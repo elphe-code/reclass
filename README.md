@@ -4,11 +4,11 @@
 
 1) First you go to the CLASSIFY page, and you distribute TAGS to your names 
 2) Then you go to the CLASSED page, and you check what is in each TAG 
-3) Finally you go to the TRANSFER page, 
-  a) you choose either TAG, MONTH, or BOTH, 
-  b) you ANALYZE it (it preloads the list of names) 
-  c) and then you click on TRANSFER 
-  d) you wait until the animation STOP 
+3) Finally you go to the TRANSFER page,  
+  a) you choose either TAG, MONTH, or BOTH,  
+  b) you ANALYZE it (it preloads the list of names)  
+  c) and then you click on TRANSFER  
+  d) you wait until the animation STOP   
 
 A GOOD TUTORIAL WILL FOLLOW  
 
