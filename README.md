@@ -20,7 +20,8 @@
      otpauth://totp/https%2F%2Fwww.namebase.io:%2F%2Fwww.namebase.io?secret=**NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN**&issuer=https%2F%2Fwww.namebase.io  
   d) and then you click on TRANSFER  
   e) you wait until the animation STOP
-5) Finally, you go to the ABOUT page and buy me 👩🏼‍💻 a coffee ☕!
+5) Check that it worked into the Dashboard Transfer page : https://www.namebase.io/manage/transfers#external   
+6) Finally, you go to the ABOUT page and buy me 👩🏼‍💻 a coffee ☕!
 
 A GOOD TUTORIAL WILL FOLLOW  
 
