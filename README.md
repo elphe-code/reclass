@@ -7,7 +7,7 @@
    b) Open this URL into your browser: https://www.namebase.io/portfolio  
    c) Right-click and click INSPECT the page  
    d) Go into the SOURCES tab and SNIPPET submenu   
-   e) Create the Reclass.js script and copy-page the raw JS script in it:    
+   e) Create the Reclass.js snippet and copy-page this raw JS script in it:    
       https://raw.githubusercontent.com/elphe-code/reclass/main/AppOneFile.js   
 
 1) Activate the script: Right-click on it and click run   
