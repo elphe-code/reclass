@@ -6,7 +6,7 @@
 2) Then you go to the CLASSED page, and you check what is in each TAG 
 3) Finally you go to the TRANSFER page,  
   a) you choose either TAG, MONTH, or BOTH,  
-  b) you ANALYZE it (it preloads the list of names)
+  b) you ANALYZE it (it preloads the list of names)  
   c) enter your destination WALLET and also your 2FA SECRET (found in the authenticator export file)  
   d) and then you click on TRANSFER  
   e) you wait until the animation STOP   
