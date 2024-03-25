@@ -7,10 +7,11 @@
 3) Finally you go to the TRANSFER page,  
   a) you choose either TAG, MONTH, or BOTH,  
   b) you ANALYZE it (it preloads the list of names)  
-  c) enter your destination WALLET and also your 2FA SECRET (found in the authenticator export file)  
+  c) enter your destination WALLET and also your 2FA SECRET (32 uppercase chars found in the authenticator export file)
+     otpauth://totp/https%2F%2Fwww.namebase.io:%2F%2Fwww.namebase.io?secret=**NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN**&issuer=https%2F%2Fwww.namebase.io
   d) and then you click on TRANSFER  
   e) you wait until the animation STOP
-4) Finally, you go to the ABOUT page and buy me 👩🏼‍💻 a coffee ☕!
+5) Finally, you go to the ABOUT page and buy me 👩🏼‍💻 a coffee ☕!
 
 A GOOD TUTORIAL WILL FOLLOW  
 
