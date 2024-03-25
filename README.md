@@ -9,7 +9,8 @@
   b) you ANALYZE it (it preloads the list of names)  
   c) enter your destination WALLET and also your 2FA SECRET (found in the authenticator export file)  
   d) and then you click on TRANSFER  
-  e) you wait until the animation STOP   
+  e) you wait until the animation STOP
+4) Finally, you go to the ABOUT page and buy me 👩🏼‍💻 a coffee ☕!
 
 A GOOD TUTORIAL WILL FOLLOW  
 
