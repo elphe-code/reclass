@@ -3,12 +3,13 @@
 ## Using
 
 0) Install and activate the script    
-   a) Open this url into your Google Chrome browser : https://www.namebase.io/portfolio  
-   b) Right-click and click inspect the page
-   c) Go into the SOURCES tab and SNIPPET submenu   
-   d) Create the Reclass.js script and copy-page the raw JS script in it:    
+   a) Log into your namebase account with your Google Chrome browser   
+   b) Open this url into your Google Chrome browser : https://www.namebase.io/portfolio  
+   c) Right-click and click inspect the page
+   d) Go into the SOURCES tab and SNIPPET submenu   
+   e) Create the Reclass.js script and copy-page the raw JS script in it:    
       https://raw.githubusercontent.com/elphe-code/reclass/main/AppOneFile.js   
-   e) Right-click on it and click run   
+   f) Right-click on it and click run   
 
 2) First you go to the CLASSIFY page, and you distribute TAGS to your names 
 3) Then you go to the CLASSED page, and you check what is in each TAG 
