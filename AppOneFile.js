@@ -1456,13 +1456,12 @@ class AccessorTags
     {
         let tags = [];
         tags[tags.length] = 'en';
-        tags[tags.length] = 'fr';
-        tags[tags.length] = 'es';
         tags[tags.length] = '2W';
         tags[tags.length] = '3L';
         tags[tags.length] = 'emoji';
         tags[tags.length] = 'emoji2';
         tags[tags.length] = 'creation';
+        tags[tags.length] = 'selling';	    
         return tags;
     }
     applyTag(name, tag)
