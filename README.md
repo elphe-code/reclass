@@ -14,8 +14,8 @@
 2) First you go to the CLASSIFY page, and you distribute TAGS to your names 
 3) Then you go to the CLASSED page, and you check what is in each TAG 
 4) Finally you go to the TRANSFER page,  
-  a) you choose either TAG, MONTH, or BOTH,  
-  b) you ANALYZE it (it preloads the list of names)  
+  a) you choose either TAG, MONTH, or BOTH using the toggle buttons,  
+  b) you ANALYZE it (it preloads the list of names) with a click on ANALYZE and wait  
   c) enter your destination WALLET and also your 2FA SECRET (32 uppercase chars found in the authenticator export file)
      otpauth://totp/https%2F%2Fwww.namebase.io:%2F%2Fwww.namebase.io?secret=**NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN**&issuer=https%2F%2Fwww.namebase.io  
   d) and then you click on TRANSFER  
