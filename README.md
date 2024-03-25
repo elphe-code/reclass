@@ -21,9 +21,9 @@
   d) and then you click on TRANSFER  
   e) you wait until the animation STOP
 5) Check that it works on the Dashboard Transfer page: https://www.namebase.io/manage/transfers#external   
-6) Finally, you go to the ABOUT page and buy me 👩🏼‍💻 a coffee ☕!
+6) Finally, optionally, you go to the ABOUT page and buy me 👩🏼‍💻 a coffee ☕!
 
-Restart at step 1 for the next month or the next 3 months   
+Restart at step 1 for the next tag, the next month, or the next 3 months   
 
 A GOOD TUTORIAL WILL FOLLOW  
 
