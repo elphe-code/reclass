@@ -2,6 +2,24 @@
 
 ## Using
 
+### Playing with the portfolio (not mandatory)
+![Pages Portfolio & Page Bests](/doc/screenshot/page-portfolio-bests.png "Pages Portfolio & Page Bests")
+### Tagging the names with categories (recommended)
+![Pages Classify & Page Classed](/doc/screenshot/page-classify-classed.png "Pages Classify & Page Classed")
+### Generating the list of names to be transferred
+![Pages Transfer Analyze](/doc/screenshot/page-transfer-analyze.png "Pages Transfer Analyze")
+### Filling the form with the destination wallet and 2FA
+![Pages Transfer Infos](/doc/screenshot/page-transfer-infos.png "Pages Transfer Infos")
+### Waiting until the script finish
+![Pages Transfer Wait](/doc/screenshot/page-transfer-wait.png "Pages Transfer Wait")
+### Giving me coffee ☕☕☕
+-   Buying me a [**coffee**](https://www.buymeacoffee.com/elphe)   
+-   Sending some [**crypto**](https://e.hnsfans.com/address/hs1qlp8vmgj8vg8qa3ej5zhk82vjzxsr4xuwjqaqly)   
+-   Investing in .PROUDLY [**domains**](https://porkbun.com/tld/proudly)   
+-   Proposing me cool [**contracts**](https://discord.gg/K3GyWuUeyp)   
+
+## Installing
+
 0) Install the script    
    a) Log into your Namebase account with your Google Chrome browser   
    b) Open this URL into your browser: https://www.namebase.io/portfolio  
@@ -25,7 +43,6 @@
 
 Restart at step 1 for the next tag, the next month, or the next 3 months   
 
-A GOOD TUTORIAL WILL FOLLOW  
 
 ## Warning
 
