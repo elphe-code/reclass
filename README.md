@@ -1,6 +1,8 @@
 # reclass/
 
 ## Using
+Slideshow tutorial : 
+[https://docs.google.com/presentation/d/1pYHBA9pCPv9LHnuCdAJvJinW1gVrRF31_qdqmUGFmmc](https://docs.google.com/presentation/d/1pYHBA9pCPv9LHnuCdAJvJinW1gVrRF31_qdqmUGFmmc)
 
 ### Playing with the portfolio (not mandatory)
 ![Pages Portfolio & Page Bests](/doc/screenshot/page-portfolio-bests.png "Pages Portfolio & Page Bests")
