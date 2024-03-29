@@ -155,7 +155,7 @@ PagePortfolio.HTML_FILTERS = `
         </select>
         <a href="#portfolio" id="filter-button">SEARCH</a>
         &nbsp;&nbsp;&nbsp;
-        <label>PAGE</label>
+        <label for="page-forward">PAGE</label>
         <a href="#portfolio" id="page-back"><<</a>
         <span id="no-page">1</span>
         <a href="#portfolio" id="page-forward">>></a>
