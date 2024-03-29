@@ -568,9 +568,9 @@ PageClassify.CSS = [
     '#filters #filter-button { background-color:#333333;color:white;}',
     '#filters #filter-button:hover { background-color:black;color:white;}',
     '#filters #page-back { padding:0.5vw;font-weight:bold;}',
-    '#filters #page-back{ background-color:#333333;color:white;}',    
+    '#filters #page-back{ background-color:#333333;color:white; border:none;}',    
     '#filters #page-forward { padding:0.5vw;font-weight:bold;}',
-    '#filters #page-forward { background-color:#333333;color:white;}',   
+    '#filters #page-forward { background-color:#333333;color:white;border:none;}',   
     
     '#domains {background-color:#ffffe0;border:solid 1vw black; }',
     '#domains {border-radius:3vw;padding:2vw;margin:2vw 5vw 5vw 5vw;}',
@@ -612,9 +612,9 @@ PageClassify.HTML_FILTERS = `
         <a href="#classify" id="filter-button">SEARCH</a>
         &nbsp;&nbsp;&nbsp;
         <label for="page-forward">PAGE</label>
-        <a href="#classify" id="page-back"><<</a>
+        <button href="#classify" id="page-back"><<</button>
         <span id="no-page">1</span>
-        <a href="#classify" id="page-forward">>></a>
+        <button href="#classify" id="page-forward">>></button>
     </div>
 `;
 
@@ -742,9 +742,9 @@ PagePortfolio.CSS = [
     '#filters #filter-button { background-color:#333333;color:white;}',
     '#filters #filter-button:hover { background-color:black;color:white;}',
     '#filters #page-back { padding:0.5vw;font-weight:bold;}',
-    '#filters #page-back{ background-color:#333333;color:white;}',    
+    '#filters #page-back{ background-color:#333333;color:white; border:none;}',    
     '#filters #page-forward { padding:0.5vw;font-weight:bold;}',
-    '#filters #page-forward { background-color:#333333;color:white;}',   
+    '#filters #page-forward { background-color:#333333;color:white; border:none;}',   
 
     '#filters { margin-top:3vw; }',
     '.domains {border-radius:3vw;padding:2vw;margin:3vw 5vw 5vw 5vw;}',
@@ -776,9 +776,9 @@ PagePortfolio.HTML_FILTERS = `
         <a href="#portfolio" id="filter-button">SEARCH</a>
         &nbsp;&nbsp;&nbsp;
         <label for="page-forward">PAGE</label>
-        <a href="#portfolio" id="page-back"><<</a>
+        <button href="#portfolio" id="page-back"><<</button>
         <span id="no-page">1</span>
-        <a href="#portfolio" id="page-forward">>></a>
+        <button href="#portfolio" id="page-forward">>></button>
     </div>
 `;
 
