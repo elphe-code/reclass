@@ -107,10 +107,10 @@ class Layout extends Html{
 
 Layout.HTML_TOGGLE = '\
     <div class="toggle-box">\
-        <label class="label-toggle">[LABEL_OFF]</label>\
+        <span class="label-toggle">[LABEL_OFF]</span>\
         <input id="[ID]" class="toggle-state hide-me" type="checkbox" aria-labelledby="[ID]"> \
         <label for="[ID]" class="toggle"></label> \
-        <label class="label-toggle">[LABEL_ON]</label>\
+        <span class="label-toggle">[LABEL_ON]</span>\
     </div>\
     ';
 Layout.CSS_TOGGLE = [
