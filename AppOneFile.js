@@ -611,7 +611,7 @@ PageClassify.HTML_FILTERS = `
         </select>
         <a href="#classify" id="filter-button">SEARCH</a>
         &nbsp;&nbsp;&nbsp;
-        <label for="filter-page">PAGE</label>
+        <label>PAGE</label>
         <a href="#classify" id="page-back"><<</a>
         <span id="no-page">1</span>
         <a href="#classify" id="page-forward">>></a>
@@ -775,7 +775,7 @@ PagePortfolio.HTML_FILTERS = `
         </select>
         <a href="#portfolio" id="filter-button">SEARCH</a>
         &nbsp;&nbsp;&nbsp;
-        <label for="filter-page">PAGE</label>
+        <label>PAGE</label>
         <a href="#portfolio" id="page-back"><<</a>
         <span id="no-page">1</span>
         <a href="#portfolio" id="page-forward">>></a>
