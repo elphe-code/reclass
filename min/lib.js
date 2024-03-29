@@ -2306,13 +2306,20 @@ if( typeof Element.prototype.clearChildren === 'undefined' ) {
       }
     });
 }
-function checkAndConvertPunycode(nom)
+function convertToPunycode(name)
 {
-    if(nom.startsWith('xn--'))
+    let nameAscii;
+    try{nameAscii = punycode.toASCII(name);}catch(e){console.log('not a punycode');}
+    //console.log(nameAscii);
+    return nameAscii;
+}
+function convertFromPunycode(name)
+{
+    if(name.startsWith('xn--'))
     {
-        try{nom = punycode.toUnicode(nom);}catch(e){console.log('punycode error');}
+        try{name = punycode.toUnicode(name);}catch(e){console.log('punycode error');}
     }
-    return nom;
+    return name;
 }
 function parseDate(date)
 {
