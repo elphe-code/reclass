@@ -1215,8 +1215,7 @@ PageTransfer.CSS = [
 ];
 
 PageTransfer.HTML =`
-        <script src="https://unpkg.com/@otplib/preset-browser@^12.0.0/buffer.js"></script>
-        <script src="https://unpkg.com/@otplib/preset-browser@^12.0.0/index.js"></script>    <div id="page"> 
+        <div id="page"> 
         <h3>Yes !! You can transfert to Bob</h3>
         <p>You will have to priorize 
         names by labels or by expiration month.</p>
@@ -1253,11 +1252,11 @@ PageTransfer.HTML =`
             <h3>Transfer infos</h3>
             <form id="form-transfer-infos">
                 <div>
-                    <label>Namebase 2FA secret : </label>
+                    <label for="namebase-secret">Namebase 2FA secret : </label>
                     <input name="namebase-secret" id="namebase-secret" type="text"/>
                 </div>
                 <div>
-                    <label>Destination wallet : </label>
+                    <label for="destination-wallet">Destination wallet : </label>
                     <input name="destination-wallet" id="destination-wallet" type="text"/>
                 </div>
                 <a id="transfer-submit" href="#transfer">TRANSFER NOW<a/>
@@ -1266,7 +1265,7 @@ PageTransfer.HTML =`
         </div>
     </div> 
     `;
-PageTransfer.HTML_SELECT_TAG = '<label>Choose a tag to transfer : </label>\
+PageTransfer.HTML_SELECT_TAG = '<label for="select-tag">Choose a tag to transfer : </label>\
                                 <select id="select-tag">[OPTIONS]</select>';
 
 class AccessorBest 
