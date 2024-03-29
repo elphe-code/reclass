@@ -281,7 +281,7 @@ class PageBests extends Page {
         {
             deco = "";
             let nom = names[position];
-            //nom = checkAndConvertPunycode(nom);
+            //nom = convertFromPunycode(nom);
             let div = this.createDivWithText(nom);
             console.log(div);
             if(nom.includes("-")) div.classList.add('dash');
@@ -331,7 +331,7 @@ class PageClassed extends Page {
         for(let name of names)
         {
             console.log("nom + " + name);
-            name = checkAndConvertPunycode(name);
+            name = convertFromPunycode(name);
     
             let div = this.createDivWithText(name);            
             domainsView.append(div);  
@@ -487,7 +487,7 @@ class PageClassify extends Page {
             let domain = domains[position];
             let nom = domain.name;
             //console.log("nom + " + nom);
-            nom = checkAndConvertPunycode(nom);
+            nom = convertFromPunycode(nom);
     
             let div = this.createDivWithText(nom);
             let tag = taggedNames[nom];
@@ -696,7 +696,7 @@ class PagePortfolio extends Page {
             let domain = domains[position];
             let name = domain.name;
             console.log("name + " + name);
-            name = checkAndConvertPunycode(name);
+            name = convertFromPunycode(name);
             //domainsView.innerHTML += '<div>'+name+'</div>';
     
             let div = this.createDivWithText(name);
@@ -985,7 +985,7 @@ class PageTransfer extends Page {
         {
             let domain = domains[position];
             let nom = domain.name;
-            nom = checkAndConvertPunycode(nom);
+            nom = convertFromPunycode(nom);
     
             let div = this.createDivWithText(nom);
             domainsView.append(div);  
@@ -1161,9 +1161,12 @@ class PageTransfer extends Page {
         let accessor = new AccessorNames();
         let transfers = PageTransfer.thisPageTransfer.transfers;
         let explanationBox = document.getElementById("waiting-explanation");
+
         for(let name of transfers)
         {
-            await accessor.transferName(name, address, secret); 
+            let encodedName = convertToPunycode(name);
+
+            await accessor.transferName(encodedName, address, secret); 
             await accessor.sleepSomeTime(200);
             
             let message = 'Transfering ' + name + " ...";
@@ -3813,7 +3816,14 @@ if( typeof Element.prototype.clearChildren === 'undefined' ) {
       }
     });
 }
-function checkAndConvertPunycode(nom)
+function convertToPunycode(name)
+{
+    let nameAscii;
+    try{nameAscii = punycode.toASCII(name);}catch(e){console.log('not a punycode');}
+    //console.log(nameAscii);
+    return nameAscii;
+}
+function convertFromPunycode(nom)
 {
     if(nom.startsWith('xn--'))
     {
