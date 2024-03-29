@@ -18,7 +18,7 @@ class PageBests extends Page {
         {
             deco = "";
             let nom = names[position];
-            //nom = checkAndConvertPunycode(nom);
+            //nom = convertFromPunycode(nom);
             let div = this.createDivWithText(nom);
             console.log(div);
             if(nom.includes("-")) div.classList.add('dash');

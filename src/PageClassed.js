@@ -33,7 +33,7 @@ class PageClassed extends Page {
         for(let name of names)
         {
             console.log("nom + " + name);
-            name = checkAndConvertPunycode(name);
+            name = convertFromPunycode(name);
     
             let div = this.createDivWithText(name);            
             domainsView.append(div);  

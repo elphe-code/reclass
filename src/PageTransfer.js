@@ -176,7 +176,7 @@ class PageTransfer extends Page {
         {
             let domain = domains[position];
             let nom = domain.name;
-            nom = checkAndConvertPunycode(nom);
+            nom = convertFromPunycode(nom);
     
             let div = this.createDivWithText(nom);
             domainsView.append(div);  
