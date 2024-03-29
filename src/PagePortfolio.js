@@ -76,7 +76,7 @@ class PagePortfolio extends Page {
             let domain = domains[position];
             let name = domain.name;
             console.log("name + " + name);
-            name = checkAndConvertPunycode(name);
+            name = convertFromPunycode(name);
             //domainsView.innerHTML += '<div>'+name+'</div>';
     
             let div = this.createDivWithText(name);
