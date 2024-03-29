@@ -96,7 +96,7 @@ class PageClassify extends Page {
             let domain = domains[position];
             let nom = domain.name;
             //console.log("nom + " + nom);
-            nom = checkAndConvertPunycode(nom);
+            nom = convertFromPunycode(nom);
     
             let div = this.createDivWithText(nom);
             let tag = taggedNames[nom];
