@@ -3823,13 +3823,13 @@ function convertToPunycode(name)
     //console.log(nameAscii);
     return nameAscii;
 }
-function convertFromPunycode(nom)
+function convertFromPunycode(name)
 {
-    if(nom.startsWith('xn--'))
+    if(name.startsWith('xn--'))
     {
-        try{nom = punycode.toUnicode(nom);}catch(e){console.log('punycode error');}
+        try{name = punycode.toUnicode(name);}catch(e){console.log('punycode error');}
     }
-    return nom;
+    return name;
 }
 function parseDate(date)
 {
