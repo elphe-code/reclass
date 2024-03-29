@@ -1,8 +1,9 @@
 class AccessorNames
 {    
     LINK = 'https://www.namebase.io/api/user/domains/owned?';
-    PARA = 'sortKey=acquiredAt&sortDirection=desc&limit=100&minLength=8&offset=';
     LINK_STATS = 'https://www.namebase.io/api/user/wallet';
+    LINK_NAME = "https://www.namebase.io/api/domains/search";
+    PARA = 'sortKey=acquiredAt&sortDirection=desc&limit=100&minLength=8&offset=';
     constructor() 
     {
         this.para = [];
@@ -126,6 +127,16 @@ class AccessorNames
         console.log(link);
         return this.getLinkNames(link);        
     }
+    async searchNameWithName(name) // from wallet
+    {
+        let para = this.para;
+        para['startsWith'] = name;
+        console.log(para);
+      
+        let link = this.LINK + this.preparePara();
+        console.log(link);
+        return this.getLinkNames(link);        
+    }
     async listNamesExpiring(x)
     {
         console.log("listNamesExpiring("+x+")");
@@ -142,5 +153,9 @@ class AccessorNames
         let data = await this.getLink(this.LINK_STATS);
         return data.totalCountOwnedDomains;
     }
-    
+    async filterActiveNames(names)
+    {
+        
+    }
 }
+

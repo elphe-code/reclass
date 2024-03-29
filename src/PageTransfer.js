@@ -326,6 +326,15 @@ class PageTransfer extends Page {
         console.log(transfer);  
         return transfer;
     }
+    removeTransferedNames(transfered)
+    {
+        let tagActive = PageTransfer.thisPageTransfer.tagActive;
+        if(tagActive)
+        {
+            let accessor = new AccessorTags();
+            let taggedNames = accessor.removeNames(transfered);  
+        }        
+    }
     async transferNames()
     {
         let walletInput = document.getElementById('destination-wallet');
@@ -354,7 +363,8 @@ class PageTransfer extends Page {
         let explanationBox = document.getElementById("waiting-explanation");
         for(let name of transfers)
         {
-            await accessor.transferName(name, address, secret); 
+            let encodedName = convertToPunycode(name);
+            await accessor.transferName(encodedName, address, secret); 
             await accessor.sleepSomeTime(200);
             
             let message = 'Transfering ' + name + " ...";
@@ -362,6 +372,7 @@ class PageTransfer extends Page {
             explanationBox.innerHTML = '<p>' + message + '</p>';
             explanationBox.innerHTML += '<p>' + messagesFun[getRandom(7)] + '</p>';
         }
+        this.removeTransferedNames(transfers);
         explanationBox.innerHTML = '<p>Finished !!!</p>';
         let hourglassBox = document.getElementById('waiting');
         hourglassBox.classList.add('stop');

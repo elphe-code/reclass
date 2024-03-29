@@ -152,8 +152,6 @@ class PageClassify extends Page {
         accessor.applyTag(name, this.selectedTag);
         element.innerHTML = name + '<span>'+this.selectedTag+'</span>';
     }
-
-
 }
 
 PageClassify.CSS = [

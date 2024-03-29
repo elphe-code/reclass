@@ -1,3 +1,13 @@
+var TAGS_FROM_USER =`
+en
+es
+2W
+emoji
+emoji2
+creation
+selling
+`;
+
 class Html
 {
     createDivWithText(text)
@@ -389,6 +399,196 @@ PageClassed.HTML = '\
 ';
 
 
+
+
+class PagePortfolio extends Page {
+    thisPagePortfolio = this;
+    PAGES = 1;
+    OFFSET = 0;
+    
+    constructor() {
+        super("PORTFOLIO");
+        PagePortfolio.thisPagePortfolio = this;
+        this.page = 0;
+    }
+    display()
+    {
+        super.display();
+        let body = document.getElementsByTagName('body')[0];
+        body.innerHTML += PagePortfolio.HTML.replace("[FILTERS]",PagePortfolio.HTML_FILTERS);
+        body.innerHTML += '<style>' + PagePortfolio.CSS.join("\n") + '</style>';
+        super.displayDomains();
+
+        this.prepareFilters();     
+    }
+    prepareFilters()
+    {
+        console.log("prepareFilters()");
+        let filterButton = document.getElementById('filter-button');
+        filterButton.onclick = (e) => {PagePortfolio.thisPagePortfolio.searchWithFilters();};
+        let pageBack = document.getElementById('page-back');
+        pageBack.onclick = (e) => {PagePortfolio.thisPagePortfolio.turnPage(-1);};
+        let pageForward = document.getElementById('page-forward');
+        pageForward.onclick = (e) => {PagePortfolio.thisPagePortfolio.turnPage(1);};
+        console.log(filterButton.onclick);
+    }
+    // I keep the page even when changing the search
+    turnPage(increment) 
+    {
+        let page = PagePortfolio.thisPagePortfolio.page;
+        page = page+increment;
+        if(page < 0) page = 0;
+        PagePortfolio.thisPagePortfolio.page = page;
+        document.getElementById('no-page').innerHTML = (page+1);
+        PagePortfolio.thisPagePortfolio.searchWithFilters();
+    }
+    async searchWithFilters()
+    {
+        console.log('searchWithFilters()');
+
+        let filterStart = document.getElementById('filter-start');
+        let filterLengthType = document.getElementById('filter-length-type');
+        let filterLength = document.getElementById('filter-length');
+        let filterAge = document.getElementById('filter-age');
+        let filterPage = document.getElementById('no-page');
+
+        let start = filterStart.value;
+        let length = filterLength.value;
+        let lengthType = filterLengthType.value;
+        let age = filterAge.value;
+        let page = parseInt(filterPage.innerHTML) - 1;
+
+        let search = {};
+        if(start) search['start'] = start;
+        if(lengthType == 'min' && length) search['min-length'] = length;
+        if(lengthType == 'max' && length) search['max-length'] = length;
+        if(age) search['age'] = age;
+        console.log(search);
+
+        let namesAccessor = new AccessorNames();
+        let domains = await namesAccessor.searchNames(search,page);
+        this.showNames(domains);
+    }
+    async showNames(domains)
+    {
+        let domainsView = document.getElementById('domains');
+        domainsView.innerHTML = '';
+        for(let position = 0; position < domains.length && this.open; position++)
+        {
+            console.log("open " + this.open);
+            let domain = domains[position];
+            let name = domain.name;
+            console.log("name + " + name);
+            name = convertFromPunycode(name);
+            //domainsView.innerHTML += '<div>'+name+'</div>';
+    
+            let div = this.createDivWithText(name);
+            console.log(div);
+            
+            div.addEventListener("click", (e)=>{this.thisPagePortfolio.chooseBest(e.srcElement)});
+            domainsView.append(div);
+            
+        }
+    }
+    async showSomeNames()
+    {
+        let DEFAULT_AGE = 'expiring';
+        let search = {};
+        search['age'] = DEFAULT_AGE;
+
+        let namesAccessor = new AccessorNames();
+        let domains = await namesAccessor.searchNames(search,0);
+        this.showNames(domains);
+    }
+
+    // EVENTS 
+
+    async chooseBest(best)
+    {
+        console.log('chooseBest');
+        console.log(best);
+        best.style.backgroundColor = 'pink';
+        let accessor = new AccessorBest();
+        accessor.addBest(best.innerHTML);
+    }
+}
+
+PagePortfolio.CSS = [
+    '#filters { margin-left:5vw; width:88vw;padding:2vw; border:solid 0.2vw #476654; border-radius:3vw;}',
+    '#filters { background: rgb(12,113,80);background: linear-gradient(90deg, rgba(12,113,80,1) 0%, rgba(9,9,121,1) 50%, rgba(0,212,255,1) 100%);font-size:2vw;}',    
+    '#filters label, #filters span { font-weight:bold;color:white;}',
+    '#filters select, #filters option {font-weight:bold;color:#111111;background-color:#abeeab;}',
+    '#filters input {font-weight:bold;color:#111111;background-color:#abeeab;}',
+    '#filters #filter-start { width:5vw;}',
+    '#filters #filter-length { width:10vw;}',
+    '#filters #filter-button { padding:0.5vw;font-weight:bold;}',
+    '#filters #filter-button { background-color:#333333;color:white;}',
+    '#filters #filter-button:hover { background-color:black;color:white;}',
+    '#filters #page-back { padding:0.5vw;font-weight:bold;}',
+    '#filters #page-back{ background-color:#333333;color:white;}',    
+    '#filters #page-forward { padding:0.5vw;font-weight:bold;}',
+    '#filters #page-forward { background-color:#333333;color:white;border:none;}',   
+
+    '#filters { margin-top:3vw; }',
+    '.domains {border-radius:3vw;padding:2vw;margin:3vw 5vw 5vw 5vw;}',
+    
+];
+
+PagePortfolio.HTML = `
+[FILTERS]
+`;
+PagePortfolio.HTML_FILTERS = `
+    <div id="filters">
+        <label for="filter-start">START</label>
+        <input id="filter-start" type="text"/>
+        <label for="filter-length">LENGTH</label>
+        <select id="filter-length-type">
+            <option>any</option>
+            <option>min</option>
+            <option>max</option>
+        </select>
+        <input id="filter-length" type="text"/>
+        <label for="filter-age">AGE</label>
+        <select id="filter-age">
+            <option>any</option>
+            <option>expiring</option>
+            <option>not expiring</option>
+            <option>newest</option>
+            <option>oldest</option>
+        </select>
+        <a href="#portfolio" id="filter-button">SEARCH</a>
+        &nbsp;&nbsp;&nbsp;
+        <label for="page-forward">PAGE</label>
+        <button href="#portfolio" id="page-back"><<</button>
+        <span id="no-page">1</span>
+        <button href="#portfolio" id="page-forward">>></button>
+    </div>
+`;
+
+class PageTags extends Page {
+    constructor() {
+        super("TAGS");
+    }
+    display(){
+        super.display();
+        let body = document.getElementsByTagName('body')[0];
+        body.innerHTML += '<style>' + PageMenu.CSS.join("\n") + '</style>';
+    }
+    showTags(tags)
+    {
+        let tagsView = document.getElementById('domains');      
+        for(let tag of tags)
+        {
+            tagsView.innerHTML += '<div>'+tag+'</div>';
+        }
+        tagsView.innerHTML += '<div><a>+</a></div>';        
+    }
+}
+
+PageTags.CSS = [
+    '#domains > div {display:block;}',
+];
+
 class PageClassify extends Page {
     thisPageClassify = this;
     OFFSET = 0;
@@ -543,8 +743,6 @@ class PageClassify extends Page {
         accessor.applyTag(name, this.selectedTag);
         element.innerHTML = name + '<span>'+this.selectedTag+'</span>';
     }
-
-
 }
 
 PageClassify.CSS = [
@@ -568,7 +766,7 @@ PageClassify.CSS = [
     '#filters #filter-button { background-color:#333333;color:white;}',
     '#filters #filter-button:hover { background-color:black;color:white;}',
     '#filters #page-back { padding:0.5vw;font-weight:bold;}',
-    '#filters #page-back{ background-color:#333333;color:white; border:none;}',    
+    '#filters #page-back{ background-color:#333333;color:white;}',    
     '#filters #page-forward { padding:0.5vw;font-weight:bold;}',
     '#filters #page-forward { background-color:#333333;color:white;border:none;}',   
     
@@ -617,196 +815,6 @@ PageClassify.HTML_FILTERS = `
         <button href="#classify" id="page-forward">>></button>
     </div>
 `;
-
-class PagePortfolio extends Page {
-    thisPagePortfolio = this;
-    PAGES = 1;
-    OFFSET = 0;
-    
-    constructor() {
-        super("PORTFOLIO");
-        PagePortfolio.thisPagePortfolio = this;
-        this.page = 0;
-    }
-    display()
-    {
-        super.display();
-        let body = document.getElementsByTagName('body')[0];
-        body.innerHTML += PagePortfolio.HTML.replace("[FILTERS]",PagePortfolio.HTML_FILTERS);
-        body.innerHTML += '<style>' + PagePortfolio.CSS.join("\n") + '</style>';
-        super.displayDomains();
-
-        this.prepareFilters();     
-    }
-    prepareFilters()
-    {
-        console.log("prepareFilters()");
-        let filterButton = document.getElementById('filter-button');
-        filterButton.onclick = (e) => {PagePortfolio.thisPagePortfolio.searchWithFilters();};
-        let pageBack = document.getElementById('page-back');
-        pageBack.onclick = (e) => {PagePortfolio.thisPagePortfolio.turnPage(-1);};
-        let pageForward = document.getElementById('page-forward');
-        pageForward.onclick = (e) => {PagePortfolio.thisPagePortfolio.turnPage(1);};
-        console.log(filterButton.onclick);
-    }
-    // I keep the page even when changing the search
-    turnPage(increment) 
-    {
-        let page = PagePortfolio.thisPagePortfolio.page;
-        page = page+increment;
-        if(page < 0) page = 0;
-        PagePortfolio.thisPagePortfolio.page = page;
-        document.getElementById('no-page').innerHTML = (page+1);
-        PagePortfolio.thisPagePortfolio.searchWithFilters();
-    }
-    async searchWithFilters()
-    {
-        console.log('searchWithFilters()');
-
-        let filterStart = document.getElementById('filter-start');
-        let filterLengthType = document.getElementById('filter-length-type');
-        let filterLength = document.getElementById('filter-length');
-        let filterAge = document.getElementById('filter-age');
-        let filterPage = document.getElementById('no-page');
-
-        let start = filterStart.value;
-        let length = filterLength.value;
-        let lengthType = filterLengthType.value;
-        let age = filterAge.value;
-        let page = parseInt(filterPage.innerHTML) - 1;
-
-        let search = {};
-        if(start) search['start'] = start;
-        if(lengthType == 'min' && length) search['min-length'] = length;
-        if(lengthType == 'max' && length) search['max-length'] = length;
-        if(age) search['age'] = age;
-        console.log(search);
-
-        let namesAccessor = new AccessorNames();
-        let domains = await namesAccessor.searchNames(search,page);
-        this.showNames(domains);
-    }
-    async showNames(domains)
-    {
-        let domainsView = document.getElementById('domains');
-        domainsView.innerHTML = '';
-        for(let position = 0; position < domains.length && this.open; position++)
-        {
-            console.log("open " + this.open);
-            let domain = domains[position];
-            let name = domain.name;
-            console.log("name + " + name);
-            name = convertFromPunycode(name);
-            //domainsView.innerHTML += '<div>'+name+'</div>';
-    
-            let div = this.createDivWithText(name);
-            console.log(div);
-            
-            div.addEventListener("click", (e)=>{this.thisPagePortfolio.chooseBest(e.srcElement)});
-            domainsView.append(div);
-            
-        }
-    }
-    async showSomeNames()
-    {
-        let DEFAULT_AGE = 'expiring';
-        let search = {};
-        search['age'] = DEFAULT_AGE;
-
-        let namesAccessor = new AccessorNames();
-        let domains = await namesAccessor.searchNames(search,0);
-        this.showNames(domains);
-    }
-
-    // EVENTS 
-
-    async chooseBest(best)
-    {
-        console.log('chooseBest');
-        console.log(best);
-        best.style.backgroundColor = 'pink';
-        let accessor = new AccessorBest();
-        accessor.addBest(best.innerHTML);
-    }
-}
-
-PagePortfolio.CSS = [
-    '#filters { margin-left:5vw; width:88vw;padding:2vw; border:solid 0.2vw #476654; border-radius:3vw;}',
-    '#filters { background: rgb(12,113,80);background: linear-gradient(90deg, rgba(12,113,80,1) 0%, rgba(9,9,121,1) 50%, rgba(0,212,255,1) 100%);font-size:2vw;}',    
-    '#filters label, #filters span { font-weight:bold;color:white;}',
-    '#filters select, #filters option {font-weight:bold;color:#111111;background-color:#abeeab;}',
-    '#filters input {font-weight:bold;color:#111111;background-color:#abeeab;}',
-    '#filters #filter-start { width:5vw;}',
-    '#filters #filter-length { width:10vw;}',
-    '#filters #filter-button { padding:0.5vw;font-weight:bold;}',
-    '#filters #filter-button { background-color:#333333;color:white;}',
-    '#filters #filter-button:hover { background-color:black;color:white;}',
-    '#filters #page-back { padding:0.5vw;font-weight:bold;}',
-    '#filters #page-back{ background-color:#333333;color:white; border:none;}',    
-    '#filters #page-forward { padding:0.5vw;font-weight:bold;}',
-    '#filters #page-forward { background-color:#333333;color:white; border:none;}',   
-
-    '#filters { margin-top:3vw; }',
-    '.domains {border-radius:3vw;padding:2vw;margin:3vw 5vw 5vw 5vw;}',
-    
-];
-
-PagePortfolio.HTML = `
-[FILTERS]
-`;
-PagePortfolio.HTML_FILTERS = `
-    <div id="filters">
-        <label for="filter-start">START</label>
-        <input id="filter-start" type="text"/>
-        <label for="filter-length">LENGTH</label>
-        <select id="filter-length-type">
-            <option>any</option>
-            <option>min</option>
-            <option>max</option>
-        </select>
-        <input id="filter-length" type="text"/>
-        <label for="filter-age">AGE</label>
-        <select id="filter-age">
-            <option>any</option>
-            <option>expiring</option>
-            <option>not expiring</option>
-            <option>newest</option>
-            <option>oldest</option>
-        </select>
-        <a href="#portfolio" id="filter-button">SEARCH</a>
-        &nbsp;&nbsp;&nbsp;
-        <label for="page-forward">PAGE</label>
-        <button href="#portfolio" id="page-back"><<</button>
-        <span id="no-page">1</span>
-        <button href="#portfolio" id="page-forward">>></button>
-    </div>
-`;
-
-class PageTags extends Page {
-    constructor() {
-        super("TAGS");
-    }
-    display(){
-        super.display();
-        let body = document.getElementsByTagName('body')[0];
-        body.innerHTML += '<style>' + PageMenu.CSS.join("\n") + '</style>';
-    }
-    showTags(tags)
-    {
-        let tagsView = document.getElementById('domains');      
-        for(let tag of tags)
-        {
-            tagsView.innerHTML += '<div>'+tag+'</div>';
-        }
-        tagsView.innerHTML += '<div><a>+</a></div>';        
-    }
-}
-
-PageTags.CSS = [
-    '#domains > div {display:block;}',
-];
-
-
 class PageTransfer extends Page {
     thisPageTransfer = this;
     
@@ -1135,6 +1143,15 @@ class PageTransfer extends Page {
         console.log(transfer);  
         return transfer;
     }
+    removeTransferedNames(transfered)
+    {
+        let tagActive = PageTransfer.thisPageTransfer.tagActive;
+        if(tagActive)
+        {
+            let accessor = new AccessorTags();
+            let taggedNames = accessor.removeNames(transfered);  
+        }        
+    }
     async transferNames()
     {
         let walletInput = document.getElementById('destination-wallet');
@@ -1161,11 +1178,9 @@ class PageTransfer extends Page {
         let accessor = new AccessorNames();
         let transfers = PageTransfer.thisPageTransfer.transfers;
         let explanationBox = document.getElementById("waiting-explanation");
-
         for(let name of transfers)
         {
             let encodedName = convertToPunycode(name);
-
             await accessor.transferName(encodedName, address, secret); 
             await accessor.sleepSomeTime(200);
             
@@ -1174,6 +1189,7 @@ class PageTransfer extends Page {
             explanationBox.innerHTML = '<p>' + message + '</p>';
             explanationBox.innerHTML += '<p>' + messagesFun[getRandom(7)] + '</p>';
         }
+        this.removeTransferedNames(transfers);
         explanationBox.innerHTML = '<p>Finished !!!</p>';
         let hourglassBox = document.getElementById('waiting');
         hourglassBox.classList.add('stop');
@@ -1301,15 +1317,14 @@ class AccessorBest
     {
         localStorage.setItem("bests", JSON.stringify(bests));
     }
-    
 }
-
 
 class AccessorNames
 {    
     LINK = 'https://www.namebase.io/api/user/domains/owned?';
-    PARA = 'sortKey=acquiredAt&sortDirection=desc&limit=100&minLength=8&offset=';
     LINK_STATS = 'https://www.namebase.io/api/user/wallet';
+    LINK_NAME = "https://www.namebase.io/api/domains/search";
+    PARA = 'sortKey=acquiredAt&sortDirection=desc&limit=100&minLength=8&offset=';
     constructor() 
     {
         this.para = [];
@@ -1433,6 +1448,16 @@ class AccessorNames
         console.log(link);
         return this.getLinkNames(link);        
     }
+    async searchNameWithName(name) // from wallet
+    {
+        let para = this.para;
+        para['startsWith'] = name;
+        console.log(para);
+      
+        let link = this.LINK + this.preparePara();
+        console.log(link);
+        return this.getLinkNames(link);        
+    }
     async listNamesExpiring(x)
     {
         console.log("listNamesExpiring("+x+")");
@@ -1449,13 +1474,24 @@ class AccessorNames
         let data = await this.getLink(this.LINK_STATS);
         return data.totalCountOwnedDomains;
     }
-    
+    async filterActiveNames(names)
+    {
+        
+    }
 }
-
 class AccessorTags
 {
+    TAGGED_NAME = "tagged";
+    
     listTags()
-    {
+    {        
+        let tagsFromUser = TAGS_FROM_USER.split("\n");
+        tagsFromUser = tagsFromUser.map(e => e.trim());
+        tagsFromUser = tagsFromUser.filter(e => e.length > 0);
+        
+        if(tagsFromUser.length > 0) return tagsFromUser;
+        
+        //var TAGS = ['en','2W','3L','emoji','emoji2','creation','selling'];
         let tags = [];
         tags[tags.length] = 'en';
         tags[tags.length] = '2W';
@@ -1463,50 +1499,67 @@ class AccessorTags
         tags[tags.length] = 'emoji';
         tags[tags.length] = 'emoji2';
         tags[tags.length] = 'creation';
-        tags[tags.length] = 'selling';	    
+        tags[tags.length] = 'selling';
+        
         return tags;
     }
     applyTag(name, tag)
     {
-        console.log("applyTag("+name+","+tag+")");
-        let tagged = localStorage.getItem("tagged") || {};
+        console.log("AccessorTags.applyTag("+name+","+tag+")");
+        let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
+        console.log("init bug");
         console.log(tagged);
         tagged = JSON.parse(tagged);
         tagged[name] = tag;
         console.log("tagged:"+JSON.stringify(tagged));
-        localStorage.setItem("tagged", JSON.stringify(tagged));                
-    }
-    removeTag(name, tag)
-    {
-        console.log("applyTag("+name+","+tag+")");
-        let tagged = localStorage.getItem("tagged") || '{}';
-        tagged = JSON.parse(tagged);
-        tagged[name] = '';
-        console.log("tagged:"+JSON.stringify(tagged));
-        localStorage.setItem("tagged", JSON.stringify(tagged));                                
+        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));                
     }
     getTaggedNames()
     {
-        console.log("getTaggedNames()");
-        let tagged = localStorage.getItem("tagged") || '{}';
+        console.log("AccessorTags.getTaggedNames()");
+        let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
         tagged = JSON.parse(tagged);
         return tagged;
     }
     getNamesForTag(tag)
     {
-        console.log("getTaggedNames()");
-        let tagged = localStorage.getItem("tagged") || '{}';
+        console.log("AccessorTags.getTaggedNames()");
+        let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
         tagged = JSON.parse(tagged);
         let filtered = Object.keys(tagged).filter(name => tagged[name] == tag);
         //console.log(filtered);
         return filtered;
     }
+    removeTag(name, tag)
+    {
+        console.log("AccessorTags.removeTag("+name+","+tag+")");
+        let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
+        tagged = JSON.parse(tagged);
+        tagged[name] = '';
+        console.log("tagged:"+JSON.stringify(tagged));
+        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));                                
+    }
+    removeNames(names)
+    {
+        console.log("AccessorTags.removeNames()");
+        let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
+        tagged = JSON.parse(tagged);
+        for(let name of names)
+        {
+            tagged[name] = '';        
+        }
+        console.log("tagged:"+JSON.stringify(tagged));
+        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));                                
+    }
     eraseAllTags()
     {
-        let tagged = [];
-        localStorage.setItem("tagged", JSON.stringify(tagged));   
+        let tagged = {};
+        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));   
     }
 }
+
+//let accessorTags = new AccessorTags();
+//accessorTags.eraseAllTags();
 
 /**
  * @preserve A JavaScript implementation of the SHA family of hashes, as
@@ -3952,3 +4005,5 @@ var app = new App();
 // only one event handler - no add event listener
 window.onhashchange = app.navigate;
 app.navigate();
+
+

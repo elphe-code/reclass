@@ -1,3 +1,13 @@
+var TAGS_FROM_USER =`
+en
+es
+2W
+emoji
+emoji2
+creation
+selling
+`;
+
 class Html
 {
     createDivWithText(text)

@@ -28,15 +28,14 @@ class AccessorBest
     {
         localStorage.setItem("bests", JSON.stringify(bests));
     }
-    
 }
-
 
 class AccessorNames
 {    
     LINK = 'https://www.namebase.io/api/user/domains/owned?';
-    PARA = 'sortKey=acquiredAt&sortDirection=desc&limit=100&minLength=8&offset=';
     LINK_STATS = 'https://www.namebase.io/api/user/wallet';
+    LINK_NAME = "https://www.namebase.io/api/domains/search";
+    PARA = 'sortKey=acquiredAt&sortDirection=desc&limit=100&minLength=8&offset=';
     constructor() 
     {
         this.para = [];
@@ -160,6 +159,16 @@ class AccessorNames
         console.log(link);
         return this.getLinkNames(link);        
     }
+    async searchNameWithName(name) // from wallet
+    {
+        let para = this.para;
+        para['startsWith'] = name;
+        console.log(para);
+      
+        let link = this.LINK + this.preparePara();
+        console.log(link);
+        return this.getLinkNames(link);        
+    }
     async listNamesExpiring(x)
     {
         console.log("listNamesExpiring("+x+")");
@@ -176,13 +185,24 @@ class AccessorNames
         let data = await this.getLink(this.LINK_STATS);
         return data.totalCountOwnedDomains;
     }
-    
+    async filterActiveNames(names)
+    {
+        
+    }
 }
-
 class AccessorTags
 {
+    TAGGED_NAME = "tagged";
+    
     listTags()
-    {
+    {        
+        let tagsFromUser = TAGS_FROM_USER.split("\n");
+        tagsFromUser = tagsFromUser.map(e => e.trim());
+        tagsFromUser = tagsFromUser.filter(e => e.length > 0);
+        
+        if(tagsFromUser.length > 0) return tagsFromUser;
+        
+        //var TAGS = ['en','2W','3L','emoji','emoji2','creation','selling'];
         let tags = [];
         tags[tags.length] = 'en';
         tags[tags.length] = '2W';
@@ -191,46 +211,63 @@ class AccessorTags
         tags[tags.length] = 'emoji2';
         tags[tags.length] = 'creation';
         tags[tags.length] = 'selling';
+        
         return tags;
     }
     applyTag(name, tag)
     {
-        console.log("applyTag("+name+","+tag+")");
-        let tagged = localStorage.getItem("tagged") || {};
+        console.log("AccessorTags.applyTag("+name+","+tag+")");
+        let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
+        console.log("init bug");
         console.log(tagged);
         tagged = JSON.parse(tagged);
         tagged[name] = tag;
         console.log("tagged:"+JSON.stringify(tagged));
-        localStorage.setItem("tagged", JSON.stringify(tagged));                
-    }
-    removeTag(name, tag)
-    {
-        console.log("applyTag("+name+","+tag+")");
-        let tagged = localStorage.getItem("tagged") || '{}';
-        tagged = JSON.parse(tagged);
-        tagged[name] = '';
-        console.log("tagged:"+JSON.stringify(tagged));
-        localStorage.setItem("tagged", JSON.stringify(tagged));                                
+        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));                
     }
     getTaggedNames()
     {
-        console.log("getTaggedNames()");
-        let tagged = localStorage.getItem("tagged") || '{}';
+        console.log("AccessorTags.getTaggedNames()");
+        let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
         tagged = JSON.parse(tagged);
         return tagged;
     }
     getNamesForTag(tag)
     {
-        console.log("getTaggedNames()");
-        let tagged = localStorage.getItem("tagged") || '{}';
+        console.log("AccessorTags.getTaggedNames()");
+        let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
         tagged = JSON.parse(tagged);
         let filtered = Object.keys(tagged).filter(name => tagged[name] == tag);
         //console.log(filtered);
         return filtered;
     }
+    removeTag(name, tag)
+    {
+        console.log("AccessorTags.removeTag("+name+","+tag+")");
+        let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
+        tagged = JSON.parse(tagged);
+        tagged[name] = '';
+        console.log("tagged:"+JSON.stringify(tagged));
+        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));                                
+    }
+    removeNames(names)
+    {
+        console.log("AccessorTags.removeNames()");
+        let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
+        tagged = JSON.parse(tagged);
+        for(let name of names)
+        {
+            tagged[name] = '';        
+        }
+        console.log("tagged:"+JSON.stringify(tagged));
+        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));                                
+    }
     eraseAllTags()
     {
-        let tagged = [];
-        localStorage.setItem("tagged", JSON.stringify(tagged));   
+        let tagged = {};
+        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));   
     }
 }
+
+//let accessorTags = new AccessorTags();
+//accessorTags.eraseAllTags();
