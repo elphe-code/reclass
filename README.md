@@ -1,4 +1,11 @@
 # reclass/
+## What is Reclass/ ?
+
+With the upcoming renewal fees in the Namebase marketplace, many users are looking for a user-friendly way to batch-transfer all, or a category, of their names.   
+
+Reclass/ is that tool, allowing first the labeling of all your names, then the transfer either by keyword and/or by expiring month.  It comes into a multi-page formula featuring many filters and search tools.   
+
+Do not lose your names ! Use Reclass/  
 
 ## Using
 Slideshow tutorial : 
