@@ -47,6 +47,16 @@ function parseDate(date)
     return newDate;
 }
 MONTHS = ['','JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+function incrementDate(date)
+{
+    date['month']++;
+    if(date['month']>12)
+    {
+        date['month']%=12;
+        date['year']++;
+    }
+    return date;
+}
 function formatDateToText(date)
 {
     let text = date['day'] + ' ' + this.MONTHS[date['month']] + ' ' + date['year'];
