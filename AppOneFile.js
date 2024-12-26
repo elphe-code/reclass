@@ -1,64 +1,63 @@
-var TAGS_FROM_USER =`
+var TAGS_FROM_USER = `
 en
-es
+fr
+tr
 2W
 emoji
-emoji2
+duomoji
+serimoji
+wordmoji
+motmoji
+nom
 creation
 selling
 `;
 
-class Html
-{
-    createDivWithText(text)
-    {
+class Html {
+    createDivWithText(text) {
         //console.log('createDivWithText()');
         const newDiv = document.createElement("div");
         const newContent = document.createTextNode(text);
         newDiv.appendChild(newContent);
         return newDiv;
     }
-    createSpanWithText(text)
-    {
+    createSpanWithText(text) {
         //console.log('createSpanWithText()');
         const newSpan = document.createElement("span");
         const newContent = document.createTextNode(text);
         newSpan.appendChild(newContent);
         return newSpan;
     }
-    createLabelWithText(text)
-    {
+    createLabelWithText(text) {
         //console.log('createLabelWithText()');
         const newLabel = document.createElement("label");
         const newContent = document.createTextNode(text);
         newLabel.appendChild(newContent);
         return newLabel;
     }
-    createInputWithValue(value)
-    {
+    createInputWithValue(value) {
         //console.log('createInputWithValue()');
         const newInput = document.createElement("input");
         return newInput;
-    }    
+    }
 }
-class Layout extends Html{
-    
-    display()
-    {
+class Layout extends Html {
+
+    display() {
         console.log("Layout.display()");
         let body = document.getElementsByTagName('body')[0];
         body.innerHTML = '<style>' + Layout.CSS.join("\n") + '</style>';
         body.innerHTML += '<style>' + Layout.CSS_TOGGLE.join("\n") + '</style>';
     }
-    
+
     currentState = false;
-    activateToggleDynamically(id, boxName, labelOff, labelOn, callback, value)
-    {
+    activateToggleDynamically(id, boxName, labelOff, labelOn, callback, value) {
         this.currentState = value;
         let divTag = createDivWithText("");
         let labelOffTag = createLabelWithText(labelOff);
         let inputTag = createInputWithValue("");
-        inputTag.id = id; inputTag.className = "toggle-state hide-me";
+        inputTag.id = id;
+        inputTag.className = "toggle-state hide-me";
         let labelForToggle = createLabelWithText("");
         labelForToggle.for = id;
         labelForToggle.className = "toggle";
@@ -71,13 +70,13 @@ class Layout extends Html{
         box.appendChild(divTag);
         let body = document.getElementsByTagName('body')[0];
         body.innerHTML += '<style>' + Visual.CSS_TOGGLE.join("\n") + '</style>';
-        let toggle = document.querySelector('#'+id);
+        let toggle = document.querySelector('#' + id);
         toggle.checked = value;
-        console.log('id='+'#'+id);
+        console.log('id=' + '#' + id);
         console.log(toggle);
         toggle.addEventListener('click', function() {
             console.log('event()');
-            let stateSpan = document.querySelector('#'+id);
+            let stateSpan = document.querySelector('#' + id);
             var currentState;
             if (toggle.checked) {
                 this.currentState = true;
@@ -88,20 +87,19 @@ class Layout extends Html{
             callback(this.currentState);
         }, false);
     }
-    activateToggle(id, boxName, labelOff, labelOn, callback, value)
-    {
+    activateToggle(id, boxName, labelOff, labelOn, callback, value) {
         let box = document.getElementById(boxName);
-        box.innerHTML +=  Layout.HTML_TOGGLE.replaceAll('[ID]',id).replace('[LABEL_OFF]',labelOff).replace('[LABEL_ON]',labelOn);
-        
-        let toggle = document.querySelector('#'+id);
+        box.innerHTML += Layout.HTML_TOGGLE.replaceAll('[ID]', id).replace('[LABEL_OFF]', labelOff).replace('[LABEL_ON]', labelOn);
+
+        let toggle = document.querySelector('#' + id);
         toggle.checked = value;
         this.currentState = value;
         callback(this.currentState);
-        console.log('id='+'#'+id);
+        console.log('id=' + '#' + id);
         console.log(toggle);
         toggle.addEventListener('click', function() {
             console.log('event()');
-            let stateSpan = document.querySelector('#'+id);
+            let stateSpan = document.querySelector('#' + id);
             var currentState;
             if (toggle.checked) {
                 this.currentState = true;
@@ -123,55 +121,34 @@ Layout.HTML_TOGGLE = '\
         <span class="label-toggle">[LABEL_ON]</span>\
     </div>\
     ';
-Layout.CSS_TOGGLE = [
-    'input[type="checkbox"]{float:left;clear:none;}',  
-    'input[type="checkbox"] {appearance: none;background-color: #fff;margin: 0;font: inherit;color: currentColor;width: 1.15em;height: 1.15em;border: 0.15em solid currentColor;border-radius: 0.15em;transform: translateY(-0.075em);}',
-    'input[type="checkbox"] {display: grid; place-content: center;}',
-    'input[type="checkbox"]::before {  content: "";  background-color:green; width: 0.65em;  height: 0.65em;  transform: scale(0);  transition: 120ms transform ease-in-out;  box-shadow: inset 1em 1em var(--form-control-color);}',
-    'input[type="checkbox"]:checked::before {  transform: scale(1);}', 
-    '.toggle { position: relative; display:inline-block;margin-top: 0.5vw;width: 15.0vw;height: 7.8vw;}',
-    '.toggle { background-color: hsl(0, 0%, 85%);border-radius: 7.5vw;cursor: pointer;transition: background-color 0.25s ease-in; }',
-    ".toggle::after { content: ''; position: absolute; top: 0.6vw; left: 0.6vw; width: 6.6vw; height: 6.6vw; }",
-    '.toggle::after { background-color: white; border-radius: 50%; transition: all 0.25s ease-out;}',
-    '.toggle-state:checked + .toggle { background-color: hsl(102, 58%, 39%); }',
-    '.toggle-state:checked + .toggle::after { transform: translateX(7.2vw);}',
-    '.hide-me { opacity: 0; height: 0; width: 0; margin:0;}',
-    '.label-toggle {position:absolute;display:inline-block; vertical-align:middle;font-size:5vw;top:0;left:20vw;margin:0; font-weight:bold;color:hsl(0, 0%, 85%);}',
-    '.toggle-box{position:relative;height:9vw;line-height:9vw;padding:0;background-color:black;}',
-];
-Layout.CSS = [
-    '.hourglass {  display: inline-block;  position: relative;  width: 20vw;  height: 20vw;}',
-    '.hourglass::after {  content: " ";  display: block;  border-radius: 50%;  width: 0;  height: 0;  margin: 2vw;  box-sizing: border-box;  border: 8vw solid #fff;  border-color: #fff transparent #fff transparent;  animation: hourglass 1.2s infinite;}',
-    '.hourglass.stop::after {  content: " ";  display: block;  border-radius: 50%;  width: 0;  height: 0;  margin: 2vw;  box-sizing: border-box;  border: 8vw solid #fff;  border-color: #fff transparent #fff transparent;  animation: stop 1.2s infinite;}',
-    '@keyframes hourglass {  0% { transform: rotate(0); animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19); }  50% { transform: rotate(900deg); animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); }  100% { transform: rotate(1800deg); }}',
-    '@keyframes stop {from { transform: rotate(0); }to { transform: rotate(0); }}',
-];
+Layout.CSS_TOGGLE = ['input[type="checkbox"]{float:left;clear:none;}', 'input[type="checkbox"] {appearance: none;background-color: #fff;margin: 0;font: inherit;color: currentColor;width: 1.15em;height: 1.15em;border: 0.15em solid currentColor;border-radius: 0.15em;transform: translateY(-0.075em);}', 'input[type="checkbox"] {display: grid; place-content: center;}', 'input[type="checkbox"]::before {  content: "";  background-color:green; width: 0.65em;  height: 0.65em;  transform: scale(0);  transition: 120ms transform ease-in-out;  box-shadow: inset 1em 1em var(--form-control-color);}', 'input[type="checkbox"]:checked::before {  transform: scale(1);}', '.toggle { position: relative; display:inline-block;margin-top: 0.5vw;width: 15.0vw;height: 7.8vw;}', '.toggle { background-color: hsl(0, 0%, 85%);border-radius: 7.5vw;cursor: pointer;transition: background-color 0.25s ease-in; }', ".toggle::after { content: ''; position: absolute; top: 0.6vw; left: 0.6vw; width: 6.6vw; height: 6.6vw; }", '.toggle::after { background-color: white; border-radius: 50%; transition: all 0.25s ease-out;}', '.toggle-state:checked + .toggle { background-color: hsl(102, 58%, 39%); }', '.toggle-state:checked + .toggle::after { transform: translateX(7.2vw);}', '.hide-me { opacity: 0; height: 0; width: 0; margin:0;}', '.label-toggle {position:absolute;display:inline-block; vertical-align:middle;font-size:5vw;top:0;left:20vw;margin:0; font-weight:bold;color:hsl(0, 0%, 85%);}', '.toggle-box{position:relative;height:9vw;line-height:9vw;padding:0;background-color:black;}', ];
+Layout.CSS = ['.hourglass {  display: inline-block;  position: relative;  width: 20vw;  height: 20vw;}', '.hourglass::after {  content: " ";  display: block;  border-radius: 50%;  width: 0;  height: 0;  margin: 2vw;  box-sizing: border-box;  border: 8vw solid #fff;  border-color: #fff transparent #fff transparent;  animation: hourglass 1.2s infinite;}', '.hourglass.stop::after {  content: " ";  display: block;  border-radius: 50%;  width: 0;  height: 0;  margin: 2vw;  box-sizing: border-box;  border: 8vw solid #fff;  border-color: #fff transparent #fff transparent;  animation: stop 1.2s infinite;}', '@keyframes hourglass {  0% { transform: rotate(0); animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19); }  50% { transform: rotate(900deg); animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); }  100% { transform: rotate(1800deg); }}', '@keyframes stop {from { transform: rotate(0); }to { transform: rotate(0); }}', ];
 
 class Page extends Layout {
     constructor(title) {
         super();
-        this.title = (title)?title:"&nbsp;";
+        this.title = (title) ? title : "&nbsp;";
         console.log(this.title);
         this.open = false;
     }
-    decorate()
-    {
-    }
+    decorate() {}
 
-    display () {
+    display() {
         console.log("Page.display()");
         super.display();
         this.open = true;
         let body = document.getElementsByTagName('body')[0];
-        body.innerHTML +=  Page.HTML_MENU + Page.HTML.replace('[TITLE]',this.title);
+        body.innerHTML += Page.HTML_MENU + Page.HTML.replace('[TITLE]', this.title);
         body.innerHTML += '<style>' + Page.CSS.join("\n") + '</style>';
         this.decorate();
     }
-    displayDomains(){
+    displayDomains() {
         let body = document.getElementsByTagName('body')[0];
-        body.innerHTML += Page.HTML_DOMAINS;        
+        body.innerHTML += Page.HTML_DOMAINS;
     }
-    close(){this.open = false;}
+    close() {
+        this.open = false;
+    }
 }
 
 Page.HTML = '<header><h1>[TITLE]</h1></header>';
@@ -186,38 +163,13 @@ Page.HTML_MENU = '\
         <div><a href="#about">ABOUT</a></div>\
     </div></div>';
 
-Page.CSS = [
-    '*{float:none;clear:both;}',
-    'header {background-color:black;padding:2vw;width:100vw;}',
-    'header h1 {color:white; font-weight:bold;font-size:10vw;}',
-    '#page {padding-left:2.5vw;padding-right:2.5vw;}',
-    '#page h3 {margin-top:2vw;font-weight:bold;font-size:5vw;font-family:Arial;}',
-    '#page ul {margin-left:2.5vw;margin-bottom:2vw;}',
-    '#page p {margin-top:2vw;margin-bottom:2vw;}',
-    '#page ul {font-family:Verdana;}',
-    '#page a {font-weight:bold;color:orange;}',
-    '#page p {font-size:3vw;font-family:Arial; }',
-    '.domains {background-color:#efefff;border:solid 1vw black; }',
-    '.domains {border-radius:3vw;padding:2vw;margin:5vw;}',
-    '.domains {display:flex;flex-direction:row; flex-wrap:wrap;}',
-    '.domains > div {font-size:3vw; margin:1.25vw; padding:1vw; cursor:pointer;}',
-    '.domains > div {background-color:#ccccff; color:#333333; font-weight:bold; }',
-    '.domains > div:hover {background-color:#bbbbee; color:#333333;}',
-    '.domains > div.best {background-color:pink;}',
-    '.domains > div.dash {background-color:yellow;}',
-    '#menu {padding-left:1.5vw;height:10vw;width:1000%;display:flex;flex-direction:row;}',
-    '#menu > div {padding-left:1.5vw; padding-right:1.5vw;font-size:3vw;padding-top:3vw;}',
-    '#menu > div:hover {background-color:#cccccc;}',
-    '#menu > div > a {color:black;font-weight:bold;}',
-];
-
-
+Page.CSS = ['*{float:none;clear:both;}', 'header {background-color:black;padding:2vw;width:100vw;}', 'header h1 {color:white; font-weight:bold;font-size:10vw;}', '#page {padding-left:2.5vw;padding-right:2.5vw;}', '#page h3 {margin-top:2vw;font-weight:bold;font-size:5vw;font-family:Arial;}', '#page ul {margin-left:2.5vw;margin-bottom:2vw;}', '#page p {margin-top:2vw;margin-bottom:2vw;}', '#page ul {font-family:Verdana;}', '#page a {font-weight:bold;color:orange;}', '#page p {font-size:3vw;font-family:Arial; }', '.domains {background-color:#efefff;border:solid 1vw black; }', '.domains {border-radius:3vw;padding:2vw;margin:5vw;}', '.domains {display:flex;flex-direction:row; flex-wrap:wrap;}', '.domains > div {font-size:3vw; margin:1.25vw; padding:1vw; cursor:pointer;}', '.domains > div {background-color:#ccccff; color:#333333; font-weight:bold; }', '.domains > div:hover {background-color:#bbbbee; color:#333333;}', '.domains > div.best {background-color:pink;}', '.domains > div.dash {background-color:yellow;}', '#menu {padding-left:1.5vw;height:10vw;width:1000%;display:flex;flex-direction:row;}', '#menu > div {padding-left:1.5vw; padding-right:1.5vw;font-size:3vw;padding-top:3vw;}', '#menu > div:hover {background-color:#cccccc;}', '#menu > div > a {color:black;font-weight:bold;}', ];
 
 class PageAbout extends Page {
     constructor() {
         super("ABOUT");
     }
-    display(){
+    display() {
         super.display();
         let body = document.getElementsByTagName('body')[0];
         body.innerHTML += PageAbout.HTML;
@@ -225,10 +177,9 @@ class PageAbout extends Page {
         body.innerHTML += PageAbout.HTML_IMAGE.replace("[SRC]", PageAbout.IMAGE_COFFEE);
         this.activateEvents();
     }
-    activateEvents()
-    {
+    activateEvents() {
         let cryptoLink = document.getElementById('crypto-link');
-        cryptoLink.onclick = (e)=>{
+        cryptoLink.onclick = (e) => {
             let link = e.srcElement;
             let copiedBox = document.getElementById('copied');
             copiedBox.style.display = 'inline-block';
@@ -237,35 +188,26 @@ class PageAbout extends Page {
     }
 }
 
-PageAbout.CSS = [
-    '#domains > div {display:block;}',
-    '#coffee-girl {margin-left:2.5vw; width:45vw; }',
-    '#coffee-girl {border:solid 1vw black;cursor:pointer;}',
-    '#coffee-girl:hover {opacity:0.5;}',
-    '#encouraging { list-style-type: circle; color:black; }',
-    '#encouraging li { font-size:2.5vw; }',
-    '#encouraging li { list-style-type: circle; color:black;}',
-    '#copied { display:none; color:green;font-weight:bold;margin-left:1vw;}',
-];
+PageAbout.CSS = ['#domains > div {display:block;}', '#coffee-girl {margin-left:2.5vw; width:45vw; }', '#coffee-girl {border:solid 1vw black;cursor:pointer;}', '#coffee-girl:hover {opacity:0.5;}', '#encouraging { list-style-type: circle; color:black; }', '#encouraging li { font-size:2.5vw; }', '#encouraging li { list-style-type: circle; color:black;}', '#copied { display:none; color:green;font-weight:bold;margin-left:1vw;}', ];
 
 PageAbout.HTML = `
-    <div id="page"> 
+    <div id="page">
         <h3>RECLASS/</h3>
-        
-        <p>RECLASS is a labelling tool 
-        allowing to transfert names of each category 
+
+        <p>RECLASS is a labelling tool
+        allowing to transfert names of each category
         to a different wallet</p>
         <p>If you like it and it saved you some time,
         please consider encouraging me by : </p>
-        
-        <div><ul id="encouraging"> 
-            <li>Buying me a <a href="https://www.buymeacoffee.com/elphe" target="_blank">coffee</a></li> 
-            <li>Sending some  <a id="crypto-link" href="#" title="hs1qlp8vmgj8vg8qa3ej5zhk82vjzxsr4xuwjqaqly">crypto</a> 
-            <span id="copied">Copied</span></li> 
-            <li>Investing in .PROUDLY <a href="https://porkbun.com/tld/proudly" target="_blank">domains</a></li> 
-            <li>Proposing me cool <a href="https://discord.gg/K3GyWuUeyp" target="_blank">contracts</a></li> 
-        </ul></div> 
-    </div> 
+
+        <div><ul id="encouraging">
+            <li>Buying me a <a href="https://www.buymeacoffee.com/elphe" target="_blank">coffee</a></li>
+            <li>Sending some  <a id="crypto-link" href="#" title="hs1qlp8vmgj8vg8qa3ej5zhk82vjzxsr4xuwjqaqly">crypto</a>
+            <span id="copied">Copied</span></li>
+            <li>Investing in .PROUDLY <a href="https://porkbun.com/tld/proudly" target="_blank">domains</a></li>
+            <li>Proposing me cool <a href="https://discord.gg/K3GyWuUeyp" target="_blank">contracts</a></li>
+        </ul></div>
+    </div>
     `;
 
 PageAbout.HTML_IMAGE = '<a href="#"><img id="coffee-girl" title="Nadine coding" src="[SRC]"/></a>';
@@ -276,35 +218,33 @@ class PageBests extends Page {
         super("BESTS");
     }
 
-    display(){
+    display() {
         super.display();
         let body = document.getElementsByTagName('body')[0];
         body.innerHTML += '<style>' + PageBests.CSS.join("\n") + '</style>';
     }
-    async showBests(bests)
-    {
+    async showBests(bests) {
         super.displayDomains();
         let names = Object.keys(bests);
         let domainsView = document.getElementById('domains');
         let deco = "";
-        for(let position = 0; position < names.length; position++)
-        {
+        for (let position = 0; position < names.length; position++) {
             deco = "";
             let nom = names[position];
             //nom = convertFromPunycode(nom);
             let div = this.createDivWithText(nom);
             console.log(div);
-            if(nom.includes("-")) div.classList.add('dash');
-            if(bests[nom]) div.classList.add('best');
-            
+            if (nom.includes("-"))
+                div.classList.add('dash');
+            if (bests[nom])
+                div.classList.add('best');
+
             domainsView.append(div);
         }
     }
 }
 
-PageBests.CSS = [
-    '#prefered {padding: 2vw; margin: 2vw; margin-left: 6vw; width: 40vw; font-size: 1.5vw;}',    
-    '#prefered {border: solid 1vw black;  border-radius: 2vw;  background-color: #d2e6fc;}'];
+PageBests.CSS = ['#prefered {padding: 2vw; margin: 2vw; margin-left: 6vw; width: 40vw; font-size: 1.5vw;}', '#prefered {border: solid 1vw black;  border-radius: 2vw;  background-color: #d2e6fc;}'];
 
 class PageClassed extends Page {
     thisPageClassed = this;
@@ -312,39 +252,38 @@ class PageClassed extends Page {
         super("CLASSED");
     }
 
-    display(){
+    display() {
         super.display();
         let body = document.getElementsByTagName('body')[0];
         body.innerHTML += PageClassed.HTML;
-        body.innerHTML += '<style>' + PageClassed.CSS.join("\n") + '</style>';        
+        body.innerHTML += '<style>' + PageClassed.CSS.join("\n") + '</style>';
     }
-    async showTags(tags)
-    {
-        let tagsView = document.getElementById('tags');      
+    async showTags(tags) {
+        let tagsView = document.getElementById('tags');
         let div = this.createDivWithText('Please select the tag to display : ');
-        div.className = "instruction"; 
+        div.className = "instruction";
         tagsView.append(div);
 
         let position = 0;
-        for(let tag of tags)
-        {
-            position = position+1;
+        for (let tag of tags) {
+            position = position + 1;
             let div = this.createDivWithText(tag);
-            div.addEventListener("click", (e)=>{this.thisPageClassed.selectTag(e.srcElement)});
+            div.addEventListener("click", (e) => {
+                this.thisPageClassed.selectTag(e.srcElement)
+            }
+            );
             tagsView.append(div);
         }
     }
-    async showNames(names)
-    {
+    async showNames(names) {
         let domainsView = document.getElementById('classed');
         domainsView.clearChildren();
-        for(let name of names)
-        {
+        for (let name of names) {
             console.log("nom + " + name);
             name = convertFromPunycode(name);
-    
-            let div = this.createDivWithText(name);            
-            domainsView.append(div);  
+
+            let div = this.createDivWithText(name);
+            domainsView.append(div);
         }
     }
 
@@ -353,20 +292,20 @@ class PageClassed extends Page {
     selectedTagElement = null;
     selectedTag = null;
 
-    async selectTag(element)
-    {
+    async selectTag(element) {
         console.log(element);
-        if(this.selectedTagElement)
-        {
+        if (this.selectedTagElement) {
             this.selectedTagElement.style.backgroundColor = '#ccccff';
-            this.selectedTagElement.style.color = 'black';         
+            this.selectedTagElement.style.color = 'black';
         }
-        
+
         this.selectedTagElement = element;
         this.selectedTag = element.innerHTML;
-        
-        element.style.backgroundColor = 'black'; // todo class
-        element.style.color = 'white'; // todo class
+
+        element.style.backgroundColor = 'black';
+        // todo class
+        element.style.color = 'white';
+        // todo class
 
         let accessor = new AccessorTags();
         let taggedNames = accessor.getNamesForTag(this.selectedTag);
@@ -375,75 +314,62 @@ class PageClassed extends Page {
 
 }
 
-PageClassed.CSS = [
-    '#tags {background-color:#efefff;border:solid 1vw black; }',
-    '#tags {border-radius:3vw;padding:2vw;margin:5vw;}',
-    '#tags {display:flex;flex-direction:row; flex-wrap:wrap;}',
-    '#tags > div {font-size:3vw; margin:1.25vw; padding:1vw; cursor:pointer;}',
-    '#tags > div {background-color:#ccccff; color:#333333; font-weight:bold; }',
-    '#tags > div:hover {background-color:#bbbbee; color:#333333;}',
-    '#tags > div:focus {background-color:#6666ee; color:white;}',
-    '#tags > div.instruction {width:100%; background-color:yellow; color:#000;}',
-    '#classed {background-color:#ffffe0;border:solid 1vw black; }',
-    '#classed {border-radius:3vw;padding:2vw;margin:5vw;}',
-    '#classed {display:flex;flex-direction:row; flex-wrap:wrap;}',
-    '#classed > div {font-size:3vw; margin:1.25vw; padding:1vw; }',
-    '#classed > div {background-color:#61d0ff; color:#333333; font-weight:bold; }',
-    '#classed > div > span {font-size:2vw; border-radius: 1vw; display:inline-block;margin-left:1vw;padding:1vw;}',
-    '#classed > div > span {background-color:#aaaacc; }',
-];
+PageClassed.CSS = ['#tags {background-color:#efefff;border:solid 1vw black; }', '#tags {border-radius:3vw;padding:2vw;margin:5vw;}', '#tags {display:flex;flex-direction:row; flex-wrap:wrap;}', '#tags > div {font-size:3vw; margin:1.25vw; padding:1vw; cursor:pointer;}', '#tags > div {background-color:#ccccff; color:#333333; font-weight:bold; }', '#tags > div:hover {background-color:#bbbbee; color:#333333;}', '#tags > div:focus {background-color:#6666ee; color:white;}', '#tags > div.instruction {width:100%; background-color:yellow; color:#000;}', '#classed {background-color:#ffffe0;border:solid 1vw black; }', '#classed {border-radius:3vw;padding:2vw;margin:5vw;}', '#classed {display:flex;flex-direction:row; flex-wrap:wrap;}', '#classed > div {font-size:3vw; margin:1.25vw; padding:1vw; }', '#classed > div {background-color:#61d0ff; color:#333333; font-weight:bold; }', '#classed > div > span {font-size:2vw; border-radius: 1vw; display:inline-block;margin-left:1vw;padding:1vw;}', '#classed > div > span {background-color:#aaaacc; }', ];
 
 PageClassed.HTML = '\
     <div id="tags"></div>\
     <div id="classed"></div>\
 ';
 
-
-
-
 class PagePortfolio extends Page {
     thisPagePortfolio = this;
     PAGES = 1;
     OFFSET = 0;
-    
+
     constructor() {
         super("PORTFOLIO");
         PagePortfolio.thisPagePortfolio = this;
         this.page = 0;
     }
-    display()
-    {
+    display() {
         super.display();
         let body = document.getElementsByTagName('body')[0];
-        body.innerHTML += PagePortfolio.HTML.replace("[FILTERS]",PagePortfolio.HTML_FILTERS);
+        body.innerHTML += PagePortfolio.HTML.replace("[FILTERS]", PagePortfolio.HTML_FILTERS);
         body.innerHTML += '<style>' + PagePortfolio.CSS.join("\n") + '</style>';
         super.displayDomains();
 
-        this.prepareFilters();     
+        this.prepareFilters();
     }
-    prepareFilters()
-    {
+    prepareFilters() {
         console.log("prepareFilters()");
         let filterButton = document.getElementById('filter-button');
-        filterButton.onclick = (e) => {PagePortfolio.thisPagePortfolio.searchWithFilters();};
+        filterButton.onclick = (e) => {
+            PagePortfolio.thisPagePortfolio.searchWithFilters();
+        }
+        ;
         let pageBack = document.getElementById('page-back');
-        pageBack.onclick = (e) => {PagePortfolio.thisPagePortfolio.turnPage(-1);};
+        pageBack.onclick = (e) => {
+            PagePortfolio.thisPagePortfolio.turnPage(-1);
+        }
+        ;
         let pageForward = document.getElementById('page-forward');
-        pageForward.onclick = (e) => {PagePortfolio.thisPagePortfolio.turnPage(1);};
+        pageForward.onclick = (e) => {
+            PagePortfolio.thisPagePortfolio.turnPage(1);
+        }
+        ;
         console.log(filterButton.onclick);
     }
     // I keep the page even when changing the search
-    turnPage(increment) 
-    {
+    turnPage(increment) {
         let page = PagePortfolio.thisPagePortfolio.page;
-        page = page+increment;
-        if(page < 0) page = 0;
+        page = page + increment;
+        if (page < 0)
+            page = 0;
         PagePortfolio.thisPagePortfolio.page = page;
-        document.getElementById('no-page').innerHTML = (page+1);
+        document.getElementById('no-page').innerHTML = (page + 1);
         PagePortfolio.thisPagePortfolio.searchWithFilters();
     }
-    async searchWithFilters()
-    {
+    async searchWithFilters() {
         console.log('searchWithFilters()');
 
         let filterStart = document.getElementById('filter-start');
@@ -459,52 +385,55 @@ class PagePortfolio extends Page {
         let page = parseInt(filterPage.innerHTML) - 1;
 
         let search = {};
-        if(start) search['start'] = start;
-        if(lengthType == 'min' && length) search['min-length'] = length;
-        if(lengthType == 'max' && length) search['max-length'] = length;
-        if(age) search['age'] = age;
+        if (start)
+            search['start'] = start;
+        if (lengthType == 'min' && length)
+            search['min-length'] = length;
+        if (lengthType == 'max' && length)
+            search['max-length'] = length;
+        if (age)
+            search['age'] = age;
         console.log(search);
 
         let namesAccessor = new AccessorNames();
-        let domains = await namesAccessor.searchNames(search,page);
+        let domains = await namesAccessor.searchNames(search, page);
         this.showNames(domains);
     }
-    async showNames(domains)
-    {
+    async showNames(domains) {
         let domainsView = document.getElementById('domains');
         domainsView.innerHTML = '';
-        for(let position = 0; position < domains.length && this.open; position++)
-        {
+        for (let position = 0; position < domains.length && this.open; position++) {
             console.log("open " + this.open);
             let domain = domains[position];
             let name = domain.name;
             console.log("name + " + name);
             name = convertFromPunycode(name);
             //domainsView.innerHTML += '<div>'+name+'</div>';
-    
+
             let div = this.createDivWithText(name);
             console.log(div);
-            
-            div.addEventListener("click", (e)=>{this.thisPagePortfolio.chooseBest(e.srcElement)});
+
+            div.addEventListener("click", (e) => {
+                this.thisPagePortfolio.chooseBest(e.srcElement)
+            }
+            );
             domainsView.append(div);
-            
+
         }
     }
-    async showSomeNames()
-    {
+    async showSomeNames() {
         let DEFAULT_AGE = 'expiring';
         let search = {};
         search['age'] = DEFAULT_AGE;
 
         let namesAccessor = new AccessorNames();
-        let domains = await namesAccessor.searchNames(search,0);
+        let domains = await namesAccessor.searchNames(search, 0);
         this.showNames(domains);
     }
 
-    // EVENTS 
+    // EVENTS
 
-    async chooseBest(best)
-    {
+    async chooseBest(best) {
         console.log('chooseBest');
         console.log(best);
         best.style.backgroundColor = 'pink';
@@ -513,25 +442,8 @@ class PagePortfolio extends Page {
     }
 }
 
-PagePortfolio.CSS = [
-    '#filters { margin-left:5vw; width:88vw;padding:2vw; border:solid 0.2vw #476654; border-radius:3vw;}',
-    '#filters { background: rgb(12,113,80);background: linear-gradient(90deg, rgba(12,113,80,1) 0%, rgba(9,9,121,1) 50%, rgba(0,212,255,1) 100%);font-size:2vw;}',    
-    '#filters label, #filters span { font-weight:bold;color:white;}',
-    '#filters select, #filters option {font-weight:bold;color:#111111;background-color:#abeeab;}',
-    '#filters input {font-weight:bold;color:#111111;background-color:#abeeab;}',
-    '#filters #filter-start { width:5vw;}',
-    '#filters #filter-length { width:10vw;}',
-    '#filters #filter-button { padding:0.5vw;font-weight:bold;}',
-    '#filters #filter-button { background-color:#333333;color:white;}',
-    '#filters #filter-button:hover { background-color:black;color:white;}',
-    '#filters #page-back { padding:0.5vw;font-weight:bold;}',
-    '#filters #page-back{ background-color:#333333;color:white;}',    
-    '#filters #page-forward { padding:0.5vw;font-weight:bold;}',
-    '#filters #page-forward { background-color:#333333;color:white;border:none;}',   
-
-    '#filters { margin-top:3vw; }',
-    '.domains {border-radius:3vw;padding:2vw;margin:3vw 5vw 5vw 5vw;}',
-    
+PagePortfolio.CSS = ['#filters { margin-left:5vw; width:88vw;padding:2vw; border:solid 0.2vw #476654; border-radius:3vw;}', '#filters { background: rgb(12,113,80);background: linear-gradient(90deg, rgba(12,113,80,1) 0%, rgba(9,9,121,1) 50%, rgba(0,212,255,1) 100%);font-size:2vw;}', '#filters label, #filters span { font-weight:bold;color:white;}', '#filters select, #filters option {font-weight:bold;color:#111111;background-color:#abeeab;}', '#filters input {font-weight:bold;color:#111111;background-color:#abeeab;}', '#filters #filter-start { width:5vw;}', '#filters #filter-length { width:10vw;}', '#filters #filter-button { padding:0.5vw;font-weight:bold;}', '#filters #filter-button { background-color:#333333;color:white;}', '#filters #filter-button:hover { background-color:black;color:white;}', '#filters #page-back { padding:0.5vw;font-weight:bold;}', '#filters #page-back{ background-color:#333333;color:white;}', '#filters #page-forward { padding:0.5vw;font-weight:bold;}', '#filters #page-forward { background-color:#333333;color:white;border:none;}',
+'#filters { margin-top:3vw; }', '.domains {border-radius:3vw;padding:2vw;margin:3vw 5vw 5vw 5vw;}',
 ];
 
 PagePortfolio.HTML = `
@@ -569,67 +481,70 @@ class PageTags extends Page {
     constructor() {
         super("TAGS");
     }
-    display(){
+    display() {
         super.display();
         let body = document.getElementsByTagName('body')[0];
         body.innerHTML += '<style>' + PageMenu.CSS.join("\n") + '</style>';
     }
-    showTags(tags)
-    {
-        let tagsView = document.getElementById('domains');      
-        for(let tag of tags)
-        {
-            tagsView.innerHTML += '<div>'+tag+'</div>';
+    showTags(tags) {
+        let tagsView = document.getElementById('domains');
+        for (let tag of tags) {
+            tagsView.innerHTML += '<div>' + tag + '</div>';
         }
-        tagsView.innerHTML += '<div><a>+</a></div>';        
+        tagsView.innerHTML += '<div><a>+</a></div>';
     }
 }
 
-PageTags.CSS = [
-    '#domains > div {display:block;}',
-];
+PageTags.CSS = ['#domains > div {display:block;}', ];
 
 class PageClassify extends Page {
     thisPageClassify = this;
     OFFSET = 0;
     PAGES = 1;
     page = 0;
-    
+
     constructor() {
         super("CLASSIFY");
         PageClassify.thisPageClassify = this;
         PageClassify.thisPageClassify.page = 0;
     }
 
-    display(){
+    display() {
         super.display();
         let body = document.getElementsByTagName('body')[0];
-        body.innerHTML += PageClassify.HTML.replace("[FILTERS]",PageClassify.HTML_FILTERS);
+        body.innerHTML += PageClassify.HTML.replace("[FILTERS]", PageClassify.HTML_FILTERS);
         body.innerHTML += '<style>' + PageClassify.CSS.join("\n") + '</style>';
 
-        this.prepareFilters();     
+        this.prepareFilters();
     }
-    prepareFilters()
-    {
+    prepareFilters() {
         let filterButton = document.getElementById('filter-button');
-        filterButton.onclick = (e) => {PageClassify.thisPageClassify.searchWithFilters();};
+        filterButton.onclick = (e) => {
+            PageClassify.thisPageClassify.searchWithFilters();
+        }
+        ;
         let pageBack = document.getElementById('page-back');
-        pageBack.onclick = (e) => {PageClassify.thisPageClassify.turnPage(-1);};
+        pageBack.onclick = (e) => {
+            PageClassify.thisPageClassify.turnPage(-1);
+        }
+        ;
         let pageForward = document.getElementById('page-forward');
-        pageForward.onclick = (e) => {PageClassify.thisPageClassify.turnPage(1);};
+        pageForward.onclick = (e) => {
+            PageClassify.thisPageClassify.turnPage(1);
+        }
+        ;
     }
     // I keep the page even when changing the search
-    turnPage(increment) 
-    {
+    turnPage(increment) {
         let page = PageClassify.thisPageClassify.page;
-        page = page+increment;
-        if(page < 0) page = 0;
+        page = page + increment;
+        if (page < 0)
+            page = 0;
         PageClassify.thisPageClassify.page = page;
-        document.getElementById('no-page').innerHTML = (page+1);
+        document.getElementById('no-page').innerHTML = (page + 1);
         PageClassify.thisPageClassify.searchWithFilters();
     }
-    async searchWithFilters()
-    {
+    async searchWithFilters() {
         console.log('searchWithFilters()');
 
         let filterStart = document.getElementById('filter-start');
@@ -645,34 +560,38 @@ class PageClassify extends Page {
         let page = parseInt(filterPage.innerHTML) - 1;
 
         let search = {};
-        if(start) search['start'] = start;
-        if(lengthType == 'min' && length) search['min-length'] = length;
-        if(lengthType == 'max' && length) search['max-length'] = length;
-        if(age) search['age'] = age;
+        if (start)
+            search['start'] = start;
+        if (lengthType == 'min' && length)
+            search['min-length'] = length;
+        if (lengthType == 'max' && length)
+            search['max-length'] = length;
+        if (age)
+            search['age'] = age;
         console.log(search);
 
         let namesAccessor = new AccessorNames();
-        let domains = await namesAccessor.searchNames(search,page);
+        let domains = await namesAccessor.searchNames(search, page);
         this.showNames(domains);
-    }    
-    async showTags(tags)
-    {
-        let tagsView = document.getElementById('tags');      
+    }
+    async showTags(tags) {
+        let tagsView = document.getElementById('tags');
         let div = this.createDivWithText('Please select the tag to apply : ');
-        div.className = "instruction"; 
+        div.className = "instruction";
         tagsView.append(div);
 
         let position = 0;
-        for(let tag of tags)
-        {
-            position = position+1;
+        for (let tag of tags) {
+            position = position + 1;
             let div = this.createDivWithText(tag);
-            div.addEventListener("click", (e)=>{this.thisPageClassify.selectTag(e.srcElement)});
+            div.addEventListener("click", (e) => {
+                this.thisPageClassify.selectTag(e.srcElement)
+            }
+            );
             tagsView.append(div);
         }
     }
-    async showNames(domains)
-    {
+    async showNames(domains) {
         console.log('showNames()');
         let accessor = new AccessorTags();
         let taggedNames = accessor.getTaggedNames();
@@ -680,110 +599,80 @@ class PageClassify extends Page {
         console.log(taggedNames);
         let domainsView = document.getElementById('domains');
         domainsView.innerHTML = '';
-        
-        for(let position = 0; position < domains.length && this.open; position++)
-        {
+
+        for (let position = 0; position < domains.length && this.open; position++) {
             //console.log("open " + this.open);
             let domain = domains[position];
             let nom = domain.name;
             //console.log("nom + " + nom);
             nom = convertFromPunycode(nom);
-    
+
             let div = this.createDivWithText(nom);
             let tag = taggedNames[nom];
             //console.log('TAG:' + tag);
-            if(tag)
-            {
+            if (tag) {
                 let span = this.createSpanWithText(tag);
-                div.append(span);                
+                div.append(span);
             }
-            
-            div.addEventListener("click", (e)=>{this.thisPageClassify.attributeTag(e.srcElement)});
-            domainsView.append(div);  
+
+            div.addEventListener("click", (e) => {
+                this.thisPageClassify.attributeTag(e.srcElement)
+            }
+            );
+            domainsView.append(div);
         }
     }
-    async showPages()
-    {
+    async showPages() {
         console.log('showPages()');
         let namesAccessor = new AccessorNames();
         //for(let page = 0 + OFFSET; page < PAGES + OFFSET; page++)
         let page = 0;
         //{
-            let domains = await namesAccessor.listNames(page);
-            this.showNames(domains);
-            await namesAccessor.sleepSomeTime(500);
+        let domains = await namesAccessor.listNames(page);
+        this.showNames(domains);
+        await namesAccessor.sleepSomeTime(500);
         //}
     }
 
-    // EVENTS 
+    // EVENTS
 
     selectedTagElement = null;
     selectedTag = null;
-    async selectTag(element)
-    {
+    async selectTag(element) {
         console.log(element);
-        if(this.selectedTagElement)
-        {
+        if (this.selectedTagElement) {
             this.selectedTagElement.style.backgroundColor = '#ccccff';
-            this.selectedTagElement.style.color = 'black';         
+            this.selectedTagElement.style.color = 'black';
         }
-        
+
         this.selectedTagElement = element;
         this.selectedTag = element.innerHTML;
-        
-        element.style.backgroundColor = 'black'; // todo class
-        element.style.color = 'white'; // todo class
+
+        element.style.backgroundColor = 'black';
+        // todo class
+        element.style.color = 'white';
+        // todo class
     }
-    
-    async attributeTag(element)
-    {
-        if(!this.selectedTag) return;
+
+    async attributeTag(element) {
+        if (!this.selectedTag)
+            return;
         let accessor = new AccessorTags();
         let name = element.innerHTML.split('<span>')[0];
         accessor.applyTag(name, this.selectedTag);
-        element.innerHTML = name + '<span>'+this.selectedTag+'</span>';
+        element.innerHTML = name + '<span>' + this.selectedTag + '</span>';
     }
 }
 
-PageClassify.CSS = [
-    '#tags {background-color:#efefff;border:solid 1vw black; }',
-    '#tags {border-radius:3vw;padding:2vw;margin:5vw 5vw 2vw 5vw;}',
-    '#tags {display:flex;flex-direction:row; flex-wrap:wrap;}',
-    '#tags > div {font-size:3vw; margin:1.25vw; padding:1vw; cursor:pointer;}',
-    '#tags > div {background-color:#ccccff; color:#333333; font-weight:bold; }',
-    '#tags > div:hover {background-color:#bbbbee; color:#333333;}',
-    '#tags > div:focus {background-color:#6666ee; color:white;}',
-    '#tags > div.instruction {width:100%; background-color:yellow; color:#000;}',
-        
-    '#filters { margin-left:5vw; width:88vw;padding:2vw; border:solid 0.2vw #476654;border-radius:3vw;}',
-    '#filters { background: rgb(12,113,80);background: linear-gradient(90deg, rgba(12,113,80,1) 0%, rgba(9,9,121,1) 50%, rgba(0,212,255,1) 100%);font-size:2vw;}',    
-    '#filters label, #filters span { font-weight:bold;color:white;}',
-    '#filters select, #filters option {font-weight:bold;color:#111111;background-color:#abeeab;}',
-    '#filters input {font-weight:bold;color:#111111;background-color:#abeeab;}',
-    '#filters #filter-start { width:5vw;}',
-    '#filters #filter-length { width:10vw;}',
-    '#filters #filter-button { padding:0.5vw;font-weight:bold;}',
-    '#filters #filter-button { background-color:#333333;color:white;}',
-    '#filters #filter-button:hover { background-color:black;color:white;}',
-    '#filters #page-back { padding:0.5vw;font-weight:bold;}',
-    '#filters #page-back{ background-color:#333333;color:white;}',    
-    '#filters #page-forward { padding:0.5vw;font-weight:bold;}',
-    '#filters #page-forward { background-color:#333333;color:white;border:none;}',   
-    
-    '#domains {background-color:#ffffe0;border:solid 1vw black; }',
-    '#domains {border-radius:3vw;padding:2vw;margin:2vw 5vw 5vw 5vw;}',
-    '#domains {display:flex;flex-direction:row; flex-wrap:wrap;}',
-    '#domains > div {font-size:3vw; margin:1.25vw; padding:1vw; cursor:pointer;}',
-    '#domains > div > span {font-size:2vw; border-radius: 1vw; display:inline-block;margin-left:1vw;padding:1vw;}',
-    '#domains > div {background-color:#affaac; color:#333333; font-weight:bold; }',
-    '#domains > div > span {background-color:#3ea63a; color:black; }',
-];
+PageClassify.CSS = ['#tags {background-color:#efefff;border:solid 1vw black; }', '#tags {border-radius:3vw;padding:2vw;margin:5vw 5vw 2vw 5vw;}', '#tags {display:flex;flex-direction:row; flex-wrap:wrap;}', '#tags > div {font-size:3vw; margin:1.25vw; padding:1vw; cursor:pointer;}', '#tags > div {background-color:#ccccff; color:#333333; font-weight:bold; }', '#tags > div:hover {background-color:#bbbbee; color:#333333;}', '#tags > div:focus {background-color:#6666ee; color:white;}', '#tags > div.instruction {width:100%; background-color:yellow; color:#000;}',
+'#filters { margin-left:5vw; width:88vw;padding:2vw; border:solid 0.2vw #476654;border-radius:3vw;}', '#filters { background: rgb(12,113,80);background: linear-gradient(90deg, rgba(12,113,80,1) 0%, rgba(9,9,121,1) 50%, rgba(0,212,255,1) 100%);font-size:2vw;}', '#filters label, #filters span { font-weight:bold;color:white;}', '#filters select, #filters option {font-weight:bold;color:#111111;background-color:#abeeab;}', '#filters input {font-weight:bold;color:#111111;background-color:#abeeab;}', '#filters #filter-start { width:5vw;}', '#filters #filter-length { width:10vw;}', '#filters #filter-button { padding:0.5vw;font-weight:bold;}', '#filters #filter-button { background-color:#333333;color:white;}', '#filters #filter-button:hover { background-color:black;color:white;}', '#filters #page-back { padding:0.5vw;font-weight:bold;}', '#filters #page-back{ background-color:#333333;color:white;}', '#filters #page-forward { padding:0.5vw;font-weight:bold;}', '#filters #page-forward { background-color:#333333;color:white;border:none;}',
+'#domains {background-color:#ffffe0;border:solid 1vw black; }', '#domains {border-radius:3vw;padding:2vw;margin:2vw 5vw 5vw 5vw;}', '#domains {display:flex;flex-direction:row; flex-wrap:wrap;}', '#domains > div {font-size:3vw; margin:1.25vw; padding:1vw; cursor:pointer;}', '#domains > div > span {font-size:2vw; border-radius: 1vw; display:inline-block;margin-left:1vw;padding:1vw;}', '#domains > div {background-color:#affaac; color:#333333; font-weight:bold; }', '#domains > div > span {background-color:#3ea63a; color:black; }', ];
 
 PageClassify.HTML = `
     <div id="tags"></div>
     [FILTERS]
     <div id="pages">
-                
+
     </div>
     <div><div id="domains" class="domains"></div></div>
 `;
@@ -802,7 +691,7 @@ PageClassify.HTML_FILTERS = `
         <label for="filter-age">AGE</label>
         <select id="filter-age">
             <option>any</option>
-            <option>expiring</option>
+            <option selected>expiring</option>
             <option>not expiring</option>
             <option>newest</option>
             <option>oldest</option>
@@ -817,65 +706,66 @@ PageClassify.HTML_FILTERS = `
 `;
 class PageTransfer extends Page {
     thisPageTransfer = this;
-    
+
     tagActive = false;
     monthActive = true;
-    tag = ''; 
+    tag = '';
     months = [];
     tooBig = 5000;
-    
+
     constructor() {
         super("TRANSFER");
-        PageTransfer.thisPageTransfer = this; // all pages are singleton
+        PageTransfer.thisPageTransfer = this;
+        // all pages are singleton
     }
-    async display(){
+    async display() {
         super.display();
         let body = document.getElementsByTagName('body')[0];
         body.innerHTML += PageTransfer.HTML;
         body.innerHTML += '<style>' + PageTransfer.CSS.join("\n") + '</style>';
-        
-        this.activateToggle('toggle-state-tags','tags-activation','','TAGS DEACTIVATED', this.reactToTagToggle, false);
+
+        this.activateToggle('toggle-state-tags', 'tags-activation', '', 'TAGS DEACTIVATED', this.reactToTagToggle, false);
         this.prepareTagSelection();
-        this.activateToggle('toggle-state-months','months-activation','','MONTHS DEACTIVATED', this.reactToMonthToggle, true);
+        this.activateToggle('toggle-state-months', 'months-activation', '', 'MONTHS DEACTIVATED', this.reactToMonthToggle, true);
         await this.initMonthSelection();
-        this.showAnalyzeButton(); 
+        this.showAnalyzeButton();
 
         let transferButton = document.getElementById('transfer-submit');
-        transferButton.onclick = (e)=>{PageTransfer.thisPageTransfer.transferNames();};
+        transferButton.onclick = (e) => {
+            PageTransfer.thisPageTransfer.transferNames();
+        }
+        ;
     }
-    async displayTagSelection(really)
-    {
+    async displayTagSelection(really) {
         let boxSelectionTag = document.getElementById('selection-tag');
-        boxSelectionTag.style.display = ((really)?'block':'none');
-        if(really)
-        {
+        boxSelectionTag.style.display = ((really) ? 'block' : 'none');
+        if (really) {
             let selectField = boxSelectionTag.getElementsByTagName('select')[0];
-            selectField.onchange = (e)=>{PageTransfer.thisPageTransfer.reactToTagSelection(e.srcElement)};            
+            selectField.onchange = (e) => {
+                PageTransfer.thisPageTransfer.reactToTagSelection(e.srcElement)
+            }
+            ;
         }
     }
-    async displayMonthSelection(really)
-    {
+    async displayMonthSelection(really) {
         let nextBox = document.getElementById('months-configuration');
-        nextBox.style.display = ((really)?'block':'none');
+        nextBox.style.display = ((really) ? 'block' : 'none');
     }
-    prepareTagSelection()
-    {
+    prepareTagSelection() {
         let tagsAccessor = new AccessorTags();
         let tags = tagsAccessor.listTags();
         this.tag = tags[0];
-        
+
         let box = document.getElementById("tags-selection");
         let optionsHTML = '';
-        for(let tag of tags)
-        {
+        for (let tag of tags) {
             optionsHTML += '<option>' + tag + '</option>';
         }
         let boxSelectionTag = document.getElementById('selection-tag');
-        boxSelectionTag.innerHTML += PageTransfer.HTML_SELECT_TAG.replace("[OPTIONS]",optionsHTML);
+        boxSelectionTag.innerHTML += PageTransfer.HTML_SELECT_TAG.replace("[OPTIONS]", optionsHTML);
     }
 
-    async computeNextDate()
-    {
+    async computeNextDate() {
         // find next month to expire
         let namesAccessor = new AccessorNames();
         let domains = await namesAccessor.listNamesExpiring(0);
@@ -884,66 +774,55 @@ class PageTransfer extends Page {
         let nextDate = nextDomain.estimatedExpirationDate;
         return nextDate;
     }
-    showNextMonths(nextDate)
-    {
+    showNextMonths(nextDate) {
         let id = "";
         let nextBox = document.getElementById('checkboxes');
-        id = formatDateToId(nextDate);
-        nextBox.innerHTML += '<input type="checkbox" id="'+id+'" checked="checked"/>'; 
-        nextBox.innerHTML += '<span>'+formatMonthToText(nextDate)+'</span>'; 
-        nextDate['month']++;
-        id = formatDateToId(nextDate);
-        nextBox.innerHTML += '<input type="checkbox" id="' + id + '"/>'; 
-        nextBox.innerHTML += '<span>'+formatMonthToText(nextDate)+'</span>'; 
-        nextDate['month']++;
-        id = formatDateToId(nextDate);
-        nextBox.innerHTML += '<input type="checkbox" id="' + id + '"/>'; 
-        nextBox.innerHTML += '<span>'+formatMonthToText(nextDate)+'</span>'; 
+        nextBox.innerHTML += '<input type="checkbox" id="' + formatDateToId(nextDate) + '" checked="checked"/>';
+        nextBox.innerHTML += '<span>' + formatMonthToText(nextDate) + '</span>';
+        nextDate = incrementDate(nextDate);
+        nextBox.innerHTML += '<input type="checkbox" id="' + formatDateToId(nextDate) + '"/>';
+        nextBox.innerHTML += '<span>' + formatMonthToText(nextDate) + '</span>';
+        nextDate = incrementDate(nextDate);
+        nextBox.innerHTML += '<input type="checkbox" id="' + formatDateToId(nextDate) + '"/>';
+        nextBox.innerHTML += '<span>' + formatMonthToText(nextDate) + '</span>';
     }
-    async initMonthSelection()
-    {
+    async initMonthSelection() {
         this.displayMonthSelection(false);
         let nextDate = parseDate(await this.computeNextDate());
         console.log(nextDate);
         let nextDateBox = document.getElementById('month-next');
-        nextDateBox.innerHTML = formatDateToText(nextDate);  
-        
+        nextDateBox.innerHTML = formatDateToText(nextDate);
+
         let namesAccessor = new AccessorNames();
         let total = await namesAccessor.countNamesInWallet();
-        let average = Math.round(total/24);
+        let average = Math.round(total / 24);
         console.log("Total " + total);
         let averageBox = document.getElementById('month-average');
-        averageBox.innerHTML = 'Estimate : average of ' +average+ ' names per month'; 
+        averageBox.innerHTML = 'Estimate : average of ' + average + ' names per month';
 
         await this.showNextMonths(nextDate);
         this.displayMonthSelection(true);
     }
-    async reactToTagToggle(state)
-    {
+    async reactToTagToggle(state) {
         console.log('reactToTagToggle()');
         let box = document.getElementById('toggle-state-tags').parentNode;
         let labelAfter = box.getElementsByClassName('label-toggle')[1];
-        if(state)
-        {
+        if (state) {
             PageTransfer.thisPageTransfer.tagActive = true;
             labelAfter.innerHTML = 'TAGS ACTIVATED';
             PageTransfer.thisPageTransfer.displayTagSelection(true);
-        }
-        else
-        {
+        } else {
             PageTransfer.thisPageTransfer.tagActive = false;
-            labelAfter.innerHTML = 'TAGS DEACTIVATED';            
+            labelAfter.innerHTML = 'TAGS DEACTIVATED';
             PageTransfer.thisPageTransfer.displayTagSelection(false);
         }
         console.log(box);
     }
-    async reactToMonthToggle(state)
-    {
+    async reactToMonthToggle(state) {
         console.log('reactToMonthToggle()');
         let box = document.getElementById('toggle-state-months').parentNode;
         let labelAfter = box.getElementsByClassName('label-toggle')[1];
-        if(state)
-        {
+        if (state) {
             labelAfter.innerHTML = 'MONTHS ACTIVATED';
             PageTransfer.thisPageTransfer.monthActive = true;
             PageTransfer.thisPageTransfer.displayMonthSelection(true);
@@ -951,21 +830,18 @@ class PageTransfer extends Page {
             let analyzeButton = document.getElementById("analyze");
             let monthsConfiguration = document.getElementById("months-configuration");
             monthsConfiguration.append(analyzeButton);
-            
-        }
-        else
-        {
-            labelAfter.innerHTML = 'MONTHS DEACTIVATED';            
+
+        } else {
+            labelAfter.innerHTML = 'MONTHS DEACTIVATED';
             PageTransfer.thisPageTransfer.monthActive = false;
             PageTransfer.thisPageTransfer.displayMonthSelection(false);
-            
+
             let analyzeButton = document.getElementById("analyze");
             let tagsConfiguration = document.getElementById("tags-configuration");
             tagsConfiguration.append(analyzeButton);
         }
     }
-    reactToTagSelection(select)
-    {
+    reactToTagSelection(select) {
         //var value = select.value;
         console.log('reactToTagSelection()');
         this.tag = select.options[select.selectedIndex].text;
@@ -973,96 +849,93 @@ class PageTransfer extends Page {
         let tags = tagsAccessor.getNamesForTag(this.tag);
         console.log(tags);
     }
-    async reactToMonthSelection()
-    {
+    async reactToMonthSelection() {
         let namesAccessor = new AccessorNames();
         let page = 0;
         //{
-            let domains = await namesAccessor.listNamesExpiring(page);
-            this.showNames(domains);
-            await sleepSomeTime(500);
+        let domains = await namesAccessor.listNamesExpiring(page);
+        this.showNames(domains);
+        await sleepSomeTime(500);
         //}
-        
+
     }
-    async showNames(domains)
-    {
+    async showNames(domains) {
         console.log('showNames()');
         let domainsView = document.getElementById('domains');
-        
-        for(let position = 0; position < domains.length && this.open; position++)
-        {
+
+        for (let position = 0; position < domains.length && this.open; position++) {
             let domain = domains[position];
             let nom = domain.name;
             nom = convertFromPunycode(nom);
-    
+
             let div = this.createDivWithText(nom);
-            domainsView.append(div);  
+            domainsView.append(div);
         }
     }
-    showAnalyzeButton()
-    {
+    showAnalyzeButton() {
         let analyzeButton = document.getElementById("analyze");
-        analyzeButton.onclick = ()=>{PageTransfer.thisPageTransfer.reactToAnalyzeClick();};
+        analyzeButton.onclick = () => {
+            PageTransfer.thisPageTransfer.reactToAnalyzeClick();
+        }
+        ;
         analyzeButton.style.display = 'block';
     }
-    showWaitingBox(really)
-    {
+    showWaitingBox(really) {
         let waitingBox = document.getElementById("waiting-box");
-        waitingBox.style.display = (really)?'flex':'none';
-        if(really)
-        {
+        waitingBox.style.display = (really) ? 'flex' : 'none';
+        if (really) {
             let waitingBox = document.getElementById('waiting');
             waitingBox.classList.remove('stop');
         }
     }
-    async readMonthsChosen()
-    {
+    async readMonthsChosen() {
         let checkboxesBox = document.getElementById("checkboxes");
         let checkboxes = checkboxesBox.getElementsByTagName('input');
         console.log(checkboxes);
         let dates = [];
-        for(let checkbox of checkboxes)
-        {
-            if(checkbox.checked)
-            {
+        for (let checkbox of checkboxes) {
+            if (checkbox.checked) {
                 console.log(checkbox.id);
                 //dates[dates.length] = parseDateFromId(checkbox.id);
                 dates[dates.length] = (checkbox.id);
             }
         }
         console.log("dates array : ");
-        console.log(dates); 
-        PageTransfer.thisPageTransfer.months = dates;        
+        console.log(dates);
+        PageTransfer.thisPageTransfer.months = dates;
     }
-    displayChoices()
-    {
+    displayChoices() {
         let conclusionBox = document.getElementById("conclusions");
         let tag = PageTransfer.thisPageTransfer.tag;
-        let months = PageTransfer.thisPageTransfer.months;
+        let months = PageTransfer.thisPageTransfer.months.map((date)=>{
+            let elements = date.split("-");
+            elements.pop();
+            return elements.join('-');
+        });
         let tagActive = PageTransfer.thisPageTransfer.tagActive;
         let monthActive = PageTransfer.thisPageTransfer.monthActive;
         let choices = [];
-        if(tagActive) choices[choices.length]  = ' the tag ' + tag;
-        if(monthActive) choices[choices.length]  = ' the month'+((months.length>1)?'s':'')+' ' + months.join(' + ');        
-        if(tagActive || monthActive) conclusionBox.innerHTML = '<p>You chose ' + choices.join(' and ') + '</p>';
-        else conclusionBox.innerHTML = '<p>Please choose a tag or a month</p>';        
+        if (tagActive)
+            choices[choices.length] = ' the tag ' + tag;
+        if (monthActive)
+            choices[choices.length] = ' the month' + ((months.length > 1) ? 's' : '') + ' ' + months.join(' + ');
+        if (tagActive || monthActive)
+            conclusionBox.innerHTML = '<p>You chose ' + choices.join(' and ') + '</p>';
+        else
+            conclusionBox.innerHTML = '<p>Please choose a tag or a month</p>';
     }
-    confirmTransfersReady(transfers)
-    {
+    confirmTransfersReady(transfers) {
         let conclusionBox = document.getElementById("conclusions");
-        conclusionBox.innerHTML += '<p>You have '+ transfers.length + ' transfers waiting such as : '
-            + listArrayWithEllipsis(transfers) +'</p>';
+        conclusionBox.innerHTML += '<p>You have ' + transfers.length + ' transfers waiting such as : ' + listArrayWithEllipsis(transfers) + '</p>';
     }
-    showTransferInfos()
-    {
+    showTransferInfos() {
         let transferInfosBox = document.getElementById('transfer-infos');
         transferInfosBox.style.display = 'block';
     }
-    async reactToAnalyzeClick()
-    {
+    async reactToAnalyzeClick() {
         console.log("reactToAnalyzeClick()");
         this.showWaitingBox(true);
-        this.readMonthsChosen(); 
+        this.readMonthsChosen();
         this.displayChoices();
         let transfers = await this.analyzeChoices();
         PageTransfer.thisPageTransfer.transfers = transfers;
@@ -1073,87 +946,85 @@ class PageTransfer extends Page {
     }
     page = 0;
     lastName = null;
-    async listNamesForMonth(target)
-    {
+    async listNamesForMonth(target) {
         let monthNames = [];
-        let namesAccessor = new AccessorNames(); 
+        let namesAccessor = new AccessorNames();
         let isDateOK = true;
         let isTooBig = false
-        do
-        {
+        do {
             let names = await namesAccessor.listNamesExpiring(this.page++);
-            this.lastName = names[names.length-1]; // for month overlapping
+            this.lastName = names[names.length - 1];
+            // for month overlapping
             await namesAccessor.sleepSomeTime(200);
-            let checkName = names[names.length-1];
+            let checkName = names[names.length - 1];
             let checkDate = parseDate(checkName.estimatedExpirationDate);
-            
+
             isDateOK = (checkDate['month'] == target['month']) && (checkDate['year'] == target['year']);
             //console.log('isDateOk' + isDateOK);
-            if(!isDateOK)
-            {
-                names = names.filter((name) => {
+            if (!isDateOK) {
+                names = names.filter( (name) => {
                     let date = parseDate(name.estimatedExpirationDate);
-                    if(date['year'] != target['year']) return false;
-                    if(date['month'] != target['month']) return false;
+                    if (date['year'] != target['year'])
+                        return false;
+                    if (date['month'] != target['month'])
+                        return false;
                     return true;
-                });   
+                }
+                );
             }
-            
+
             monthNames = monthNames.concat(names);
             isTooBig = monthNames.length > this.tooBig;
-            
-        }while(isDateOK && !isTooBig);
+
+        } while (isDateOK && !isTooBig);
         return monthNames;
     }
-    async analyzeChoices()
-    {
+    async analyzeChoices() {
         let months = PageTransfer.thisPageTransfer.months;
-        let tag = PageTransfer.thisPageTransfer.tag;        
+        let tag = PageTransfer.thisPageTransfer.tag;
         let monthActive = PageTransfer.thisPageTransfer.monthActive;
         let tagActive = PageTransfer.thisPageTransfer.tagActive;
 
         let transfer = [];
 
-        if(monthActive)
-        {
+        if (monthActive) {
             this.page = 0;
-            for(let index = 0; index < 3 && months[index] != null; index++)
-            {
+            for (let index = 0; index < 3 && months[index] != null; index++) {
                 let target = parseDateFromId(months[index]);
-                if(index>0 && this.lastName['month' == target['month']] ) this.page--;
+                if (index > 0 && this.lastName['month' == target['month']])
+                    this.page--;
                 let monthNames = await this.listNamesForMonth(target);
                 transfer = transfer.concat(monthNames);
-            } 
-            transfer = transfer.map((name)=>{return name.name;});
+            }
+            transfer = transfer.map( (name) => {
+                return name.name;
+            }
+            );
             console.log('Months names are the following : ');
-            console.log(transfer);  
+            console.log(transfer);
         }
 
-        if(tagActive)
-        {
+        if (tagActive) {
             let accessor = new AccessorTags();
-            let taggedNames = accessor.getNamesForTag(tag);  
+            let taggedNames = accessor.getNamesForTag(tag);
             console.log(taggedNames);
-            if(monthActive)
+            if (monthActive)
                 transfer = transfer.filter(name => taggedNames.includes(name));
             else
                 transfer = taggedNames;
         }
         console.log('Transfer names are the following : ');
-        console.log(transfer);  
+        console.log(transfer);
         return transfer;
     }
-    removeTransferedNames(transfered)
-    {
+    removeTransferedNames(transfered) {
         let tagActive = PageTransfer.thisPageTransfer.tagActive;
-        if(tagActive)
-        {
+        if (tagActive) {
             let accessor = new AccessorTags();
-            let taggedNames = accessor.removeNames(transfered);  
-        }        
+            let taggedNames = accessor.removeNames(transfered);
+        }
     }
-    async transferNames()
-    {
+    async transferNames() {
         let walletInput = document.getElementById('destination-wallet');
         let secretInput = document.getElementById('namebase-secret');
         let address = walletInput.value;
@@ -1165,25 +1036,16 @@ class PageTransfer extends Page {
         transferInfosBox.append(waitingBox);
         waitingBox.style.display = 'block';
 
-        let messagesFun = ['Picking flowers...',
-                           'Baking cupcakes...',
-                          'Compressing the internet...',
-                          'Inventing web4...',
-                          'Surfing on a rainbow...',
-                          'Painting the sky...',
-                          'Flavoring websites...',
-                          'Jumping in wormholes...',
-                          ];
-        
+        let messagesFun = ['Picking flowers...', 'Baking cupcakes...', 'Compressing the internet...', 'Inventing web4...', 'Surfing on a rainbow...', 'Painting the sky...', 'Flavoring websites...', 'Jumping in wormholes...', ];
+
         let accessor = new AccessorNames();
         let transfers = PageTransfer.thisPageTransfer.transfers;
         let explanationBox = document.getElementById("waiting-explanation");
-        for(let name of transfers)
-        {
+        for (let name of transfers) {
             let encodedName = convertToPunycode(name);
-            await accessor.transferName(encodedName, address, secret); 
+            await accessor.transferName(encodedName, address, secret);
             await accessor.sleepSomeTime(200);
-            
+
             let message = 'Transfering ' + name + " ...";
             console.log(message);
             explanationBox.innerHTML = '<p>' + message + '</p>';
@@ -1196,76 +1058,47 @@ class PageTransfer extends Page {
     }
 }
 
-PageTransfer.CSS = [
-    '#months-configuration {display:none;position:relative;padding:1vw 0vw 0vw 1vw;height:14vw;}',
-    '#months-configuration {font-size:2.5vw;background-color:#eeeeee;}',
-    '#months-configuration > p {margin:0vw 0vw 0vw 1vw;}',
-    '#months-configuration > #month-average {font-weight:bold;width:auto;}',
-    '#months-configuration > #checkboxes {margin:1vw 0vw 0vw 1vw;}',
-    '#months-configuration input{float:left;clear:none;}',
-    '#months-configuration span{float:left;clear:none;margin:0 1vw 0 0vw;}',
-    
-    '#tags-configuration {position:relative;padding-top:1vw;}',
-    '#tags-configuration #analyze {height:6vw;}',
-    '#tags-configuration #analyze a {padding:1.2vw; font-size:3vw;}',
-    '#selection-tag {display:none;font-size:3vw;padding:2vw;background-color:#eeeeee;}',
-    
-    '#analyze {display:none;position:absolute;right:2vw; top:2vw; width:auto; height:10vw;}',
-    '#analyze a {display:inline-block;font-size:5vw; padding:2vw;height:100%;vertical-align:middle;}',
-    '#analyze a {background-color: #aaaaaa;color:white;}',
-    '#analyze a:hover {background-color:orange;color:white;}',
-    
+PageTransfer.CSS = ['#months-configuration {display:none;position:relative;padding:1vw 0vw 0vw 1vw;height:14vw;}', '#months-configuration {font-size:2.5vw;background-color:#eeeeee;}', '#months-configuration > p {margin:0vw 0vw 0vw 1vw;}', '#months-configuration > #month-average {font-weight:bold;width:auto;}', '#months-configuration > #checkboxes {margin:1vw 0vw 0vw 1vw;}', '#months-configuration input{float:left;clear:none;}', '#months-configuration span{float:left;clear:none;margin:0 1vw 0 0vw;}',
+'#tags-configuration {position:relative;padding-top:1vw;}', '#tags-configuration #analyze {height:6vw;}', '#tags-configuration #analyze a {padding:1.2vw; font-size:3vw;}', '#selection-tag {display:none;font-size:3vw;padding:2vw;background-color:#eeeeee;}',
+'#analyze {display:none;position:absolute;right:2vw; top:2vw; width:auto; height:10vw;}', '#analyze a {display:inline-block;font-size:5vw; padding:2vw;height:100%;vertical-align:middle;}', '#analyze a {background-color: #aaaaaa;color:white;}', '#analyze a:hover {background-color:orange;color:white;}',
 //    '#waiting-box {width: 20vw;  height: 20vw;}',
-    '#waiting-box {position:relative; display:none;flex-direction:row;margin-top:2vw;}',
-    '#waiting {background-color:orange;}',
-    '#waiting-explanation {margin-left:5vw;}',
-    '#waiting-explanation, #waiting-explanation p {color:orange;font-weight:bold;font-size:6vw;}',
+'#waiting-box {position:relative; display:none;flex-direction:row;margin-top:2vw;}', '#waiting {background-color:orange;}', '#waiting-explanation {margin-left:5vw;}', '#waiting-explanation, #waiting-explanation p {color:orange;font-weight:bold;font-size:6vw;}',
+'#transfer-infos #waiting-explanation {position:absolute;top:0;right:0;width:70vw;}', '#transfer-infos #waiting-explanation p {font-size:4vw;}',
+'#transfer-infos {display:none;}', '#transfer-infos form {background-color:#eeeeee;padding-top:1vw;padding-bottom:2vw;}', '#transfer-infos form > div {}', '#transfer-infos form > div > label {display:block; color:#666666;font-size:2.5vw; margin:1vw 0 1vw 0;}', '#transfer-infos form > div > input {width:90vw;line-height:5vw;font-size:2.5vw;padding-left:1vw;padding-right:1vw;}', '#transfer-infos form > #transfer-submit {display:block;width:90vw;margin-left:0vw;font-size:5vw;margin-top:2vw;cursor:pointer;}', '#transfer-infos form > #transfer-submit {text-align:center;background-color:orange;font-weight:bold;color:white;border:none;}', ];
 
-    '#transfer-infos #waiting-explanation {position:absolute;top:0;right:0;width:70vw;}',
-    '#transfer-infos #waiting-explanation p {font-size:4vw;}',
-    
-    '#transfer-infos {display:none;}',
-    '#transfer-infos form {background-color:#eeeeee;padding-top:1vw;padding-bottom:2vw;}',
-    '#transfer-infos form > div {}',
-    '#transfer-infos form > div > label {display:block; color:#666666;font-size:2.5vw; margin:1vw 0 1vw 0;}',
-    '#transfer-infos form > div > input {width:90vw;line-height:5vw;font-size:2.5vw;padding-left:1vw;padding-right:1vw;}',
-    '#transfer-infos form > #transfer-submit {display:block;width:90vw;margin-left:0vw;font-size:5vw;margin-top:2vw;cursor:pointer;}',
-    '#transfer-infos form > #transfer-submit {text-align:center;background-color:orange;font-weight:bold;color:white;border:none;}',
-];
-
-PageTransfer.HTML =`
-        <div id="page"> 
+PageTransfer.HTML = `
+        <div id="page">
         <h3>Yes !! You can transfert to Bob</h3>
-        <p>You will have to priorize 
+        <p>You will have to priorize
         names by labels or by expiration month.</p>
         <h3>Step by Step</h3>
         <div id="step-tags">
             <div id="tags-activation">
                 <p>First you have to select tags ON or OFF : </p>
             </div>
-            <div id="tags-configuration"> 
-                <div id="tags-selection"><div id="selection-tag"></div> </div> 
-            </div> 
+            <div id="tags-configuration">
+                <div id="tags-selection"><div id="selection-tag"></div> </div>
+            </div>
         </div>
         <div id="step-months">
-            <div id="months-activation"> 
-                <p>Then you have to configure the transfer : </p> 
-            </div> 
-            <p>Then you have to choose the month to transfer : </p> 
+            <div id="months-activation">
+                <p>Then you have to configure the transfer : </p>
+            </div>
+            <p>Then you have to choose the month to transfer : </p>
             <div id="months-configuration">
                 <p><span>Next expiration date is</span><span id="month-next"></span></p>
                 <p id="month-average"></p>
                 <div class="checkboxes" id="checkboxes">
                 </div>
                 <div id="analyze"><a>ANALYZE</a></div>
-            </div> 
+            </div>
         </div>
         <div id="waiting-box">
             <div id="waiting" class="hourglass"></div>
             <div id="waiting-explanation"><p>Preparing the whole </p><p> list of names</p></div>
         </div>
         <div id="conclusions">
-            
+
         </div>
         <div id="transfer-infos">
             <h3>Transfer infos</h3>
@@ -1282,215 +1115,196 @@ PageTransfer.HTML =`
                 <!--input id="transfer-submit" type="submit" value="TRANSFER NOW"/-->
             </form>
         </div>
-    </div> 
+    </div>
     `;
 PageTransfer.HTML_SELECT_TAG = '<label for="select-tag">Choose a tag to transfer : </label>\
                                 <select id="select-tag">[OPTIONS]</select>';
 
-class AccessorBest 
-{
-    async initBests()
-    {
+class AccessorBest {
+    async initBests() {
         let bests = localStorage.getItem("bests");
         bests = JSON.parse(bests) || {};
-        //if(!bests) bests = {};    
+        //if(!bests) bests = {};
         saveBests(bests);
     }
-    
-    async addBest(best)
-    {
-        console.log("addBest("+best+")");
+
+    async addBest(best) {
+        console.log("addBest(" + best + ")");
         let bests = localStorage.getItem("bests") || {};
         bests = JSON.parse(bests);
         bests[best] = 1;
-        console.log("bests:"+JSON.stringify(bests));
+        console.log("bests:" + JSON.stringify(bests));
         localStorage.setItem("bests", JSON.stringify(bests));
     }
-    
-    async listBests()
-    {
+
+    async listBests() {
         let bests = localStorage.getItem("bests");
         return JSON.parse(bests);
     }
-    
-    async saveBests(bests)
-    {
+
+    async saveBests(bests) {
         localStorage.setItem("bests", JSON.stringify(bests));
     }
 }
 
-class AccessorNames
-{    
+class AccessorNames {
     LINK = 'https://www.namebase.io/api/user/domains/owned?';
     LINK_STATS = 'https://www.namebase.io/api/user/wallet';
     LINK_NAME = "https://www.namebase.io/api/domains/search";
     PARA = 'sortKey=acquiredAt&sortDirection=desc&limit=100&minLength=8&offset=';
-    constructor() 
-    {
+    constructor() {
         this.para = [];
-        this.para['sortKey'] = 'acquiredAt'; // expires
-        this.para['sortDirection'] = 'asc'; // desc
+        this.para['sortKey'] = 'acquiredAt';
+        // expires
+        this.para['sortDirection'] = 'asc';
+        // desc
         this.para['limit'] = '100';
-        this.para['offset'] = '0';        
+        this.para['offset'] = '0';
         //this.resetPara();
-    }  
-    resetPara()
-    {
-        this.para['sortKey'] = 'acquired'; // expires
-        this.para['sortDirection'] = 'asc'; // desc
+    }
+    resetPara() {
+        this.para['sortKey'] = 'acquired';
+        // expires
+        this.para['sortDirection'] = 'asc';
+        // desc
         this.para['limit'] = '100';
-        this.para['offset'] = '0';        
+        this.para['offset'] = '0';
     }
-    preparePara()
-    {
-        return Object.keys(this.para)
-        .map(cle => `${encodeURIComponent(cle)}=${encodeURIComponent(this.para[cle])}`)
-        .join('&');
+    preparePara() {
+        return Object.keys(this.para).map(cle => `${encodeURIComponent(cle)}=${encodeURIComponent(this.para[cle])}`).join('&');
     }
-    sleepSomeTime(tenth) 
-    {
-       return new Promise(resolve => setTimeout(resolve, 10*tenth));
+    sleepSomeTime(tenth) {
+        return new Promise(resolve => setTimeout(resolve, 10 * tenth));
     }
-    async getLink(link)
-    {
+    async getLink(link) {
         let data = '';
-        try
-        {
+        try {
             let message = await fetch(link);
             data = await message.json();
-        }
-        catch(e)
-        {
+        } catch (e) {
             console.log(e);
         }
-        return data;                    
+        return data;
     }
-    async postLink(data)
-    {
+    async postLink(data) {
         var options = {
-              method: "POST",
-              headers: {"Content-Type": "application/json",},
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
         };
-        options = Object.assign({}, options, data); 
-        const reponse = await fetch(url, options);        
+        options = Object.assign({}, options, data);
+        const reponse = await fetch(url, options);
     }
-    async transferName(name, address, secret)
-    {
+    async transferName(name, address, secret) {
         let totp = new jsOTP.totp();
         let token = totp.getOtp(secret);
-        
+
         var data = {};
         data['address'] = address;
         var options = {
-              method: "POST",
-              headers: {"Content-Type": "application/json","x-totp-tokens":token},
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-totp-tokens": token
+            },
         };
-        options['body'] = JSON.stringify(data);        
-        let link = 'https://www.namebase.io/api/domains/'+name+'/transfer';
-        const response = await fetch(link, options); 
+        options['body'] = JSON.stringify(data);
+        let link = 'https://www.namebase.io/api/domains/' + name + '/transfer';
+        const response = await fetch(link, options);
         console.log(response);
     }
-    async getLinkNames(link)
-    {
+    async getLinkNames(link) {
         let domains = [];
-        try
-        {
+        try {
             let message = await fetch(link);
             let data = await message.json();
             domains = data.domains;
-        }
-        catch(e)
-        {
+        } catch (e) {
             console.log(e);
         }
-        return domains;                    
+        return domains;
     }
-    async listNames(page)
-    {
-        console.log("listNames("+page+")");
-        let link = this.LINK + this.PARA + page*100;
+    async listNames(page) {
+        console.log("listNames(" + page + ")");
+        let link = this.LINK + this.PARA + page * 100;
         console.log(link);
         return this.getLinkNames(link);
-    } 
-    async searchNames(search, page)
-    {
+    }
+    async searchNames(search, page) {
         let para = this.para;
-        if(search['start']) para['startsWith'] = search['start'];
-        if(search['min-length']) para['minLength'] = search['min-length'];
-        if(search['max-length']) para['maxLength'] = search['max-length'];
-        if(search['age'] != 'any') 
-        {
-            switch(search['age'])
-            {
-                case 'expiring':
-                    para['sortKey'] = 'expires';
-                    para['sortDirection'] = 'asc';
+        if (search['start'])
+            para['startsWith'] = search['start'];
+        if (search['min-length'])
+            para['minLength'] = search['min-length'];
+        if (search['max-length'])
+            para['maxLength'] = search['max-length'];
+        if (search['age'] != 'any') {
+            switch (search['age']) {
+            case 'expiring':
+                para['sortKey'] = 'expires';
+                para['sortDirection'] = 'asc';
                 break;
-                case 'not expiring':
-                    para['sortKey'] = 'expires';
-                    para['sortDirection'] = 'desc';
+            case 'not expiring':
+                para['sortKey'] = 'expires';
+                para['sortDirection'] = 'desc';
                 break;
-                case 'newest':
-                    para['sortKey'] = 'acquiredAt';
-                    para['sortDirection'] = 'desc';
+            case 'newest':
+                para['sortKey'] = 'acquiredAt';
+                para['sortDirection'] = 'desc';
                 break;
-                case 'oldest':
-                    para['sortKey'] = 'acquiredAt';
-                    para['sortDirection'] = 'asc';
+            case 'oldest':
+                para['sortKey'] = 'acquiredAt';
+                para['sortDirection'] = 'asc';
                 break;
-                    
+
             }
         }
-        para['offset'] = page*100;
+        para['offset'] = page * 100;
         console.log(para);
-      
+
         let link = this.LINK + this.preparePara();
         console.log(link);
-        return this.getLinkNames(link);        
+        return this.getLinkNames(link);
     }
     async searchNameWithName(name) // from wallet
     {
         let para = this.para;
         para['startsWith'] = name;
         console.log(para);
-      
-        let link = this.LINK + this.preparePara();
-        console.log(link);
-        return this.getLinkNames(link);        
-    }
-    async listNamesExpiring(x)
-    {
-        console.log("listNamesExpiring("+x+")");
-        this.para['sortKey'] = 'expires'; 
-        this.para['offset'] = x*100;
-        console.log(this.para);
-        
+
         let link = this.LINK + this.preparePara();
         console.log(link);
         return this.getLinkNames(link);
-    } 
-    async countNamesInWallet()
-    {
+    }
+    async listNamesExpiring(x) {
+        console.log("listNamesExpiring(" + x + ")");
+        this.para['sortKey'] = 'expires';
+        this.para['offset'] = x * 100;
+        console.log(this.para);
+
+        let link = this.LINK + this.preparePara();
+        console.log(link);
+        return this.getLinkNames(link);
+    }
+    async countNamesInWallet() {
         let data = await this.getLink(this.LINK_STATS);
         return data.totalCountOwnedDomains;
     }
-    async filterActiveNames(names)
-    {
-        
+    async filterActiveNames(names) {
     }
 }
-class AccessorTags
-{
+class AccessorTags {
     TAGGED_NAME = "tagged";
-    
-    listTags()
-    {        
+
+    listTags() {
         let tagsFromUser = TAGS_FROM_USER.split("\n");
         tagsFromUser = tagsFromUser.map(e => e.trim());
         tagsFromUser = tagsFromUser.filter(e => e.length > 0);
-        
-        if(tagsFromUser.length > 0) return tagsFromUser;
-        
+
+        if (tagsFromUser.length > 0)
+            return tagsFromUser;
+
         //var TAGS = ['en','2W','3L','emoji','emoji2','creation','selling'];
         let tags = [];
         tags[tags.length] = 'en';
@@ -1500,29 +1314,26 @@ class AccessorTags
         tags[tags.length] = 'emoji2';
         tags[tags.length] = 'creation';
         tags[tags.length] = 'selling';
-        
+
         return tags;
     }
-    applyTag(name, tag)
-    {
-        console.log("AccessorTags.applyTag("+name+","+tag+")");
+    applyTag(name, tag) {
+        console.log("AccessorTags.applyTag(" + name + "," + tag + ")");
         let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
         console.log("init bug");
         console.log(tagged);
         tagged = JSON.parse(tagged);
         tagged[name] = tag;
-        console.log("tagged:"+JSON.stringify(tagged));
-        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));                
+        console.log("tagged:" + JSON.stringify(tagged));
+        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));
     }
-    getTaggedNames()
-    {
+    getTaggedNames() {
         console.log("AccessorTags.getTaggedNames()");
         let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
         tagged = JSON.parse(tagged);
         return tagged;
     }
-    getNamesForTag(tag)
-    {
+    getNamesForTag(tag) {
         console.log("AccessorTags.getTaggedNames()");
         let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
         tagged = JSON.parse(tagged);
@@ -1530,31 +1341,27 @@ class AccessorTags
         //console.log(filtered);
         return filtered;
     }
-    removeTag(name, tag)
-    {
-        console.log("AccessorTags.removeTag("+name+","+tag+")");
+    removeTag(name, tag) {
+        console.log("AccessorTags.removeTag(" + name + "," + tag + ")");
         let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
         tagged = JSON.parse(tagged);
         tagged[name] = '';
-        console.log("tagged:"+JSON.stringify(tagged));
-        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));                                
+        console.log("tagged:" + JSON.stringify(tagged));
+        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));
     }
-    removeNames(names)
-    {
+    removeNames(names) {
         console.log("AccessorTags.removeNames()");
         let tagged = localStorage.getItem(this.TAGGED_NAME) || '{}';
         tagged = JSON.parse(tagged);
-        for(let name of names)
-        {
-            tagged[name] = '';        
+        for (let name of names) {
+            tagged[name] = '';
         }
-        console.log("tagged:"+JSON.stringify(tagged));
-        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));                                
+        console.log("tagged:" + JSON.stringify(tagged));
+        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));
     }
-    eraseAllTags()
-    {
+    eraseAllTags() {
         let tagged = {};
-        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));   
+        localStorage.setItem(this.TAGGED_NAME, JSON.stringify(tagged));
     }
 }
 
@@ -1573,7 +1380,7 @@ class AccessorTags
  * Several functions taken from Paul Johnston
  */
 
- /**
+/**
   * SUPPORTED_ALGS is the stub for a compile flag that will cause pruning of
   * functions that are not needed when a limited number of SHA families are
   * selected
@@ -1583,10 +1390,9 @@ class AccessorTags
   */
 var SUPPORTED_ALGS = 4 | 2 | 1;
 
-(function (global)
-{
-	"use strict";
-	/**
+(function(global) {
+    "use strict";
+    /**
 	 * Int_64 is a object for 2 32-bit numbers emulating a 64-bit number
 	 *
 	 * @private
@@ -1595,13 +1401,12 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {number} msint_32 The most significant 32-bits of a 64-bit number
 	 * @param {number} lsint_32 The least significant 32-bits of a 64-bit number
 	 */
-	function Int_64(msint_32, lsint_32)
-	{
-		this.highOrder = msint_32;
-		this.lowOrder = lsint_32;
-	}
+    function Int_64(msint_32, lsint_32) {
+        this.highOrder = msint_32;
+        this.lowOrder = lsint_32;
+    }
 
-	/**
+    /**
 	 * Convert a string to an array of big-endian words
 	 *
 	 * There is a known bug with an odd number of existing bytes and using a
@@ -1621,90 +1426,67 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 *   "value" contains the output number array and "binLen" is the binary
 	 *   length of "value"
 	 */
-	function str2binb(str, utfType, existingBin, existingBinLen)
-	{
-		var bin = [], codePnt, binArr = [], byteCnt = 0, i, j, existingByteLen,
-			intOffset, byteOffset;
+    function str2binb(str, utfType, existingBin, existingBinLen) {
+        var bin = [], codePnt, binArr = [], byteCnt = 0, i, j, existingByteLen, intOffset, byteOffset;
 
-		bin = existingBin || [0];
-		existingBinLen = existingBinLen || 0;
-		existingByteLen = existingBinLen >>> 3;
+        bin = existingBin || [0];
+        existingBinLen = existingBinLen || 0;
+        existingByteLen = existingBinLen >>> 3;
 
-		if ("UTF8" === utfType)
-		{
-			for (i = 0; i < str.length; i += 1)
-			{
-				codePnt = str.charCodeAt(i);
-				binArr = [];
+        if ("UTF8" === utfType) {
+            for (i = 0; i < str.length; i += 1) {
+                codePnt = str.charCodeAt(i);
+                binArr = [];
 
-				if (0x80 > codePnt)
-				{
-					binArr.push(codePnt);
-				}
-				else if (0x800 > codePnt)
-				{
-					binArr.push(0xC0 | (codePnt >>> 6));
-					binArr.push(0x80 | (codePnt & 0x3F));
-				}
-				else if ((0xd800 > codePnt) || (0xe000 <= codePnt)) {
-					binArr.push(
-						0xe0 | (codePnt >>> 12),
-						0x80 | ((codePnt >>> 6) & 0x3f),
-						0x80 | (codePnt & 0x3f)
-					);
-				}
-				else
-				{
-					i += 1;
-					codePnt = 0x10000 + (((codePnt & 0x3ff) << 10) | (str.charCodeAt(i) & 0x3ff));
-					binArr.push(
-						0xf0 | (codePnt >>> 18),
-						0x80 | ((codePnt >>> 12) & 0x3f),
-						0x80 | ((codePnt >>> 6) & 0x3f),
-						0x80 | (codePnt & 0x3f)
-					);
-				}
+                if (0x80 > codePnt) {
+                    binArr.push(codePnt);
+                } else if (0x800 > codePnt) {
+                    binArr.push(0xC0 | (codePnt >>> 6));
+                    binArr.push(0x80 | (codePnt & 0x3F));
+                } else if ((0xd800 > codePnt) || (0xe000 <= codePnt)) {
+                    binArr.push(0xe0 | (codePnt >>> 12), 0x80 | ((codePnt >>> 6) & 0x3f), 0x80 | (codePnt & 0x3f));
+                } else {
+                    i += 1;
+                    codePnt = 0x10000 + (((codePnt & 0x3ff) << 10) | (str.charCodeAt(i) & 0x3ff));
+                    binArr.push(0xf0 | (codePnt >>> 18), 0x80 | ((codePnt >>> 12) & 0x3f), 0x80 | ((codePnt >>> 6) & 0x3f), 0x80 | (codePnt & 0x3f));
+                }
 
-				for (j = 0; j < binArr.length; j += 1)
-				{
-					byteOffset = byteCnt + existingByteLen;
-					intOffset = byteOffset >>> 2;
-					while (bin.length <= intOffset)
-					{
-						bin.push(0);
-					}
-					/* Known bug kicks in here */
-					bin[intOffset] |= binArr[j] << (8 * (3 - (byteOffset % 4)));
-					byteCnt += 1;
-				}
-			}
-		}
-		else if (("UTF16BE" === utfType) || "UTF16LE" === utfType)
-		{
-			for (i = 0; i < str.length; i += 1)
-			{
-				codePnt = str.charCodeAt(i);
-				/* Internally strings are UTF-16BE so only change if UTF-16LE */
-				if ("UTF16LE" === utfType)
-				{
-					j = codePnt & 0xFF;
-					codePnt = (j << 8) | (codePnt >>> 8);
-				}
+                for (j = 0; j < binArr.length; j += 1) {
+                    byteOffset = byteCnt + existingByteLen;
+                    intOffset = byteOffset >>> 2;
+                    while (bin.length <= intOffset) {
+                        bin.push(0);
+                    }
+                    /* Known bug kicks in here */
+                    bin[intOffset] |= binArr[j] << (8 * (3 - (byteOffset % 4)));
+                    byteCnt += 1;
+                }
+            }
+        } else if (("UTF16BE" === utfType) || "UTF16LE" === utfType) {
+            for (i = 0; i < str.length; i += 1) {
+                codePnt = str.charCodeAt(i);
+                /* Internally strings are UTF-16BE so only change if UTF-16LE */
+                if ("UTF16LE" === utfType) {
+                    j = codePnt & 0xFF;
+                    codePnt = (j << 8) | (codePnt >>> 8);
+                }
 
-				byteOffset = byteCnt + existingByteLen;
-				intOffset = byteOffset >>> 2;
-				while (bin.length <= intOffset)
-				{
-					bin.push(0);
-				}
-				bin[intOffset] |= codePnt << (8 * (2 - (byteOffset % 4)));
-				byteCnt += 2;
-			}
-		}
-		return {"value" : bin, "binLen" : byteCnt * 8 + existingBinLen};
-	}
+                byteOffset = byteCnt + existingByteLen;
+                intOffset = byteOffset >>> 2;
+                while (bin.length <= intOffset) {
+                    bin.push(0);
+                }
+                bin[intOffset] |= codePnt << (8 * (2 - (byteOffset % 4)));
+                byteCnt += 2;
+            }
+        }
+        return {
+            "value": bin,
+            "binLen": byteCnt * 8 + existingBinLen
+        };
+    }
 
-	/**
+    /**
 	 * Convert a hex string to an array of big-endian words
 	 *
 	 * @private
@@ -1717,43 +1499,38 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 *   "value" contains the output number array and "binLen" is the binary
 	 *   length of "value"
 	 */
-	function hex2binb(str, existingBin, existingBinLen)
-	{
-		var bin, length = str.length, i, num, intOffset, byteOffset,
-			existingByteLen;
+    function hex2binb(str, existingBin, existingBinLen) {
+        var bin, length = str.length, i, num, intOffset, byteOffset, existingByteLen;
 
-		bin = existingBin || [0];
-		existingBinLen = existingBinLen || 0;
-		existingByteLen = existingBinLen >>> 3;
+        bin = existingBin || [0];
+        existingBinLen = existingBinLen || 0;
+        existingByteLen = existingBinLen >>> 3;
 
-		if (0 !== (length % 2))
-		{
-			throw new Error("String of HEX type must be in byte increments");
-		}
+        if (0 !== (length % 2)) {
+            throw new Error("String of HEX type must be in byte increments");
+        }
 
-		for (i = 0; i < length; i += 2)
-		{
-			num = parseInt(str.substr(i, 2), 16);
-			if (!isNaN(num))
-			{
-				byteOffset = (i >>> 1) + existingByteLen;
-				intOffset = byteOffset >>> 2;
-				while (bin.length <= intOffset)
-				{
-					bin.push(0);
-				}
-				bin[intOffset] |= num << 8 * (3 - (byteOffset % 4));
-			}
-			else
-			{
-				throw new Error("String of HEX type contains invalid characters");
-			}
-		}
+        for (i = 0; i < length; i += 2) {
+            num = parseInt(str.substr(i, 2), 16);
+            if (!isNaN(num)) {
+                byteOffset = (i >>> 1) + existingByteLen;
+                intOffset = byteOffset >>> 2;
+                while (bin.length <= intOffset) {
+                    bin.push(0);
+                }
+                bin[intOffset] |= num << 8 * (3 - (byteOffset % 4));
+            } else {
+                throw new Error("String of HEX type contains invalid characters");
+            }
+        }
 
-		return {"value" : bin, "binLen" : length * 4 + existingBinLen};
-	}
+        return {
+            "value": bin,
+            "binLen": length * 4 + existingBinLen
+        };
+    }
 
-	/**
+    /**
 	 * Convert a string of raw bytes to an array of big-endian words
 	 *
 	 * @private
@@ -1766,32 +1543,31 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 *   "value" contains the output number array and "binLen" is the binary
 	 *   length of "value"
 	 */
-	function bytes2binb(str, existingBin, existingBinLen)
-	{
-		var bin = [], codePnt, i, existingByteLen, intOffset,
-			byteOffset;
+    function bytes2binb(str, existingBin, existingBinLen) {
+        var bin = [], codePnt, i, existingByteLen, intOffset, byteOffset;
 
-		bin = existingBin || [0];
-		existingBinLen = existingBinLen || 0;
-		existingByteLen = existingBinLen >>> 3;
+        bin = existingBin || [0];
+        existingBinLen = existingBinLen || 0;
+        existingByteLen = existingBinLen >>> 3;
 
-		for (i = 0; i < str.length; i += 1)
-		{
-			codePnt = str.charCodeAt(i);
+        for (i = 0; i < str.length; i += 1) {
+            codePnt = str.charCodeAt(i);
 
-			byteOffset = i + existingByteLen;
-			intOffset = byteOffset >>> 2;
-			if (bin.length <= intOffset)
-			{
-				bin.push(0);
-			}
-			bin[intOffset] |= codePnt << 8 * (3 - (byteOffset % 4));
-		}
+            byteOffset = i + existingByteLen;
+            intOffset = byteOffset >>> 2;
+            if (bin.length <= intOffset) {
+                bin.push(0);
+            }
+            bin[intOffset] |= codePnt << 8 * (3 - (byteOffset % 4));
+        }
 
-		return {"value" : bin, "binLen" : str.length * 8 + existingBinLen};
-	}
+        return {
+            "value": bin,
+            "binLen": str.length * 8 + existingBinLen
+        };
+    }
 
-	/**
+    /**
 	 * Convert a base-64 string to an array of big-endian words
 	 *
 	 * @private
@@ -1804,56 +1580,49 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 *   "value" contains the output number array and "binLen" is the binary
 	 *   length of "value"
 	 */
-	function b642binb(str, existingBin, existingBinLen)
-	{
-		var bin = [], byteCnt = 0, index, i, j, tmpInt, strPart, firstEqual,
-			b64Tab = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
-			existingByteLen, intOffset, byteOffset;
+    function b642binb(str, existingBin, existingBinLen) {
+        var bin = [], byteCnt = 0, index, i, j, tmpInt, strPart, firstEqual, b64Tab = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", existingByteLen, intOffset, byteOffset;
 
-		bin = existingBin || [0];
-		existingBinLen = existingBinLen || 0;
-		existingByteLen = existingBinLen >>> 3;
+        bin = existingBin || [0];
+        existingBinLen = existingBinLen || 0;
+        existingByteLen = existingBinLen >>> 3;
 
-		if (-1 === str.search(/^[a-zA-Z0-9=+\/]+$/))
-		{
-			throw new Error("Invalid character in base-64 string");
-		}
-		firstEqual = str.indexOf('=');
-		str = str.replace(/\=/g, '');
-		if ((-1 !== firstEqual) && (firstEqual < str.length))
-		{
-			throw new Error("Invalid '=' found in base-64 string");
-		}
+        if (-1 === str.search(/^[a-zA-Z0-9=+\/]+$/)) {
+            throw new Error("Invalid character in base-64 string");
+        }
+        firstEqual = str.indexOf('=');
+        str = str.replace(/\=/g, '');
+        if ((-1 !== firstEqual) && (firstEqual < str.length)) {
+            throw new Error("Invalid '=' found in base-64 string");
+        }
 
-		for (i = 0; i < str.length; i += 4)
-		{
-			strPart = str.substr(i, 4);
-			tmpInt = 0;
+        for (i = 0; i < str.length; i += 4) {
+            strPart = str.substr(i, 4);
+            tmpInt = 0;
 
-			for (j = 0; j < strPart.length; j += 1)
-			{
-				index = b64Tab.indexOf(strPart[j]);
-				tmpInt |= index << (18 - (6 * j));
-			}
+            for (j = 0; j < strPart.length; j += 1) {
+                index = b64Tab.indexOf(strPart[j]);
+                tmpInt |= index << (18 - (6 * j));
+            }
 
-			for (j = 0; j < strPart.length - 1; j += 1)
-			{
-				byteOffset = byteCnt + existingByteLen;
-				intOffset = byteOffset >>> 2;
-				while (bin.length <= intOffset)
-				{
-					bin.push(0);
-				}
-				bin[intOffset] |= ((tmpInt >>> (16 - (j * 8))) & 0xFF) <<
-					8 * (3 - (byteOffset % 4));
-				byteCnt += 1;
-			}
-		}
+            for (j = 0; j < strPart.length - 1; j += 1) {
+                byteOffset = byteCnt + existingByteLen;
+                intOffset = byteOffset >>> 2;
+                while (bin.length <= intOffset) {
+                    bin.push(0);
+                }
+                bin[intOffset] |= ((tmpInt >>> (16 - (j * 8))) & 0xFF) << 8 * (3 - (byteOffset % 4));
+                byteCnt += 1;
+            }
+        }
 
-		return {"value" : bin, "binLen" : byteCnt * 8 + existingBinLen};
-	}
+        return {
+            "value": bin,
+            "binLen": byteCnt * 8 + existingBinLen
+        };
+    }
 
-	/**
+    /**
 	 * Convert an array of big-endian words to a hex string.
 	 *
 	 * @private
@@ -1864,23 +1633,19 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @return {string} Hexidecimal representation of the parameter in string
 	 *   form
 	 */
-	function binb2hex(binarray, formatOpts)
-	{
-		var hex_tab = "0123456789abcdef", str = "",
-			length = binarray.length * 4, i, srcByte;
+    function binb2hex(binarray, formatOpts) {
+        var hex_tab = "0123456789abcdef", str = "", length = binarray.length * 4, i, srcByte;
 
-		for (i = 0; i < length; i += 1)
-		{
-			/* The below is more than a byte but it gets taken care of later */
-			srcByte = binarray[i >>> 2] >>> ((3 - (i % 4)) * 8);
-			str += hex_tab.charAt((srcByte >>> 4) & 0xF) +
-				hex_tab.charAt(srcByte & 0xF);
-		}
+        for (i = 0; i < length; i += 1) {
+            /* The below is more than a byte but it gets taken care of later */
+            srcByte = binarray[i >>> 2] >>> ((3 - (i % 4)) * 8);
+            str += hex_tab.charAt((srcByte >>> 4) & 0xF) + hex_tab.charAt(srcByte & 0xF);
+        }
 
-		return (formatOpts["outputUpper"]) ? str.toUpperCase() : str;
-	}
+        return (formatOpts["outputUpper"]) ? str.toUpperCase() : str;
+    }
 
-	/**
+    /**
 	 * Convert an array of big-endian words to a base-64 string
 	 *
 	 * @private
@@ -1891,36 +1656,27 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @return {string} Base-64 encoded representation of the parameter in
 	 *   string form
 	 */
-	function binb2b64(binarray, formatOpts)
-	{
-		var str = "", length = binarray.length * 4, i, j, triplet, offset, int1, int2,
-			b64Tab = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    function binb2b64(binarray, formatOpts) {
+        var str = "", length = binarray.length * 4, i, j, triplet, offset, int1, int2, b64Tab = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-		for (i = 0; i < length; i += 3)
-		{
-			offset = (i + 1) >>> 2;
-			int1 = (binarray.length <= offset) ? 0 : binarray[offset];
-			offset = (i + 2) >>> 2;
-			int2 = (binarray.length <= offset) ? 0 : binarray[offset];
-			triplet = (((binarray[i >>> 2] >>> 8 * (3 - i % 4)) & 0xFF) << 16) |
-				(((int1 >>> 8 * (3 - (i + 1) % 4)) & 0xFF) << 8) |
-				((int2 >>> 8 * (3 - (i + 2) % 4)) & 0xFF);
-			for (j = 0; j < 4; j += 1)
-			{
-				if (i * 8 + j * 6 <= binarray.length * 32)
-				{
-					str += b64Tab.charAt((triplet >>> 6 * (3 - j)) & 0x3F);
-				}
-				else
-				{
-					str += formatOpts["b64Pad"];
-				}
-			}
-		}
-		return str;
-	}
+        for (i = 0; i < length; i += 3) {
+            offset = (i + 1) >>> 2;
+            int1 = (binarray.length <= offset) ? 0 : binarray[offset];
+            offset = (i + 2) >>> 2;
+            int2 = (binarray.length <= offset) ? 0 : binarray[offset];
+            triplet = (((binarray[i >>> 2] >>> 8 * (3 - i % 4)) & 0xFF) << 16) | (((int1 >>> 8 * (3 - (i + 1) % 4)) & 0xFF) << 8) | ((int2 >>> 8 * (3 - (i + 2) % 4)) & 0xFF);
+            for (j = 0; j < 4; j += 1) {
+                if (i * 8 + j * 6 <= binarray.length * 32) {
+                    str += b64Tab.charAt((triplet >>> 6 * (3 - j)) & 0x3F);
+                } else {
+                    str += formatOpts["b64Pad"];
+                }
+            }
+        }
+        return str;
+    }
 
-	/**
+    /**
 	 * Convert an array of big-endian words to raw bytes string
 	 *
 	 * @private
@@ -1929,20 +1685,18 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @return {string} Raw bytes representation of the parameter in string
 	 *   form
 	 */
-	function binb2bytes(binarray)
-	{
-		var str = "", length = binarray.length * 4, i, srcByte;
+    function binb2bytes(binarray) {
+        var str = "", length = binarray.length * 4, i, srcByte;
 
-		for (i = 0; i < length; i += 1)
-		{
-			srcByte = (binarray[i >>> 2] >>> ((3 - (i % 4)) * 8)) & 0xFF;
-			str += String.fromCharCode(srcByte);
-		}
+        for (i = 0; i < length; i += 1) {
+            srcByte = (binarray[i >>> 2] >>> ((3 - (i % 4)) * 8)) & 0xFF;
+            str += String.fromCharCode(srcByte);
+        }
 
-		return str;
-	}
+        return str;
+    }
 
-	/**
+    /**
 	 * Validate hash list containing output formatting options, ensuring
 	 * presence of every option or adding the default value
 	 *
@@ -1952,28 +1706,28 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @return {{outputUpper : boolean, b64Pad : string}} Validated hash list
 	 *   containing output formatting options
 	 */
-	function getOutputOpts(options)
-	{
-		var retVal = {"outputUpper" : false, "b64Pad" : "="}, outputOptions;
-		outputOptions = options || {};
+    function getOutputOpts(options) {
+        var retVal = {
+            "outputUpper": false,
+            "b64Pad": "="
+        }, outputOptions;
+        outputOptions = options || {};
 
-		retVal["outputUpper"] = outputOptions["outputUpper"] || false;
-		retVal["b64Pad"] = outputOptions["b64Pad"] || "=";
+        retVal["outputUpper"] = outputOptions["outputUpper"] || false;
+        retVal["b64Pad"] = outputOptions["b64Pad"] || "=";
 
-		if ("boolean" !== typeof(retVal["outputUpper"]))
-		{
-			throw new Error("Invalid outputUpper formatting option");
-		}
+        if ("boolean" !== typeof (retVal["outputUpper"])) {
+            throw new Error("Invalid outputUpper formatting option");
+        }
 
-		if ("string" !== typeof(retVal["b64Pad"]))
-		{
-			throw new Error("Invalid b64Pad formatting option");
-		}
+        if ("string" !== typeof (retVal["b64Pad"])) {
+            throw new Error("Invalid b64Pad formatting option");
+        }
 
-		return retVal;
-	}
+        return retVal;
+    }
 
-	/**
+    /**
 	 * Function that takes an input format and UTF encoding and returns the
 	 * appropriate function used to convert the input.
 	 *
@@ -1985,50 +1739,47 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 *   Array.<number>, binLen : number}} Function that will convert an input
 	 *   string to a packed int array
 	 */
-	function getStrConverter(format, utfType)
-	{
-		var retVal;
+    function getStrConverter(format, utfType) {
+        var retVal;
 
-		/* Validate encoding */
-		switch (utfType)
-		{
-		case "UTF8":
-			/* Fallthrough */
-		case "UTF16BE":
-			/* Fallthrough */
-		case "UTF16LE":
-			/* Fallthrough */
-			break;
-		default:
-			throw new Error("encoding must be UTF8, UTF16BE, or UTF16LE");
-		}
+        /* Validate encoding */
+        switch (utfType) {
+        case "UTF8":
+            /* Fallthrough */
+        case "UTF16BE":
+            /* Fallthrough */
+        case "UTF16LE":
+            /* Fallthrough */
+            break;
+        default:
+            throw new Error("encoding must be UTF8, UTF16BE, or UTF16LE");
+        }
 
-		/* Map inputFormat to the appropriate converter */
-		switch (format)
-		{
-		case "HEX":
-			retVal = hex2binb;
-			break;
-		case "TEXT":
-			retVal = function(str, existingBin, existingBinLen)
-				{
-					return str2binb(str, utfType, existingBin, existingBinLen);
-				};
-			break;
-		case "B64":
-			retVal = b642binb;
-			break;
-		case "BYTES":
-			retVal = bytes2binb;
-			break;
-		default:
-			throw new Error("format must be HEX, TEXT, B64, or BYTES");
-		}
+        /* Map inputFormat to the appropriate converter */
+        switch (format) {
+        case "HEX":
+            retVal = hex2binb;
+            break;
+        case "TEXT":
+            retVal = function(str, existingBin, existingBinLen) {
+                return str2binb(str, utfType, existingBin, existingBinLen);
+            }
+            ;
+            break;
+        case "B64":
+            retVal = b642binb;
+            break;
+        case "BYTES":
+            retVal = bytes2binb;
+            break;
+        default:
+            throw new Error("format must be HEX, TEXT, B64, or BYTES");
+        }
 
-		return retVal;
-	}
+        return retVal;
+    }
 
-	/**
+    /**
 	 * The 32-bit implementation of circular rotate left
 	 *
 	 * @private
@@ -2036,12 +1787,11 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {number} n The number of bits to shift
 	 * @return {number} The x shifted circularly by n bits
 	 */
-	function rotl_32(x, n)
-	{
-		return (x << n) | (x >>> (32 - n));
-	}
+    function rotl_32(x, n) {
+        return (x << n) | (x >>> (32 - n));
+    }
 
-	/**
+    /**
 	 * The 32-bit implementation of circular rotate right
 	 *
 	 * @private
@@ -2049,12 +1799,11 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {number} n The number of bits to shift
 	 * @return {number} The x shifted circularly by n bits
 	 */
-	function rotr_32(x, n)
-	{
-		return (x >>> n) | (x << (32 - n));
-	}
+    function rotr_32(x, n) {
+        return (x >>> n) | (x << (32 - n));
+    }
 
-	/**
+    /**
 	 * The 64-bit implementation of circular rotate right
 	 *
 	 * @private
@@ -2062,29 +1811,20 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {number} n The number of bits to shift
 	 * @return {Int_64} The x shifted circularly by n bits
 	 */
-	function rotr_64(x, n)
-	{
-		var retVal = null, tmp = new Int_64(x.highOrder, x.lowOrder);
+    function rotr_64(x, n) {
+        var retVal = null
+          , tmp = new Int_64(x.highOrder,x.lowOrder);
 
-		if (32 >= n)
-		{
-			retVal = new Int_64(
-					(tmp.highOrder >>> n) | ((tmp.lowOrder << (32 - n)) & 0xFFFFFFFF),
-					(tmp.lowOrder >>> n) | ((tmp.highOrder << (32 - n)) & 0xFFFFFFFF)
-				);
-		}
-		else
-		{
-			retVal = new Int_64(
-					(tmp.lowOrder >>> (n - 32)) | ((tmp.highOrder << (64 - n)) & 0xFFFFFFFF),
-					(tmp.highOrder >>> (n - 32)) | ((tmp.lowOrder << (64 - n)) & 0xFFFFFFFF)
-				);
-		}
+        if (32 >= n) {
+            retVal = new Int_64((tmp.highOrder >>> n) | ((tmp.lowOrder << (32 - n)) & 0xFFFFFFFF),(tmp.lowOrder >>> n) | ((tmp.highOrder << (32 - n)) & 0xFFFFFFFF));
+        } else {
+            retVal = new Int_64((tmp.lowOrder >>> (n - 32)) | ((tmp.highOrder << (64 - n)) & 0xFFFFFFFF),(tmp.highOrder >>> (n - 32)) | ((tmp.lowOrder << (64 - n)) & 0xFFFFFFFF));
+        }
 
-		return retVal;
-	}
+        return retVal;
+    }
 
-	/**
+    /**
 	 * The 32-bit implementation of shift right
 	 *
 	 * @private
@@ -2092,12 +1832,11 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {number} n The number of bits to shift
 	 * @return {number} The x shifted by n bits
 	 */
-	function shr_32(x, n)
-	{
-		return x >>> n;
-	}
+    function shr_32(x, n) {
+        return x >>> n;
+    }
 
-	/**
+    /**
 	 * The 64-bit implementation of shift right
 	 *
 	 * @private
@@ -2105,29 +1844,19 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {number} n The number of bits to shift
 	 * @return {Int_64} The x shifted by n bits
 	 */
-	function shr_64(x, n)
-	{
-		var retVal = null;
+    function shr_64(x, n) {
+        var retVal = null;
 
-		if (32 >= n)
-		{
-			retVal = new Int_64(
-					x.highOrder >>> n,
-					x.lowOrder >>> n | ((x.highOrder << (32 - n)) & 0xFFFFFFFF)
-				);
-		}
-		else
-		{
-			retVal = new Int_64(
-					0,
-					x.highOrder >>> (n - 32)
-				);
-		}
+        if (32 >= n) {
+            retVal = new Int_64(x.highOrder >>> n,x.lowOrder >>> n | ((x.highOrder << (32 - n)) & 0xFFFFFFFF));
+        } else {
+            retVal = new Int_64(0,x.highOrder >>> (n - 32));
+        }
 
-		return retVal;
-	}
+        return retVal;
+    }
 
-	/**
+    /**
 	 * The 32-bit implementation of the NIST specified Parity function
 	 *
 	 * @private
@@ -2136,12 +1865,11 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {number} z The third 32-bit integer argument
 	 * @return {number} The NIST specified output of the function
 	 */
-	function parity_32(x, y, z)
-	{
-		return x ^ y ^ z;
-	}
+    function parity_32(x, y, z) {
+        return x ^ y ^ z;
+    }
 
-	/**
+    /**
 	 * The 32-bit implementation of the NIST specified Ch function
 	 *
 	 * @private
@@ -2150,12 +1878,11 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {number} z The third 32-bit integer argument
 	 * @return {number} The NIST specified output of the function
 	 */
-	function ch_32(x, y, z)
-	{
-		return (x & y) ^ (~x & z);
-	}
+    function ch_32(x, y, z) {
+        return (x & y) ^ (~x & z);
+    }
 
-	/**
+    /**
 	 * The 64-bit implementation of the NIST specified Ch function
 	 *
 	 * @private
@@ -2164,15 +1891,11 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {Int_64} z The third 64-bit integer argument
 	 * @return {Int_64} The NIST specified output of the function
 	 */
-	function ch_64(x, y, z)
-	{
-		return new Int_64(
-				(x.highOrder & y.highOrder) ^ (~x.highOrder & z.highOrder),
-				(x.lowOrder & y.lowOrder) ^ (~x.lowOrder & z.lowOrder)
-			);
-	}
+    function ch_64(x, y, z) {
+        return new Int_64((x.highOrder & y.highOrder) ^ (~x.highOrder & z.highOrder),(x.lowOrder & y.lowOrder) ^ (~x.lowOrder & z.lowOrder));
+    }
 
-	/**
+    /**
 	 * The 32-bit implementation of the NIST specified Maj function
 	 *
 	 * @private
@@ -2181,12 +1904,11 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {number} z The third 32-bit integer argument
 	 * @return {number} The NIST specified output of the function
 	 */
-	function maj_32(x, y, z)
-	{
-		return (x & y) ^ (x & z) ^ (y & z);
-	}
+    function maj_32(x, y, z) {
+        return (x & y) ^ (x & z) ^ (y & z);
+    }
 
-	/**
+    /**
 	 * The 64-bit implementation of the NIST specified Maj function
 	 *
 	 * @private
@@ -2195,136 +1917,115 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {Int_64} z The third 64-bit integer argument
 	 * @return {Int_64} The NIST specified output of the function
 	 */
-	function maj_64(x, y, z)
-	{
-		return new Int_64(
-				(x.highOrder & y.highOrder) ^
-				(x.highOrder & z.highOrder) ^
-				(y.highOrder & z.highOrder),
-				(x.lowOrder & y.lowOrder) ^
-				(x.lowOrder & z.lowOrder) ^
-				(y.lowOrder & z.lowOrder)
-			);
-	}
+    function maj_64(x, y, z) {
+        return new Int_64((x.highOrder & y.highOrder) ^ (x.highOrder & z.highOrder) ^ (y.highOrder & z.highOrder),(x.lowOrder & y.lowOrder) ^ (x.lowOrder & z.lowOrder) ^ (y.lowOrder & z.lowOrder));
+    }
 
-	/**
+    /**
 	 * The 32-bit implementation of the NIST specified Sigma0 function
 	 *
 	 * @private
 	 * @param {number} x The 32-bit integer argument
 	 * @return {number} The NIST specified output of the function
 	 */
-	function sigma0_32(x)
-	{
-		return rotr_32(x, 2) ^ rotr_32(x, 13) ^ rotr_32(x, 22);
-	}
+    function sigma0_32(x) {
+        return rotr_32(x, 2) ^ rotr_32(x, 13) ^ rotr_32(x, 22);
+    }
 
-	/**
+    /**
 	 * The 64-bit implementation of the NIST specified Sigma0 function
 	 *
 	 * @private
 	 * @param {Int_64} x The 64-bit integer argument
 	 * @return {Int_64} The NIST specified output of the function
 	 */
-	function sigma0_64(x)
-	{
-		var rotr28 = rotr_64(x, 28), rotr34 = rotr_64(x, 34),
-			rotr39 = rotr_64(x, 39);
+    function sigma0_64(x) {
+        var rotr28 = rotr_64(x, 28)
+          , rotr34 = rotr_64(x, 34)
+          , rotr39 = rotr_64(x, 39);
 
-		return new Int_64(
-				rotr28.highOrder ^ rotr34.highOrder ^ rotr39.highOrder,
-				rotr28.lowOrder ^ rotr34.lowOrder ^ rotr39.lowOrder);
-	}
+        return new Int_64(rotr28.highOrder ^ rotr34.highOrder ^ rotr39.highOrder,rotr28.lowOrder ^ rotr34.lowOrder ^ rotr39.lowOrder);
+    }
 
-	/**
+    /**
 	 * The 32-bit implementation of the NIST specified Sigma1 function
 	 *
 	 * @private
 	 * @param {number} x The 32-bit integer argument
 	 * @return {number} The NIST specified output of the function
 	 */
-	function sigma1_32(x)
-	{
-		return rotr_32(x, 6) ^ rotr_32(x, 11) ^ rotr_32(x, 25);
-	}
+    function sigma1_32(x) {
+        return rotr_32(x, 6) ^ rotr_32(x, 11) ^ rotr_32(x, 25);
+    }
 
-	/**
+    /**
 	 * The 64-bit implementation of the NIST specified Sigma1 function
 	 *
 	 * @private
 	 * @param {Int_64} x The 64-bit integer argument
 	 * @return {Int_64} The NIST specified output of the function
 	 */
-	function sigma1_64(x)
-	{
-		var rotr14 = rotr_64(x, 14), rotr18 = rotr_64(x, 18),
-			rotr41 = rotr_64(x, 41);
+    function sigma1_64(x) {
+        var rotr14 = rotr_64(x, 14)
+          , rotr18 = rotr_64(x, 18)
+          , rotr41 = rotr_64(x, 41);
 
-		return new Int_64(
-				rotr14.highOrder ^ rotr18.highOrder ^ rotr41.highOrder,
-				rotr14.lowOrder ^ rotr18.lowOrder ^ rotr41.lowOrder);
-	}
+        return new Int_64(rotr14.highOrder ^ rotr18.highOrder ^ rotr41.highOrder,rotr14.lowOrder ^ rotr18.lowOrder ^ rotr41.lowOrder);
+    }
 
-	/**
+    /**
 	 * The 32-bit implementation of the NIST specified Gamma0 function
 	 *
 	 * @private
 	 * @param {number} x The 32-bit integer argument
 	 * @return {number} The NIST specified output of the function
 	 */
-	function gamma0_32(x)
-	{
-		return rotr_32(x, 7) ^ rotr_32(x, 18) ^ shr_32(x, 3);
-	}
+    function gamma0_32(x) {
+        return rotr_32(x, 7) ^ rotr_32(x, 18) ^ shr_32(x, 3);
+    }
 
-	/**
+    /**
 	 * The 64-bit implementation of the NIST specified Gamma0 function
 	 *
 	 * @private
 	 * @param {Int_64} x The 64-bit integer argument
 	 * @return {Int_64} The NIST specified output of the function
 	 */
-	function gamma0_64(x)
-	{
-		var rotr1 = rotr_64(x, 1), rotr8 = rotr_64(x, 8), shr7 = shr_64(x, 7);
+    function gamma0_64(x) {
+        var rotr1 = rotr_64(x, 1)
+          , rotr8 = rotr_64(x, 8)
+          , shr7 = shr_64(x, 7);
 
-		return new Int_64(
-				rotr1.highOrder ^ rotr8.highOrder ^ shr7.highOrder,
-				rotr1.lowOrder ^ rotr8.lowOrder ^ shr7.lowOrder
-			);
-	}
+        return new Int_64(rotr1.highOrder ^ rotr8.highOrder ^ shr7.highOrder,rotr1.lowOrder ^ rotr8.lowOrder ^ shr7.lowOrder);
+    }
 
-	/**
+    /**
 	 * The 32-bit implementation of the NIST specified Gamma1 function
 	 *
 	 * @private
 	 * @param {number} x The 32-bit integer argument
 	 * @return {number} The NIST specified output of the function
 	 */
-	function gamma1_32(x)
-	{
-		return rotr_32(x, 17) ^ rotr_32(x, 19) ^ shr_32(x, 10);
-	}
+    function gamma1_32(x) {
+        return rotr_32(x, 17) ^ rotr_32(x, 19) ^ shr_32(x, 10);
+    }
 
-	/**
+    /**
 	 * The 64-bit implementation of the NIST specified Gamma1 function
 	 *
 	 * @private
 	 * @param {Int_64} x The 64-bit integer argument
 	 * @return {Int_64} The NIST specified output of the function
 	 */
-	function gamma1_64(x)
-	{
-		var rotr19 = rotr_64(x, 19), rotr61 = rotr_64(x, 61),
-			shr6 = shr_64(x, 6);
+    function gamma1_64(x) {
+        var rotr19 = rotr_64(x, 19)
+          , rotr61 = rotr_64(x, 61)
+          , shr6 = shr_64(x, 6);
 
-		return new Int_64(
-				rotr19.highOrder ^ rotr61.highOrder ^ shr6.highOrder,
-				rotr19.lowOrder ^ rotr61.lowOrder ^ shr6.lowOrder
-			);
-	}
+        return new Int_64(rotr19.highOrder ^ rotr61.highOrder ^ shr6.highOrder,rotr19.lowOrder ^ rotr61.lowOrder ^ shr6.lowOrder);
+    }
 
-	/**
+    /**
 	 * Add two 32-bit integers, wrapping at 2^32. This uses 16-bit operations
 	 * internally to work around bugs in some JS interpreters.
 	 *
@@ -2333,15 +2034,14 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {number} b The second 32-bit integer argument to be added
 	 * @return {number} The sum of a + b
 	 */
-	function safeAdd_32_2(a, b)
-	{
-		var lsw = (a & 0xFFFF) + (b & 0xFFFF),
-			msw = (a >>> 16) + (b >>> 16) + (lsw >>> 16);
+    function safeAdd_32_2(a, b) {
+        var lsw = (a & 0xFFFF) + (b & 0xFFFF)
+          , msw = (a >>> 16) + (b >>> 16) + (lsw >>> 16);
 
-		return ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
-	}
+        return ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
+    }
 
-	/**
+    /**
 	 * Add four 32-bit integers, wrapping at 2^32. This uses 16-bit operations
 	 * internally to work around bugs in some JS interpreters.
 	 *
@@ -2352,16 +2052,14 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {number} d The fourth 32-bit integer argument to be added
 	 * @return {number} The sum of a + b + c + d
 	 */
-	function safeAdd_32_4(a, b, c, d)
-	{
-		var lsw = (a & 0xFFFF) + (b & 0xFFFF) + (c & 0xFFFF) + (d & 0xFFFF),
-			msw = (a >>> 16) + (b >>> 16) + (c >>> 16) + (d >>> 16) +
-				(lsw >>> 16);
+    function safeAdd_32_4(a, b, c, d) {
+        var lsw = (a & 0xFFFF) + (b & 0xFFFF) + (c & 0xFFFF) + (d & 0xFFFF)
+          , msw = (a >>> 16) + (b >>> 16) + (c >>> 16) + (d >>> 16) + (lsw >>> 16);
 
-		return ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
-	}
+        return ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
+    }
 
-	/**
+    /**
 	 * Add five 32-bit integers, wrapping at 2^32. This uses 16-bit operations
 	 * internally to work around bugs in some JS interpreters.
 	 *
@@ -2373,17 +2071,14 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {number} e The fifth 32-bit integer argument to be added
 	 * @return {number} The sum of a + b + c + d + e
 	 */
-	function safeAdd_32_5(a, b, c, d, e)
-	{
-		var lsw = (a & 0xFFFF) + (b & 0xFFFF) + (c & 0xFFFF) + (d & 0xFFFF) +
-				(e & 0xFFFF),
-			msw = (a >>> 16) + (b >>> 16) + (c >>> 16) + (d >>> 16) +
-				(e >>> 16) + (lsw >>> 16);
+    function safeAdd_32_5(a, b, c, d, e) {
+        var lsw = (a & 0xFFFF) + (b & 0xFFFF) + (c & 0xFFFF) + (d & 0xFFFF) + (e & 0xFFFF)
+          , msw = (a >>> 16) + (b >>> 16) + (c >>> 16) + (d >>> 16) + (e >>> 16) + (lsw >>> 16);
 
-		return ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
-	}
+        return ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
+    }
 
-	/**
+    /**
 	 * Add two 64-bit integers, wrapping at 2^64. This uses 16-bit operations
 	 * internally to work around bugs in some JS interpreters.
 	 *
@@ -2392,22 +2087,21 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {Int_64} y The second 64-bit integer argument to be added
 	 * @return {Int_64} The sum of x + y
 	 */
-	function safeAdd_64_2(x, y)
-	{
-		var lsw, msw, lowOrder, highOrder;
+    function safeAdd_64_2(x, y) {
+        var lsw, msw, lowOrder, highOrder;
 
-		lsw = (x.lowOrder & 0xFFFF) + (y.lowOrder & 0xFFFF);
-		msw = (x.lowOrder >>> 16) + (y.lowOrder >>> 16) + (lsw >>> 16);
-		lowOrder = ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
+        lsw = (x.lowOrder & 0xFFFF) + (y.lowOrder & 0xFFFF);
+        msw = (x.lowOrder >>> 16) + (y.lowOrder >>> 16) + (lsw >>> 16);
+        lowOrder = ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
 
-		lsw = (x.highOrder & 0xFFFF) + (y.highOrder & 0xFFFF) + (msw >>> 16);
-		msw = (x.highOrder >>> 16) + (y.highOrder >>> 16) + (lsw >>> 16);
-		highOrder = ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
+        lsw = (x.highOrder & 0xFFFF) + (y.highOrder & 0xFFFF) + (msw >>> 16);
+        msw = (x.highOrder >>> 16) + (y.highOrder >>> 16) + (lsw >>> 16);
+        highOrder = ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
 
-		return new Int_64(highOrder, lowOrder);
-	}
+        return new Int_64(highOrder,lowOrder);
+    }
 
-	/**
+    /**
 	 * Add four 64-bit integers, wrapping at 2^64. This uses 16-bit operations
 	 * internally to work around bugs in some JS interpreters.
 	 *
@@ -2418,26 +2112,21 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {Int_64} d The fouth 64-bit integer argument to be added
 	 * @return {Int_64} The sum of a + b + c + d
 	 */
-	function safeAdd_64_4(a, b, c, d)
-	{
-		var lsw, msw, lowOrder, highOrder;
+    function safeAdd_64_4(a, b, c, d) {
+        var lsw, msw, lowOrder, highOrder;
 
-		lsw = (a.lowOrder & 0xFFFF) + (b.lowOrder & 0xFFFF) +
-			(c.lowOrder & 0xFFFF) + (d.lowOrder & 0xFFFF);
-		msw = (a.lowOrder >>> 16) + (b.lowOrder >>> 16) +
-			(c.lowOrder >>> 16) + (d.lowOrder >>> 16) + (lsw >>> 16);
-		lowOrder = ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
+        lsw = (a.lowOrder & 0xFFFF) + (b.lowOrder & 0xFFFF) + (c.lowOrder & 0xFFFF) + (d.lowOrder & 0xFFFF);
+        msw = (a.lowOrder >>> 16) + (b.lowOrder >>> 16) + (c.lowOrder >>> 16) + (d.lowOrder >>> 16) + (lsw >>> 16);
+        lowOrder = ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
 
-		lsw = (a.highOrder & 0xFFFF) + (b.highOrder & 0xFFFF) +
-			(c.highOrder & 0xFFFF) + (d.highOrder & 0xFFFF) + (msw >>> 16);
-		msw = (a.highOrder >>> 16) + (b.highOrder >>> 16) +
-			(c.highOrder >>> 16) + (d.highOrder >>> 16) + (lsw >>> 16);
-		highOrder = ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
+        lsw = (a.highOrder & 0xFFFF) + (b.highOrder & 0xFFFF) + (c.highOrder & 0xFFFF) + (d.highOrder & 0xFFFF) + (msw >>> 16);
+        msw = (a.highOrder >>> 16) + (b.highOrder >>> 16) + (c.highOrder >>> 16) + (d.highOrder >>> 16) + (lsw >>> 16);
+        highOrder = ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
 
-		return new Int_64(highOrder, lowOrder);
-	}
+        return new Int_64(highOrder,lowOrder);
+    }
 
-	/**
+    /**
 	 * Add five 64-bit integers, wrapping at 2^64. This uses 16-bit operations
 	 * internally to work around bugs in some JS interpreters.
 	 *
@@ -2449,101 +2138,59 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {Int_64} e The fouth 64-bit integer argument to be added
 	 * @return {Int_64} The sum of a + b + c + d + e
 	 */
-	function safeAdd_64_5(a, b, c, d, e)
-	{
-		var lsw, msw, lowOrder, highOrder;
+    function safeAdd_64_5(a, b, c, d, e) {
+        var lsw, msw, lowOrder, highOrder;
 
-		lsw = (a.lowOrder & 0xFFFF) + (b.lowOrder & 0xFFFF) +
-			(c.lowOrder & 0xFFFF) + (d.lowOrder & 0xFFFF) +
-			(e.lowOrder & 0xFFFF);
-		msw = (a.lowOrder >>> 16) + (b.lowOrder >>> 16) +
-			(c.lowOrder >>> 16) + (d.lowOrder >>> 16) + (e.lowOrder >>> 16) +
-			(lsw >>> 16);
-		lowOrder = ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
+        lsw = (a.lowOrder & 0xFFFF) + (b.lowOrder & 0xFFFF) + (c.lowOrder & 0xFFFF) + (d.lowOrder & 0xFFFF) + (e.lowOrder & 0xFFFF);
+        msw = (a.lowOrder >>> 16) + (b.lowOrder >>> 16) + (c.lowOrder >>> 16) + (d.lowOrder >>> 16) + (e.lowOrder >>> 16) + (lsw >>> 16);
+        lowOrder = ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
 
-		lsw = (a.highOrder & 0xFFFF) + (b.highOrder & 0xFFFF) +
-			(c.highOrder & 0xFFFF) + (d.highOrder & 0xFFFF) +
-			(e.highOrder & 0xFFFF) + (msw >>> 16);
-		msw = (a.highOrder >>> 16) + (b.highOrder >>> 16) +
-			(c.highOrder >>> 16) + (d.highOrder >>> 16) +
-			(e.highOrder >>> 16) + (lsw >>> 16);
-		highOrder = ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
+        lsw = (a.highOrder & 0xFFFF) + (b.highOrder & 0xFFFF) + (c.highOrder & 0xFFFF) + (d.highOrder & 0xFFFF) + (e.highOrder & 0xFFFF) + (msw >>> 16);
+        msw = (a.highOrder >>> 16) + (b.highOrder >>> 16) + (c.highOrder >>> 16) + (d.highOrder >>> 16) + (e.highOrder >>> 16) + (lsw >>> 16);
+        highOrder = ((msw & 0xFFFF) << 16) | (lsw & 0xFFFF);
 
-		return new Int_64(highOrder, lowOrder);
-	}
+        return new Int_64(highOrder,lowOrder);
+    }
 
-	/**
+    /**
 	 * Gets the H values for the specified SHA variant
 	 *
 	 * @param {string} variant The SHA variant
 	 * @return {Array.<number|Int_64>} The initial H values
 	 */
-	function getH(variant)
-	{
-		var retVal, H_trunc, H_full;
+    function getH(variant) {
+        var retVal, H_trunc, H_full;
 
-		if (("SHA-1" === variant) && (1 & SUPPORTED_ALGS))
-		{
-			retVal = [
-				0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0
-			];
-		}
-		else if (6 & SUPPORTED_ALGS)
-		{
-			H_trunc = [
-				0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939,
-				0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4
-			];
-			H_full = [
-				0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A,
-				0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19
-			];
+        if (("SHA-1" === variant) && (1 & SUPPORTED_ALGS)) {
+            retVal = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0];
+        } else if (6 & SUPPORTED_ALGS) {
+            H_trunc = [0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939, 0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4];
+            H_full = [0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A, 0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19];
 
-			switch (variant)
-			{
-			case "SHA-224":
-				retVal = H_trunc;
-				break;
-			case "SHA-256":
-				retVal = H_full;
-				break;
-			case "SHA-384":
-				retVal = [
-					new Int_64(0xcbbb9d5d, H_trunc[0]),
-					new Int_64(0x0629a292a, H_trunc[1]),
-					new Int_64(0x9159015a, H_trunc[2]),
-					new Int_64(0x0152fecd8, H_trunc[3]),
-					new Int_64(0x67332667, H_trunc[4]),
-					new Int_64(0x98eb44a87, H_trunc[5]),
-					new Int_64(0xdb0c2e0d, H_trunc[6]),
-					new Int_64(0x047b5481d, H_trunc[7])
-				];
-				break;
-			case "SHA-512":
-				retVal = [
-					new Int_64(H_full[0], 0xf3bcc908),
-					new Int_64(H_full[1], 0x84caa73b),
-					new Int_64(H_full[2], 0xfe94f82b),
-					new Int_64(H_full[3], 0x5f1d36f1),
-					new Int_64(H_full[4], 0xade682d1),
-					new Int_64(H_full[5], 0x2b3e6c1f),
-					new Int_64(H_full[6], 0xfb41bd6b),
-					new Int_64(H_full[7], 0x137e2179)
-				];
-				break;
-			default:
-				throw new Error("Unknown SHA variant");
-			}
-		}
-		else
-		{
-			throw new Error("No SHA variants supported");
-		}
+            switch (variant) {
+            case "SHA-224":
+                retVal = H_trunc;
+                break;
+            case "SHA-256":
+                retVal = H_full;
+                break;
+            case "SHA-384":
+                retVal = [new Int_64(0xcbbb9d5d,H_trunc[0]), new Int_64(0x0629a292a,H_trunc[1]), new Int_64(0x9159015a,H_trunc[2]), new Int_64(0x0152fecd8,H_trunc[3]), new Int_64(0x67332667,H_trunc[4]), new Int_64(0x98eb44a87,H_trunc[5]), new Int_64(0xdb0c2e0d,H_trunc[6]), new Int_64(0x047b5481d,H_trunc[7])];
+                break;
+            case "SHA-512":
+                retVal = [new Int_64(H_full[0],0xf3bcc908), new Int_64(H_full[1],0x84caa73b), new Int_64(H_full[2],0xfe94f82b), new Int_64(H_full[3],0x5f1d36f1), new Int_64(H_full[4],0xade682d1), new Int_64(H_full[5],0x2b3e6c1f), new Int_64(H_full[6],0xfb41bd6b), new Int_64(H_full[7],0x137e2179)];
+                break;
+            default:
+                throw new Error("Unknown SHA variant");
+            }
+        } else {
+            throw new Error("No SHA variants supported");
+        }
 
-		return retVal;
-	}
+        return retVal;
+    }
 
-	/**
+    /**
 	 * Performs a round of SHA-1 hashing over a 512-byte block
 	 *
 	 * @private
@@ -2553,61 +2200,49 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 *   round
 	 * @return {Array.<number>} The resulting H values
 	 */
-	function roundSHA1(block, H)
-	{
-		var W = [], a, b, c, d, e, T, ch = ch_32, parity = parity_32,
-			maj = maj_32, rotl = rotl_32, safeAdd_2 = safeAdd_32_2, t,
-			safeAdd_5 = safeAdd_32_5;
+    function roundSHA1(block, H) {
+        var W = [], a, b, c, d, e, T, ch = ch_32, parity = parity_32, maj = maj_32, rotl = rotl_32, safeAdd_2 = safeAdd_32_2, t, safeAdd_5 = safeAdd_32_5;
 
-		a = H[0];
-		b = H[1];
-		c = H[2];
-		d = H[3];
-		e = H[4];
+        a = H[0];
+        b = H[1];
+        c = H[2];
+        d = H[3];
+        e = H[4];
 
-		for (t = 0; t < 80; t += 1)
-		{
-			if (t < 16)
-			{
-				W[t] = block[t];
-			}
-			else
-			{
-				W[t] = rotl(W[t - 3] ^ W[t - 8] ^ W[t - 14] ^ W[t - 16], 1);
-			}
+        for (t = 0; t < 80; t += 1) {
+            if (t < 16) {
+                W[t] = block[t];
+            } else {
+                W[t] = rotl(W[t - 3] ^ W[t - 8] ^ W[t - 14] ^ W[t - 16], 1);
+            }
 
-			if (t < 20)
-			{
-				T = safeAdd_5(rotl(a, 5), ch(b, c, d), e, 0x5a827999, W[t]);
-			}
-			else if (t < 40)
-			{
-				T = safeAdd_5(rotl(a, 5), parity(b, c, d), e, 0x6ed9eba1, W[t]);
-			}
-			else if (t < 60)
-			{
-				T = safeAdd_5(rotl(a, 5), maj(b, c, d), e, 0x8f1bbcdc, W[t]);
-			} else {
-				T = safeAdd_5(rotl(a, 5), parity(b, c, d), e, 0xca62c1d6, W[t]);
-			}
+            if (t < 20) {
+                T = safeAdd_5(rotl(a, 5), ch(b, c, d), e, 0x5a827999, W[t]);
+            } else if (t < 40) {
+                T = safeAdd_5(rotl(a, 5), parity(b, c, d), e, 0x6ed9eba1, W[t]);
+            } else if (t < 60) {
+                T = safeAdd_5(rotl(a, 5), maj(b, c, d), e, 0x8f1bbcdc, W[t]);
+            } else {
+                T = safeAdd_5(rotl(a, 5), parity(b, c, d), e, 0xca62c1d6, W[t]);
+            }
 
-			e = d;
-			d = c;
-			c = rotl(b, 30);
-			b = a;
-			a = T;
-		}
+            e = d;
+            d = c;
+            c = rotl(b, 30);
+            b = a;
+            a = T;
+        }
 
-		H[0] = safeAdd_2(a, H[0]);
-		H[1] = safeAdd_2(b, H[1]);
-		H[2] = safeAdd_2(c, H[2]);
-		H[3] = safeAdd_2(d, H[3]);
-		H[4] = safeAdd_2(e, H[4]);
+        H[0] = safeAdd_2(a, H[0]);
+        H[1] = safeAdd_2(b, H[1]);
+        H[2] = safeAdd_2(c, H[2]);
+        H[3] = safeAdd_2(d, H[3]);
+        H[4] = safeAdd_2(e, H[4]);
 
-		return H;
-	}
+        return H;
+    }
 
-	/**
+    /**
 	 * Finalizes the SHA-1 hash
 	 *
 	 * @private
@@ -2621,108 +2256,45 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @return {Array.<number>} The array of integers representing the SHA-1
 	 *   hash of message
 	 */
-	function finalizeSHA1(remainder, remainderBinLen, processedBinLen, H)
-	{
-		var i, appendedMessageLength, offset;
+    function finalizeSHA1(remainder, remainderBinLen, processedBinLen, H) {
+        var i, appendedMessageLength, offset;
 
-		/* The 65 addition is a hack but it works.  The correct number is
+        /* The 65 addition is a hack but it works.  The correct number is
 		   actually 72 (64 + 8) but the below math fails if
 		   remainderBinLen + 72 % 512 = 0. Since remainderBinLen % 8 = 0,
 		   "shorting" the addition is OK. */
-		offset = (((remainderBinLen + 65) >>> 9) << 4) + 15;
-		while (remainder.length <= offset)
-		{
-			remainder.push(0);
-		}
-		/* Append '1' at the end of the binary string */
-		remainder[remainderBinLen >>> 5] |= 0x80 << (24 - (remainderBinLen % 32));
-		/* Append length of binary string in the position such that the new
+        offset = (((remainderBinLen + 65) >>> 9) << 4) + 15;
+        while (remainder.length <= offset) {
+            remainder.push(0);
+        }
+        /* Append '1' at the end of the binary string */
+        remainder[remainderBinLen >>> 5] |= 0x80 << (24 - (remainderBinLen % 32));
+        /* Append length of binary string in the position such that the new
 		length is a multiple of 512.  Logic does not work for even multiples
 		of 512 but there can never be even multiples of 512 */
-		remainder[offset] = remainderBinLen + processedBinLen;
+        remainder[offset] = remainderBinLen + processedBinLen;
 
-		appendedMessageLength = remainder.length;
+        appendedMessageLength = remainder.length;
 
-		/* This will always be at least 1 full chunk */
-		for (i = 0; i < appendedMessageLength; i += 16)
-		{
-			H = roundSHA1(remainder.slice(i, i + 16), H);
-		}
+        /* This will always be at least 1 full chunk */
+        for (i = 0; i < appendedMessageLength; i += 16) {
+            H = roundSHA1(remainder.slice(i, i + 16), H);
+        }
 
-		return H;
-	}
+        return H;
+    }
 
-	/* Put this here so the K arrays aren't put on the stack for every block */
-	var K_sha2, K_sha512;
-	if (6 & SUPPORTED_ALGS)
-	{
-		K_sha2 = [
-			0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5,
-			0x3956C25B, 0x59F111F1, 0x923F82A4, 0xAB1C5ED5,
-			0xD807AA98, 0x12835B01, 0x243185BE, 0x550C7DC3,
-			0x72BE5D74, 0x80DEB1FE, 0x9BDC06A7, 0xC19BF174,
-			0xE49B69C1, 0xEFBE4786, 0x0FC19DC6, 0x240CA1CC,
-			0x2DE92C6F, 0x4A7484AA, 0x5CB0A9DC, 0x76F988DA,
-			0x983E5152, 0xA831C66D, 0xB00327C8, 0xBF597FC7,
-			0xC6E00BF3, 0xD5A79147, 0x06CA6351, 0x14292967,
-			0x27B70A85, 0x2E1B2138, 0x4D2C6DFC, 0x53380D13,
-			0x650A7354, 0x766A0ABB, 0x81C2C92E, 0x92722C85,
-			0xA2BFE8A1, 0xA81A664B, 0xC24B8B70, 0xC76C51A3,
-			0xD192E819, 0xD6990624, 0xF40E3585, 0x106AA070,
-			0x19A4C116, 0x1E376C08, 0x2748774C, 0x34B0BCB5,
-			0x391C0CB3, 0x4ED8AA4A, 0x5B9CCA4F, 0x682E6FF3,
-			0x748F82EE, 0x78A5636F, 0x84C87814, 0x8CC70208,
-			0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2
-		];
+    /* Put this here so the K arrays aren't put on the stack for every block */
+    var K_sha2, K_sha512;
+    if (6 & SUPPORTED_ALGS) {
+        K_sha2 = [0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5, 0x3956C25B, 0x59F111F1, 0x923F82A4, 0xAB1C5ED5, 0xD807AA98, 0x12835B01, 0x243185BE, 0x550C7DC3, 0x72BE5D74, 0x80DEB1FE, 0x9BDC06A7, 0xC19BF174, 0xE49B69C1, 0xEFBE4786, 0x0FC19DC6, 0x240CA1CC, 0x2DE92C6F, 0x4A7484AA, 0x5CB0A9DC, 0x76F988DA, 0x983E5152, 0xA831C66D, 0xB00327C8, 0xBF597FC7, 0xC6E00BF3, 0xD5A79147, 0x06CA6351, 0x14292967, 0x27B70A85, 0x2E1B2138, 0x4D2C6DFC, 0x53380D13, 0x650A7354, 0x766A0ABB, 0x81C2C92E, 0x92722C85, 0xA2BFE8A1, 0xA81A664B, 0xC24B8B70, 0xC76C51A3, 0xD192E819, 0xD6990624, 0xF40E3585, 0x106AA070, 0x19A4C116, 0x1E376C08, 0x2748774C, 0x34B0BCB5, 0x391C0CB3, 0x4ED8AA4A, 0x5B9CCA4F, 0x682E6FF3, 0x748F82EE, 0x78A5636F, 0x84C87814, 0x8CC70208, 0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2];
 
-		if (4 & SUPPORTED_ALGS)
-		{
-			 K_sha512 = [
-				new Int_64(K_sha2[ 0], 0xd728ae22), new Int_64(K_sha2[ 1], 0x23ef65cd),
-				new Int_64(K_sha2[ 2], 0xec4d3b2f), new Int_64(K_sha2[ 3], 0x8189dbbc),
-				new Int_64(K_sha2[ 4], 0xf348b538), new Int_64(K_sha2[ 5], 0xb605d019),
-				new Int_64(K_sha2[ 6], 0xaf194f9b), new Int_64(K_sha2[ 7], 0xda6d8118),
-				new Int_64(K_sha2[ 8], 0xa3030242), new Int_64(K_sha2[ 9], 0x45706fbe),
-				new Int_64(K_sha2[10], 0x4ee4b28c), new Int_64(K_sha2[11], 0xd5ffb4e2),
-				new Int_64(K_sha2[12], 0xf27b896f), new Int_64(K_sha2[13], 0x3b1696b1),
-				new Int_64(K_sha2[14], 0x25c71235), new Int_64(K_sha2[15], 0xcf692694),
-				new Int_64(K_sha2[16], 0x9ef14ad2), new Int_64(K_sha2[17], 0x384f25e3),
-				new Int_64(K_sha2[18], 0x8b8cd5b5), new Int_64(K_sha2[19], 0x77ac9c65),
-				new Int_64(K_sha2[20], 0x592b0275), new Int_64(K_sha2[21], 0x6ea6e483),
-				new Int_64(K_sha2[22], 0xbd41fbd4), new Int_64(K_sha2[23], 0x831153b5),
-				new Int_64(K_sha2[24], 0xee66dfab), new Int_64(K_sha2[25], 0x2db43210),
-				new Int_64(K_sha2[26], 0x98fb213f), new Int_64(K_sha2[27], 0xbeef0ee4),
-				new Int_64(K_sha2[28], 0x3da88fc2), new Int_64(K_sha2[29], 0x930aa725),
-				new Int_64(K_sha2[30], 0xe003826f), new Int_64(K_sha2[31], 0x0a0e6e70),
-				new Int_64(K_sha2[32], 0x46d22ffc), new Int_64(K_sha2[33], 0x5c26c926),
-				new Int_64(K_sha2[34], 0x5ac42aed), new Int_64(K_sha2[35], 0x9d95b3df),
-				new Int_64(K_sha2[36], 0x8baf63de), new Int_64(K_sha2[37], 0x3c77b2a8),
-				new Int_64(K_sha2[38], 0x47edaee6), new Int_64(K_sha2[39], 0x1482353b),
-				new Int_64(K_sha2[40], 0x4cf10364), new Int_64(K_sha2[41], 0xbc423001),
-				new Int_64(K_sha2[42], 0xd0f89791), new Int_64(K_sha2[43], 0x0654be30),
-				new Int_64(K_sha2[44], 0xd6ef5218), new Int_64(K_sha2[45], 0x5565a910),
-				new Int_64(K_sha2[46], 0x5771202a), new Int_64(K_sha2[47], 0x32bbd1b8),
-				new Int_64(K_sha2[48], 0xb8d2d0c8), new Int_64(K_sha2[49], 0x5141ab53),
-				new Int_64(K_sha2[50], 0xdf8eeb99), new Int_64(K_sha2[51], 0xe19b48a8),
-				new Int_64(K_sha2[52], 0xc5c95a63), new Int_64(K_sha2[53], 0xe3418acb),
-				new Int_64(K_sha2[54], 0x7763e373), new Int_64(K_sha2[55], 0xd6b2b8a3),
-				new Int_64(K_sha2[56], 0x5defb2fc), new Int_64(K_sha2[57], 0x43172f60),
-				new Int_64(K_sha2[58], 0xa1f0ab72), new Int_64(K_sha2[59], 0x1a6439ec),
-				new Int_64(K_sha2[60], 0x23631e28), new Int_64(K_sha2[61], 0xde82bde9),
-				new Int_64(K_sha2[62], 0xb2c67915), new Int_64(K_sha2[63], 0xe372532b),
-				new Int_64(0xca273ece, 0xea26619c), new Int_64(0xd186b8c7, 0x21c0c207),
-				new Int_64(0xeada7dd6, 0xcde0eb1e), new Int_64(0xf57d4f7f, 0xee6ed178),
-				new Int_64(0x06f067aa, 0x72176fba), new Int_64(0x0a637dc5, 0xa2c898a6),
-				new Int_64(0x113f9804, 0xbef90dae), new Int_64(0x1b710b35, 0x131c471b),
-				new Int_64(0x28db77f5, 0x23047d84), new Int_64(0x32caab7b, 0x40c72493),
-				new Int_64(0x3c9ebe0a, 0x15c9bebc), new Int_64(0x431d67c4, 0x9c100d4c),
-				new Int_64(0x4cc5d4be, 0xcb3e42b6), new Int_64(0x597f299c, 0xfc657e2a),
-				new Int_64(0x5fcb6fab, 0x3ad6faec), new Int_64(0x6c44198c, 0x4a475817)
-			];
-		}
-	}
+        if (4 & SUPPORTED_ALGS) {
+            K_sha512 = [new Int_64(K_sha2[0],0xd728ae22), new Int_64(K_sha2[1],0x23ef65cd), new Int_64(K_sha2[2],0xec4d3b2f), new Int_64(K_sha2[3],0x8189dbbc), new Int_64(K_sha2[4],0xf348b538), new Int_64(K_sha2[5],0xb605d019), new Int_64(K_sha2[6],0xaf194f9b), new Int_64(K_sha2[7],0xda6d8118), new Int_64(K_sha2[8],0xa3030242), new Int_64(K_sha2[9],0x45706fbe), new Int_64(K_sha2[10],0x4ee4b28c), new Int_64(K_sha2[11],0xd5ffb4e2), new Int_64(K_sha2[12],0xf27b896f), new Int_64(K_sha2[13],0x3b1696b1), new Int_64(K_sha2[14],0x25c71235), new Int_64(K_sha2[15],0xcf692694), new Int_64(K_sha2[16],0x9ef14ad2), new Int_64(K_sha2[17],0x384f25e3), new Int_64(K_sha2[18],0x8b8cd5b5), new Int_64(K_sha2[19],0x77ac9c65), new Int_64(K_sha2[20],0x592b0275), new Int_64(K_sha2[21],0x6ea6e483), new Int_64(K_sha2[22],0xbd41fbd4), new Int_64(K_sha2[23],0x831153b5), new Int_64(K_sha2[24],0xee66dfab), new Int_64(K_sha2[25],0x2db43210), new Int_64(K_sha2[26],0x98fb213f), new Int_64(K_sha2[27],0xbeef0ee4), new Int_64(K_sha2[28],0x3da88fc2), new Int_64(K_sha2[29],0x930aa725), new Int_64(K_sha2[30],0xe003826f), new Int_64(K_sha2[31],0x0a0e6e70), new Int_64(K_sha2[32],0x46d22ffc), new Int_64(K_sha2[33],0x5c26c926), new Int_64(K_sha2[34],0x5ac42aed), new Int_64(K_sha2[35],0x9d95b3df), new Int_64(K_sha2[36],0x8baf63de), new Int_64(K_sha2[37],0x3c77b2a8), new Int_64(K_sha2[38],0x47edaee6), new Int_64(K_sha2[39],0x1482353b), new Int_64(K_sha2[40],0x4cf10364), new Int_64(K_sha2[41],0xbc423001), new Int_64(K_sha2[42],0xd0f89791), new Int_64(K_sha2[43],0x0654be30), new Int_64(K_sha2[44],0xd6ef5218), new Int_64(K_sha2[45],0x5565a910), new Int_64(K_sha2[46],0x5771202a), new Int_64(K_sha2[47],0x32bbd1b8), new Int_64(K_sha2[48],0xb8d2d0c8), new Int_64(K_sha2[49],0x5141ab53), new Int_64(K_sha2[50],0xdf8eeb99), new Int_64(K_sha2[51],0xe19b48a8), new Int_64(K_sha2[52],0xc5c95a63), new Int_64(K_sha2[53],0xe3418acb), new Int_64(K_sha2[54],0x7763e373), new Int_64(K_sha2[55],0xd6b2b8a3), new Int_64(K_sha2[56],0x5defb2fc), new Int_64(K_sha2[57],0x43172f60), new Int_64(K_sha2[58],0xa1f0ab72), new Int_64(K_sha2[59],0x1a6439ec), new Int_64(K_sha2[60],0x23631e28), new Int_64(K_sha2[61],0xde82bde9), new Int_64(K_sha2[62],0xb2c67915), new Int_64(K_sha2[63],0xe372532b), new Int_64(0xca273ece,0xea26619c), new Int_64(0xd186b8c7,0x21c0c207), new Int_64(0xeada7dd6,0xcde0eb1e), new Int_64(0xf57d4f7f,0xee6ed178), new Int_64(0x06f067aa,0x72176fba), new Int_64(0x0a637dc5,0xa2c898a6), new Int_64(0x113f9804,0xbef90dae), new Int_64(0x1b710b35,0x131c471b), new Int_64(0x28db77f5,0x23047d84), new Int_64(0x32caab7b,0x40c72493), new Int_64(0x3c9ebe0a,0x15c9bebc), new Int_64(0x431d67c4,0x9c100d4c), new Int_64(0x4cc5d4be,0xcb3e42b6), new Int_64(0x597f299c,0xfc657e2a), new Int_64(0x5fcb6fab,0x3ad6faec), new Int_64(0x6c44198c,0x4a475817)];
+        }
+    }
 
-	/**
+    /**
 	 * Performs a round of SHA-2 hashing over a block
 	 *
 	 * @private
@@ -2733,107 +2305,90 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {string} variant The desired SHA-2 variant
 	 * @return {Array.<number|Int_64>} The resulting H values
 	 */
-	function roundSHA2(block, H, variant)
-	{
-		var a, b, c, d, e, f, g, h, T1, T2, numRounds, t, binaryStringMult,
-			safeAdd_2, safeAdd_4, safeAdd_5, gamma0, gamma1, sigma0, sigma1,
-			ch, maj, Int, W = [], int1, int2, offset, K;
+    function roundSHA2(block, H, variant) {
+        var a, b, c, d, e, f, g, h, T1, T2, numRounds, t, binaryStringMult, safeAdd_2, safeAdd_4, safeAdd_5, gamma0, gamma1, sigma0, sigma1, ch, maj, Int, W = [], int1, int2, offset, K;
 
-		/* Set up the various function handles and variable for the specific
+        /* Set up the various function handles and variable for the specific
 		 * variant */
-		if ((variant === "SHA-224" || variant === "SHA-256") &&
-			(2 & SUPPORTED_ALGS))
-		{
-			/* 32-bit variant */
-			numRounds = 64;
-			binaryStringMult = 1;
-			Int = Number;
-			safeAdd_2 = safeAdd_32_2;
-			safeAdd_4 = safeAdd_32_4;
-			safeAdd_5 = safeAdd_32_5;
-			gamma0 = gamma0_32;
-			gamma1 = gamma1_32;
-			sigma0 = sigma0_32;
-			sigma1 = sigma1_32;
-			maj = maj_32;
-			ch = ch_32;
-			K = K_sha2;
-		}
-		else if ((variant === "SHA-384" || variant === "SHA-512") &&
-			(4 & SUPPORTED_ALGS))
-		{
-			/* 64-bit variant */
-			numRounds = 80;
-			binaryStringMult = 2;
-			Int = Int_64;
-			safeAdd_2 = safeAdd_64_2;
-			safeAdd_4 = safeAdd_64_4;
-			safeAdd_5 = safeAdd_64_5;
-			gamma0 = gamma0_64;
-			gamma1 = gamma1_64;
-			sigma0 = sigma0_64;
-			sigma1 = sigma1_64;
-			maj = maj_64;
-			ch = ch_64;
-			K = K_sha512;
-		}
-		else
-		{
-			throw new Error("Unexpected error in SHA-2 implementation");
-		}
+        if ((variant === "SHA-224" || variant === "SHA-256") && (2 & SUPPORTED_ALGS)) {
+            /* 32-bit variant */
+            numRounds = 64;
+            binaryStringMult = 1;
+            Int = Number;
+            safeAdd_2 = safeAdd_32_2;
+            safeAdd_4 = safeAdd_32_4;
+            safeAdd_5 = safeAdd_32_5;
+            gamma0 = gamma0_32;
+            gamma1 = gamma1_32;
+            sigma0 = sigma0_32;
+            sigma1 = sigma1_32;
+            maj = maj_32;
+            ch = ch_32;
+            K = K_sha2;
+        } else if ((variant === "SHA-384" || variant === "SHA-512") && (4 & SUPPORTED_ALGS)) {
+            /* 64-bit variant */
+            numRounds = 80;
+            binaryStringMult = 2;
+            Int = Int_64;
+            safeAdd_2 = safeAdd_64_2;
+            safeAdd_4 = safeAdd_64_4;
+            safeAdd_5 = safeAdd_64_5;
+            gamma0 = gamma0_64;
+            gamma1 = gamma1_64;
+            sigma0 = sigma0_64;
+            sigma1 = sigma1_64;
+            maj = maj_64;
+            ch = ch_64;
+            K = K_sha512;
+        } else {
+            throw new Error("Unexpected error in SHA-2 implementation");
+        }
 
-		a = H[0];
-		b = H[1];
-		c = H[2];
-		d = H[3];
-		e = H[4];
-		f = H[5];
-		g = H[6];
-		h = H[7];
+        a = H[0];
+        b = H[1];
+        c = H[2];
+        d = H[3];
+        e = H[4];
+        f = H[5];
+        g = H[6];
+        h = H[7];
 
-		for (t = 0; t < numRounds; t += 1)
-		{
-			if (t < 16)
-			{
-				offset = t * binaryStringMult;
-				int1 = (block.length <= offset) ? 0 : block[offset];
-				int2 = (block.length <= offset + 1) ? 0 : block[offset + 1];
-				/* Bit of a hack - for 32-bit, the second term is ignored */
-				W[t] = new Int(int1, int2);
-			}
-			else
-			{
-				W[t] = safeAdd_4(
-						gamma1(W[t - 2]), W[t - 7],
-						gamma0(W[t - 15]), W[t - 16]
-					);
-			}
+        for (t = 0; t < numRounds; t += 1) {
+            if (t < 16) {
+                offset = t * binaryStringMult;
+                int1 = (block.length <= offset) ? 0 : block[offset];
+                int2 = (block.length <= offset + 1) ? 0 : block[offset + 1];
+                /* Bit of a hack - for 32-bit, the second term is ignored */
+                W[t] = new Int(int1,int2);
+            } else {
+                W[t] = safeAdd_4(gamma1(W[t - 2]), W[t - 7], gamma0(W[t - 15]), W[t - 16]);
+            }
 
-			T1 = safeAdd_5(h, sigma1(e), ch(e, f, g), K[t], W[t]);
-			T2 = safeAdd_2(sigma0(a), maj(a, b, c));
-			h = g;
-			g = f;
-			f = e;
-			e = safeAdd_2(d, T1);
-			d = c;
-			c = b;
-			b = a;
-			a = safeAdd_2(T1, T2);
-		}
+            T1 = safeAdd_5(h, sigma1(e), ch(e, f, g), K[t], W[t]);
+            T2 = safeAdd_2(sigma0(a), maj(a, b, c));
+            h = g;
+            g = f;
+            f = e;
+            e = safeAdd_2(d, T1);
+            d = c;
+            c = b;
+            b = a;
+            a = safeAdd_2(T1, T2);
+        }
 
-		H[0] = safeAdd_2(a, H[0]);
-		H[1] = safeAdd_2(b, H[1]);
-		H[2] = safeAdd_2(c, H[2]);
-		H[3] = safeAdd_2(d, H[3]);
-		H[4] = safeAdd_2(e, H[4]);
-		H[5] = safeAdd_2(f, H[5]);
-		H[6] = safeAdd_2(g, H[6]);
-		H[7] = safeAdd_2(h, H[7]);
+        H[0] = safeAdd_2(a, H[0]);
+        H[1] = safeAdd_2(b, H[1]);
+        H[2] = safeAdd_2(c, H[2]);
+        H[3] = safeAdd_2(d, H[3]);
+        H[4] = safeAdd_2(e, H[4]);
+        H[5] = safeAdd_2(f, H[5]);
+        H[6] = safeAdd_2(g, H[6]);
+        H[7] = safeAdd_2(h, H[7]);
 
-		return H;
-	}
+        return H;
+    }
 
-	/**
+    /**
 	 * Finalizes the SHA-2 hash
 	 *
 	 * @private
@@ -2848,99 +2403,62 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @return {Array.<number>} The array of integers representing the SHA-2
 	 *   hash of message
 	 */
-	function finalizeSHA2(remainder, remainderBinLen, processedBinLen, H, variant)
-	{
-		var i, appendedMessageLength, offset, retVal, binaryStringInc;
+    function finalizeSHA2(remainder, remainderBinLen, processedBinLen, H, variant) {
+        var i, appendedMessageLength, offset, retVal, binaryStringInc;
 
-		if ((variant === "SHA-224" || variant === "SHA-256") &&
-			(2 & SUPPORTED_ALGS))
-		{
-			/* 32-bit variant */
-			/* The 65 addition is a hack but it works.  The correct number is
+        if ((variant === "SHA-224" || variant === "SHA-256") && (2 & SUPPORTED_ALGS)) {
+            /* 32-bit variant */
+            /* The 65 addition is a hack but it works.  The correct number is
 			   actually 72 (64 + 8) but the below math fails if
 			   remainderBinLen + 72 % 512 = 0. Since remainderBinLen % 8 = 0,
 			   "shorting" the addition is OK. */
-			offset = (((remainderBinLen + 65) >>> 9) << 4) + 15;;
-			binaryStringInc = 16;
-		}
-		else if ((variant === "SHA-384" || variant === "SHA-512") &&
-			(4 & SUPPORTED_ALGS))
-		{
-			/* 64-bit variant */
-			/* The 129 addition is a hack but it works.  The correct number is
+            offset = (((remainderBinLen + 65) >>> 9) << 4) + 15;
+            ;binaryStringInc = 16;
+        } else if ((variant === "SHA-384" || variant === "SHA-512") && (4 & SUPPORTED_ALGS)) {
+            /* 64-bit variant */
+            /* The 129 addition is a hack but it works.  The correct number is
 			   actually 136 (128 + 8) but the below math fails if
 			   remainderBinLen + 136 % 1024 = 0. Since remainderBinLen % 8 = 0,
 			   "shorting" the addition is OK. */
-			offset = (((remainderBinLen + 129) >>> 10) << 5) + 31;
-			binaryStringInc = 32;
-		}
-		else
-		{
-			throw new Error("Unexpected error in SHA-2 implementation");
-		}
+            offset = (((remainderBinLen + 129) >>> 10) << 5) + 31;
+            binaryStringInc = 32;
+        } else {
+            throw new Error("Unexpected error in SHA-2 implementation");
+        }
 
-		while (remainder.length <= offset)
-		{
-			remainder.push(0);
-		}
-		/* Append '1' at the end of the binary string */
-		remainder[remainderBinLen >>> 5] |= 0x80 << (24 - remainderBinLen % 32);
-		/* Append length of binary string in the position such that the new
+        while (remainder.length <= offset) {
+            remainder.push(0);
+        }
+        /* Append '1' at the end of the binary string */
+        remainder[remainderBinLen >>> 5] |= 0x80 << (24 - remainderBinLen % 32);
+        /* Append length of binary string in the position such that the new
 		 * length is correct */
-		remainder[offset] = remainderBinLen + processedBinLen;
+        remainder[offset] = remainderBinLen + processedBinLen;
 
-		appendedMessageLength = remainder.length;
+        appendedMessageLength = remainder.length;
 
-		/* This will always be at least 1 full chunk */
-		for (i = 0; i < appendedMessageLength; i += binaryStringInc)
-		{
-			H = roundSHA2(remainder.slice(i, i + binaryStringInc), H, variant);
-		}
+        /* This will always be at least 1 full chunk */
+        for (i = 0; i < appendedMessageLength; i += binaryStringInc) {
+            H = roundSHA2(remainder.slice(i, i + binaryStringInc), H, variant);
+        }
 
-		if (("SHA-224" === variant) && (2 & SUPPORTED_ALGS))
-		{
-			retVal = [
-				H[0], H[1], H[2], H[3],
-				H[4], H[5], H[6]
-			];
-		}
-		else if (("SHA-256" === variant) && (2 & SUPPORTED_ALGS))
-		{
-			retVal = H;
-		}
-		else if (("SHA-384" === variant) && (4 & SUPPORTED_ALGS))
-		{
-			retVal = [
-				H[0].highOrder, H[0].lowOrder,
-				H[1].highOrder, H[1].lowOrder,
-				H[2].highOrder, H[2].lowOrder,
-				H[3].highOrder, H[3].lowOrder,
-				H[4].highOrder, H[4].lowOrder,
-				H[5].highOrder, H[5].lowOrder
-			];
-		}
-		else if (("SHA-512" === variant) && (4 & SUPPORTED_ALGS))
-		{
-			retVal = [
-				H[0].highOrder, H[0].lowOrder,
-				H[1].highOrder, H[1].lowOrder,
-				H[2].highOrder, H[2].lowOrder,
-				H[3].highOrder, H[3].lowOrder,
-				H[4].highOrder, H[4].lowOrder,
-				H[5].highOrder, H[5].lowOrder,
-				H[6].highOrder, H[6].lowOrder,
-				H[7].highOrder, H[7].lowOrder
-			];
-		}
-		else /* This should never be reached */
-		{
-			throw new Error("Unexpected error in SHA-2 implementation");
-		}
+        if (("SHA-224" === variant) && (2 & SUPPORTED_ALGS)) {
+            retVal = [H[0], H[1], H[2], H[3], H[4], H[5], H[6]];
+        } else if (("SHA-256" === variant) && (2 & SUPPORTED_ALGS)) {
+            retVal = H;
+        } else if (("SHA-384" === variant) && (4 & SUPPORTED_ALGS)) {
+            retVal = [H[0].highOrder, H[0].lowOrder, H[1].highOrder, H[1].lowOrder, H[2].highOrder, H[2].lowOrder, H[3].highOrder, H[3].lowOrder, H[4].highOrder, H[4].lowOrder, H[5].highOrder, H[5].lowOrder];
+        } else if (("SHA-512" === variant) && (4 & SUPPORTED_ALGS)) {
+            retVal = [H[0].highOrder, H[0].lowOrder, H[1].highOrder, H[1].lowOrder, H[2].highOrder, H[2].lowOrder, H[3].highOrder, H[3].lowOrder, H[4].highOrder, H[4].lowOrder, H[5].highOrder, H[5].lowOrder, H[6].highOrder, H[6].lowOrder, H[7].highOrder, H[7].lowOrder];
+        } else /* This should never be reached */
+        {
+            throw new Error("Unexpected error in SHA-2 implementation");
+        }
 
-		return retVal;
-	}
+        return retVal;
+    }
 
-	/**
+    /**
 	 * jsSHA is the workhorse of the library.  Instantiate it with the string to
 	 * be hashed as the parameter
 	 *
@@ -2952,74 +2470,56 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {{encoding: (string|undefined), numRounds: (string|undefined)}=}
 	 *   options Optional values
 	 */
-	var jsSHA = function(variant, inputFormat, options)
-	{
-		var processedLen = 0, remainder = [], remainderLen = 0, utfType,
-			intermediateH, converterFunc, shaVariant = variant, outputBinLen,
-			variantBlockSize, roundFunc, finalizeFunc, finalized = false,
-			hmacKeySet = false, keyWithIPad = [], keyWithOPad = [], numRounds,
-			updatedCalled = false, inputOptions;
+    var jsSHA = function(variant, inputFormat, options) {
+        var processedLen = 0, remainder = [], remainderLen = 0, utfType, intermediateH, converterFunc, shaVariant = variant, outputBinLen, variantBlockSize, roundFunc, finalizeFunc, finalized = false, hmacKeySet = false, keyWithIPad = [], keyWithOPad = [], numRounds, updatedCalled = false, inputOptions;
 
-		inputOptions = options || {};
-		utfType = inputOptions["encoding"] || "UTF8";
-		numRounds = inputOptions["numRounds"] || 1;
+        inputOptions = options || {};
+        utfType = inputOptions["encoding"] || "UTF8";
+        numRounds = inputOptions["numRounds"] || 1;
 
-		converterFunc = getStrConverter(inputFormat, utfType);
+        converterFunc = getStrConverter(inputFormat, utfType);
 
-		if ((numRounds !== parseInt(numRounds, 10)) || (1 > numRounds))
-		{
-			throw new Error("numRounds must a integer >= 1");
-		}
+        if ((numRounds !== parseInt(numRounds, 10)) || (1 > numRounds)) {
+            throw new Error("numRounds must a integer >= 1");
+        }
 
-		if (("SHA-1" === shaVariant) && (1 & SUPPORTED_ALGS))
-		{
-			variantBlockSize = 512;
-			roundFunc = roundSHA1;
-			finalizeFunc = finalizeSHA1;
-			outputBinLen = 160;
-		}
-		else
-		{
-			if (6 & SUPPORTED_ALGS)
-			{
-				roundFunc = function (block, H) {
-					return roundSHA2(block, H, shaVariant);
-				};
-				finalizeFunc = function (remainder, remainderBinLen, processedBinLen, H)
-				{
-					return finalizeSHA2(remainder, remainderBinLen, processedBinLen, H, shaVariant);
-				};
-			}
+        if (("SHA-1" === shaVariant) && (1 & SUPPORTED_ALGS)) {
+            variantBlockSize = 512;
+            roundFunc = roundSHA1;
+            finalizeFunc = finalizeSHA1;
+            outputBinLen = 160;
+        } else {
+            if (6 & SUPPORTED_ALGS) {
+                roundFunc = function(block, H) {
+                    return roundSHA2(block, H, shaVariant);
+                }
+                ;
+                finalizeFunc = function(remainder, remainderBinLen, processedBinLen, H) {
+                    return finalizeSHA2(remainder, remainderBinLen, processedBinLen, H, shaVariant);
+                }
+                ;
+            }
 
-			if (("SHA-224" === shaVariant) && (2 & SUPPORTED_ALGS))
-			{
-				variantBlockSize = 512;
-				outputBinLen = 224;
-			}
-			else if (("SHA-256" === shaVariant) && (2 & SUPPORTED_ALGS))
-			{
-				variantBlockSize = 512;
-				outputBinLen = 256;
-			}
-			else if (("SHA-384" === shaVariant) && (4 & SUPPORTED_ALGS))
-			{
-				variantBlockSize = 1024;
-				outputBinLen = 384;
-			}
-			else if (("SHA-512" === shaVariant) && (4 & SUPPORTED_ALGS))
-			{
-				variantBlockSize = 1024;
-				outputBinLen = 512;
-			}
-			else
-			{
-				throw new Error("Chosen SHA variant is not supported");
-			}
-		}
+            if (("SHA-224" === shaVariant) && (2 & SUPPORTED_ALGS)) {
+                variantBlockSize = 512;
+                outputBinLen = 224;
+            } else if (("SHA-256" === shaVariant) && (2 & SUPPORTED_ALGS)) {
+                variantBlockSize = 512;
+                outputBinLen = 256;
+            } else if (("SHA-384" === shaVariant) && (4 & SUPPORTED_ALGS)) {
+                variantBlockSize = 1024;
+                outputBinLen = 384;
+            } else if (("SHA-512" === shaVariant) && (4 & SUPPORTED_ALGS)) {
+                variantBlockSize = 1024;
+                outputBinLen = 512;
+            } else {
+                throw new Error("Chosen SHA variant is not supported");
+            }
+        }
 
-		intermediateH = getH(shaVariant);
+        intermediateH = getH(shaVariant);
 
-		/**
+        /**
 		 * Sets the HMAC key for an eventual getHMAC call.  Must be called
 		 * immediately after jsSHA object instantiation
 		 *
@@ -3029,114 +2529,98 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 		 * @param {{encoding : (string|undefined)}=} options Associative array
 		 *   of input format options
 		 */
-		this.setHMACKey = function(key, inputFormat, options)
-		{
-			var keyConverterFunc, convertRet, keyBinLen, keyToUse, blockByteSize,
-				i, lastArrayIndex, keyOptions;
+        this.setHMACKey = function(key, inputFormat, options) {
+            var keyConverterFunc, convertRet, keyBinLen, keyToUse, blockByteSize, i, lastArrayIndex, keyOptions;
 
-			if (true === hmacKeySet)
-			{
-				throw new Error("HMAC key already set");
-			}
+            if (true === hmacKeySet) {
+                throw new Error("HMAC key already set");
+            }
 
-			if (true === finalized)
-			{
-				throw new Error("Cannot set HMAC key after finalizing hash");
-			}
+            if (true === finalized) {
+                throw new Error("Cannot set HMAC key after finalizing hash");
+            }
 
-			if (true === updatedCalled)
-			{
-				throw new Error("Cannot set HMAC key after calling update");
-			}
+            if (true === updatedCalled) {
+                throw new Error("Cannot set HMAC key after calling update");
+            }
 
-			keyOptions = options || {};
-			utfType = keyOptions["encoding"] || "UTF8";
+            keyOptions = options || {};
+            utfType = keyOptions["encoding"] || "UTF8";
 
-			keyConverterFunc = getStrConverter(inputFormat, utfType);
+            keyConverterFunc = getStrConverter(inputFormat, utfType);
 
-			convertRet = keyConverterFunc(key);
-			keyBinLen = convertRet["binLen"];
-			keyToUse = convertRet["value"];
+            convertRet = keyConverterFunc(key);
+            keyBinLen = convertRet["binLen"];
+            keyToUse = convertRet["value"];
 
-			blockByteSize = variantBlockSize >>> 3;
+            blockByteSize = variantBlockSize >>> 3;
 
-			/* These are used multiple times, calculate and store them */
-			lastArrayIndex = (blockByteSize / 4) - 1;
+            /* These are used multiple times, calculate and store them */
+            lastArrayIndex = (blockByteSize / 4) - 1;
 
-			/* Figure out what to do with the key based on its size relative to
+            /* Figure out what to do with the key based on its size relative to
 			 * the hash's block size */
-			if (blockByteSize < (keyBinLen / 8))
-			{
-				keyToUse = finalizeFunc(keyToUse, keyBinLen, 0, getH(shaVariant));
-				/* For all variants, the block size is bigger than the output
+            if (blockByteSize < (keyBinLen / 8)) {
+                keyToUse = finalizeFunc(keyToUse, keyBinLen, 0, getH(shaVariant));
+                /* For all variants, the block size is bigger than the output
 				 * size so there will never be a useful byte at the end of the
 				 * string */
-				while (keyToUse.length <= lastArrayIndex)
-				{
-					keyToUse.push(0);
-				}
-				keyToUse[lastArrayIndex] &= 0xFFFFFF00;
-			}
-			else if (blockByteSize > (keyBinLen / 8))
-			{
-				/* If the blockByteSize is greater than the key length, there
+                while (keyToUse.length <= lastArrayIndex) {
+                    keyToUse.push(0);
+                }
+                keyToUse[lastArrayIndex] &= 0xFFFFFF00;
+            } else if (blockByteSize > (keyBinLen / 8)) {
+                /* If the blockByteSize is greater than the key length, there
 				 * will always be at LEAST one "useless" byte at the end of the
 				 * string */
-				while (keyToUse.length <= lastArrayIndex)
-				{
-					keyToUse.push(0);
-				}
-				keyToUse[lastArrayIndex] &= 0xFFFFFF00;
-			}
+                while (keyToUse.length <= lastArrayIndex) {
+                    keyToUse.push(0);
+                }
+                keyToUse[lastArrayIndex] &= 0xFFFFFF00;
+            }
 
-			/* Create ipad and opad */
-			for (i = 0; i <= lastArrayIndex; i += 1)
-			{
-				keyWithIPad[i] = keyToUse[i] ^ 0x36363636;
-				keyWithOPad[i] = keyToUse[i] ^ 0x5C5C5C5C;
-			}
+            /* Create ipad and opad */
+            for (i = 0; i <= lastArrayIndex; i += 1) {
+                keyWithIPad[i] = keyToUse[i] ^ 0x36363636;
+                keyWithOPad[i] = keyToUse[i] ^ 0x5C5C5C5C;
+            }
 
-			intermediateH = roundFunc(keyWithIPad, intermediateH);
-			processedLen = variantBlockSize;
+            intermediateH = roundFunc(keyWithIPad, intermediateH);
+            processedLen = variantBlockSize;
 
-			hmacKeySet = true;
-		};
+            hmacKeySet = true;
+        }
+        ;
 
-		/**
+        /**
 		 * Takes strString and hashes as many blocks as possible.  Stores the
 		 * rest for either a future update or getHash call.
 		 *
 		 * @expose
 		 * @param {string} srcString The string to be hashed
 		 */
-		this.update = function(srcString)
-		{
-			var convertRet, chunkBinLen, chunkIntLen, chunk, i, updateProcessedLen = 0,
-				variantBlockIntInc = variantBlockSize >>> 5;
+        this.update = function(srcString) {
+            var convertRet, chunkBinLen, chunkIntLen, chunk, i, updateProcessedLen = 0, variantBlockIntInc = variantBlockSize >>> 5;
 
-			convertRet = converterFunc(srcString, remainder, remainderLen);
-			chunkBinLen = convertRet["binLen"];
-			chunk = convertRet["value"];
+            convertRet = converterFunc(srcString, remainder, remainderLen);
+            chunkBinLen = convertRet["binLen"];
+            chunk = convertRet["value"];
 
-			chunkIntLen = chunkBinLen >>> 5;
-			for (i = 0; i < chunkIntLen; i += variantBlockIntInc)
-			{
-				if (updateProcessedLen + variantBlockSize <= chunkBinLen)
-				{
-					intermediateH = roundFunc(
-						chunk.slice(i, i + variantBlockIntInc),
-						intermediateH
-					);
-					updateProcessedLen += variantBlockSize;
-				}
-			}
-			processedLen += updateProcessedLen;
-			remainder = chunk.slice(updateProcessedLen >>> 5);
-			remainderLen = chunkBinLen % variantBlockSize;
-			updatedCalled = true;
-		};
+            chunkIntLen = chunkBinLen >>> 5;
+            for (i = 0; i < chunkIntLen; i += variantBlockIntInc) {
+                if (updateProcessedLen + variantBlockSize <= chunkBinLen) {
+                    intermediateH = roundFunc(chunk.slice(i, i + variantBlockIntInc), intermediateH);
+                    updateProcessedLen += variantBlockSize;
+                }
+            }
+            processedLen += updateProcessedLen;
+            remainder = chunk.slice(updateProcessedLen >>> 5);
+            remainderLen = chunkBinLen % variantBlockSize;
+            updatedCalled = true;
+        }
+        ;
 
-		/**
+        /**
 		 * Returns the desired SHA hash of the string specified at instantiation
 		 * using the specified parameters
 		 *
@@ -3147,47 +2631,49 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 		 * @return {string} The string representation of the hash in the format
 		 *   specified
 		 */
-		this.getHash = function(format, options)
-		{
-			var formatFunc, i, outputOptions;
+        this.getHash = function(format, options) {
+            var formatFunc, i, outputOptions;
 
-			if (true === hmacKeySet)
-			{
-				throw new Error("Cannot call getHash after setting HMAC key");
-			}
+            if (true === hmacKeySet) {
+                throw new Error("Cannot call getHash after setting HMAC key");
+            }
 
-			outputOptions = getOutputOpts(options);
+            outputOptions = getOutputOpts(options);
 
-			/* Validate the output format selection */
-			switch (format)
-			{
-			case "HEX":
-				formatFunc = function(binarray) {return binb2hex(binarray, outputOptions);};
-				break;
-			case "B64":
-				formatFunc = function(binarray) {return binb2b64(binarray, outputOptions);};
-				break;
-			case "BYTES":
-				formatFunc = binb2bytes;
-				break;
-			default:
-				throw new Error("format must be HEX, B64, or BYTES");
-			}
+            /* Validate the output format selection */
+            switch (format) {
+            case "HEX":
+                formatFunc = function(binarray) {
+                    return binb2hex(binarray, outputOptions);
+                }
+                ;
+                break;
+            case "B64":
+                formatFunc = function(binarray) {
+                    return binb2b64(binarray, outputOptions);
+                }
+                ;
+                break;
+            case "BYTES":
+                formatFunc = binb2bytes;
+                break;
+            default:
+                throw new Error("format must be HEX, B64, or BYTES");
+            }
 
-			if (false === finalized)
-			{
-				intermediateH = finalizeFunc(remainder, remainderLen, processedLen, intermediateH);
-				for (i = 1; i < numRounds; i += 1)
-				{
-					intermediateH = finalizeFunc(intermediateH, outputBinLen, 0, getH(shaVariant));
-				}
-			}
+            if (false === finalized) {
+                intermediateH = finalizeFunc(remainder, remainderLen, processedLen, intermediateH);
+                for (i = 1; i < numRounds; i += 1) {
+                    intermediateH = finalizeFunc(intermediateH, outputBinLen, 0, getH(shaVariant));
+                }
+            }
 
-			finalized = true;
-			return formatFunc(intermediateH);
-		};
+            finalized = true;
+            return formatFunc(intermediateH);
+        }
+        ;
 
-		/**
+        /**
 		 * Returns the the HMAC in the specified format using the key given by
 		 * a previous setHMACKey call.
 		 *
@@ -3199,208 +2685,212 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 		 * @return {string} The string representation of the hash in the format
 		 *   specified
 		 */
-		this.getHMAC = function(format, options)
-		{
-			var formatFunc,	firstHash, outputOptions;
+        this.getHMAC = function(format, options) {
+            var formatFunc, firstHash, outputOptions;
 
-			if (false === hmacKeySet)
-			{
-				throw new Error("Cannot call getHMAC without first setting HMAC key");
-			}
+            if (false === hmacKeySet) {
+                throw new Error("Cannot call getHMAC without first setting HMAC key");
+            }
 
-			outputOptions = getOutputOpts(options);
+            outputOptions = getOutputOpts(options);
 
-			/* Validate the output format selection */
-			switch (format)
-			{
-			case "HEX":
-				formatFunc = function(binarray) {return binb2hex(binarray, outputOptions);};
-				break;
-			case "B64":
-				formatFunc = function(binarray) {return binb2b64(binarray, outputOptions);};
-				break;
-			case "BYTES":
-				formatFunc = binb2bytes;
-				break;
-			default:
-				throw new Error("outputFormat must be HEX, B64, or BYTES");
-			}
+            /* Validate the output format selection */
+            switch (format) {
+            case "HEX":
+                formatFunc = function(binarray) {
+                    return binb2hex(binarray, outputOptions);
+                }
+                ;
+                break;
+            case "B64":
+                formatFunc = function(binarray) {
+                    return binb2b64(binarray, outputOptions);
+                }
+                ;
+                break;
+            case "BYTES":
+                formatFunc = binb2bytes;
+                break;
+            default:
+                throw new Error("outputFormat must be HEX, B64, or BYTES");
+            }
 
-			if (false === finalized)
-			{
-				firstHash = finalizeFunc(remainder, remainderLen, processedLen, intermediateH);
-				intermediateH = roundFunc(keyWithOPad, getH(shaVariant));
-				intermediateH = finalizeFunc(firstHash, outputBinLen, variantBlockSize, intermediateH);
-			}
+            if (false === finalized) {
+                firstHash = finalizeFunc(remainder, remainderLen, processedLen, intermediateH);
+                intermediateH = roundFunc(keyWithOPad, getH(shaVariant));
+                intermediateH = finalizeFunc(firstHash, outputBinLen, variantBlockSize, intermediateH);
+            }
 
-			finalized = true;
-			return formatFunc(intermediateH);
-		};
-	};
+            finalized = true;
+            return formatFunc(intermediateH);
+        }
+        ;
+    };
 
-	if (("function" === typeof define) && (define["amd"])) /* AMD Support */
-	{
-		define(function()
-		{
-			return jsSHA;
-		});
-	} else if ("undefined" !== typeof exports) /* Node Support */
-	{
-		if (("undefined" !== typeof module) && module["exports"])
-		{
-		  module["exports"] = exports = jsSHA;
-		}
-		else {
-			exports = jsSHA;
-		}
-	} else { /* Browsers and Web Workers*/
-		global["jsSHA"] = jsSHA;
-	}
+    if (("function" === typeof define) && (define["amd"])) /* AMD Support */
+    {
+        define(function() {
+            return jsSHA;
+        });
+    } else if ("undefined" !== typeof exports) /* Node Support */
+    {
+        if (("undefined" !== typeof module) && module["exports"]) {
+            module["exports"] = exports = jsSHA;
+        } else {
+            exports = jsSHA;
+        }
+    } else {
+        /* Browsers and Web Workers*/
+        global["jsSHA"] = jsSHA;
+    }
 }(this));
 
 (function() {
-  var Hotp, Totp;
+    var Hotp, Totp;
 
-  Totp = class Totp {
-    // pass in the secret, code dom element, ticker dom element
-    constructor(expiry = 30, length = 6) {
-      this.expiry = expiry;
-      this.length = length;
-      // validate input
-      if (this.length > 8 || this.length < 6) {
-        throw "Error: invalid code length";
-      }
+    Totp = class Totp {
+        // pass in the secret, code dom element, ticker dom element
+        constructor(expiry=30, length=6) {
+            this.expiry = expiry;
+            this.length = length;
+            // validate input
+            if (this.length > 8 || this.length < 6) {
+                throw "Error: invalid code length";
+            }
+        }
+
+        dec2hex(s) {
+            return (s < 15.5 ? "0" : "") + Math.round(s).toString(16);
+        }
+
+        hex2dec(s) {
+            return parseInt(s, 16);
+        }
+
+        base32tohex(base32) {
+            var base32chars, bits, chunk, hex, i, val;
+            base32chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+            bits = "";
+            hex = "";
+            i = 0;
+            while (i < base32.length) {
+                val = base32chars.indexOf(base32.charAt(i).toUpperCase());
+                bits += this.leftpad(val.toString(2), 5, "0");
+                i++;
+            }
+            i = 0;
+            while (i + 4 <= bits.length) {
+                chunk = bits.substr(i, 4);
+                hex = hex + parseInt(chunk, 2).toString(16);
+                i += 4;
+            }
+            return hex;
+        }
+
+        leftpad(str, len, pad) {
+            if (len + 1 >= str.length) {
+                str = Array(len + 1 - str.length).join(pad) + str;
+            }
+            return str;
+        }
+
+        getOtp(secret, now=new Date().getTime()) {
+            var epoch, hmac, key, offset, otp, shaObj, time;
+            key = this.base32tohex(secret);
+            epoch = Math.round(now / 1000.0);
+            time = this.leftpad(this.dec2hex(Math.floor(epoch / this.expiry)), 16, "0");
+            shaObj = new jsSHA("SHA-1","HEX");
+            shaObj.setHMACKey(key, "HEX");
+            shaObj.update(time);
+            hmac = shaObj.getHMAC("HEX");
+            // hmacObj = new jsSHA(time, "HEX")  # Dependency on sha.js
+            // hmac = hmacObj.getHMAC(key, "HEX", "SHA-1", "HEX")
+            if (hmac === "KEY MUST BE IN BYTE INCREMENTS") {
+                throw "Error: hex key must be in byte increments";
+            } else {
+                // return null
+                offset = this.hex2dec(hmac.substring(hmac.length - 1));
+            }
+            otp = (this.hex2dec(hmac.substr(offset * 2, 8)) & this.hex2dec("7fffffff")) + "";
+            if (otp.length > this.length) {
+                otp = otp.substr(otp.length - this.length, this.length);
+            } else {
+                otp = this.leftpad(otp, this.length, "0");
+            }
+            return otp;
+        }
+
     }
+    ;
 
-    dec2hex(s) {
-      return (s < 15.5 ? "0" : "") + Math.round(s).toString(16);
+    Hotp = class Hotp {
+        constructor(length=6) {
+            this.length = length;
+            // validate input
+            if (this.length > 8 || this.length < 6) {
+                throw "Error: invalid code length";
+            }
+        }
+
+        // stuck on this for a long time. Use JSON.stringify to inspect uintToString output!!
+        uintToString(uintArray) {
+            var decodedString, encodedString;
+            encodedString = String.fromCharCode.apply(null, uintArray);
+            decodedString = decodeURIComponent(escape(encodedString));
+            return decodedString;
+        }
+
+        getOtp(key, counter) {
+            var digest, h, offset, shaObj, v;
+            shaObj = new jsSHA("SHA-1","TEXT");
+            shaObj.setHMACKey(key, "TEXT");
+            shaObj.update(this.uintToString(new Uint8Array(this.intToBytes(counter))));
+            digest = shaObj.getHMAC("HEX");
+            // Get byte array
+            h = this.hexToBytes(digest);
+
+            // Truncate
+            offset = h[19] & 0xf;
+            v = (h[offset] & 0x7f) << 24 | (h[offset + 1] & 0xff) << 16 | (h[offset + 2] & 0xff) << 8 | h[offset + 3] & 0xff;
+            v = v + '';
+            return v.substr(v.length - this.length, this.length);
+        }
+
+        intToBytes(num) {
+            var bytes, i;
+            bytes = [];
+            i = 7;
+            while (i >= 0) {
+                bytes[i] = num & 255;
+                num = num >> 8;
+                --i;
+            }
+            return bytes;
+        }
+
+        hexToBytes(hex) {
+            var C, bytes, c;
+            bytes = [];
+            c = 0;
+            C = hex.length;
+            while (c < C) {
+                bytes.push(parseInt(hex.substr(c, 2), 16));
+                c += 2;
+            }
+            return bytes;
+        }
+
     }
+    ;
 
-    hex2dec(s) {
-      return parseInt(s, 16);
-    }
+    window.jsOTP = {};
 
-    base32tohex(base32) {
-      var base32chars, bits, chunk, hex, i, val;
-      base32chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-      bits = "";
-      hex = "";
-      i = 0;
-      while (i < base32.length) {
-        val = base32chars.indexOf(base32.charAt(i).toUpperCase());
-        bits += this.leftpad(val.toString(2), 5, "0");
-        i++;
-      }
-      i = 0;
-      while (i + 4 <= bits.length) {
-        chunk = bits.substr(i, 4);
-        hex = hex + parseInt(chunk, 2).toString(16);
-        i += 4;
-      }
-      return hex;
-    }
+    jsOTP.totp = Totp;
 
-    leftpad(str, len, pad) {
-      if (len + 1 >= str.length) {
-        str = Array(len + 1 - str.length).join(pad) + str;
-      }
-      return str;
-    }
+    jsOTP.hotp = Hotp;
 
-    getOtp(secret, now = new Date().getTime()) {
-      var epoch, hmac, key, offset, otp, shaObj, time;
-      key = this.base32tohex(secret);
-      epoch = Math.round(now / 1000.0);
-      time = this.leftpad(this.dec2hex(Math.floor(epoch / this.expiry)), 16, "0");
-      shaObj = new jsSHA("SHA-1", "HEX");
-      shaObj.setHMACKey(key, "HEX");
-      shaObj.update(time);
-      hmac = shaObj.getHMAC("HEX");
-      // hmacObj = new jsSHA(time, "HEX")  # Dependency on sha.js
-      // hmac = hmacObj.getHMAC(key, "HEX", "SHA-1", "HEX")
-      if (hmac === "KEY MUST BE IN BYTE INCREMENTS") {
-        throw "Error: hex key must be in byte increments";
-      } else {
-        // return null
-        offset = this.hex2dec(hmac.substring(hmac.length - 1));
-      }
-      otp = (this.hex2dec(hmac.substr(offset * 2, 8)) & this.hex2dec("7fffffff")) + "";
-      if (otp.length > this.length) {
-        otp = otp.substr(otp.length - this.length, this.length);
-      } else {
-        otp = this.leftpad(otp, this.length, "0");
-      }
-      return otp;
-    }
-
-  };
-
-  Hotp = class Hotp {
-    constructor(length = 6) {
-      this.length = length;
-      // validate input
-      if (this.length > 8 || this.length < 6) {
-        throw "Error: invalid code length";
-      }
-    }
-
-    // stuck on this for a long time. Use JSON.stringify to inspect uintToString output!!
-    uintToString(uintArray) {
-      var decodedString, encodedString;
-      encodedString = String.fromCharCode.apply(null, uintArray);
-      decodedString = decodeURIComponent(escape(encodedString));
-      return decodedString;
-    }
-
-    getOtp(key, counter) {
-      var digest, h, offset, shaObj, v;
-      shaObj = new jsSHA("SHA-1", "TEXT");
-      shaObj.setHMACKey(key, "TEXT");
-      shaObj.update(this.uintToString(new Uint8Array(this.intToBytes(counter))));
-      digest = shaObj.getHMAC("HEX");
-      // Get byte array
-      h = this.hexToBytes(digest);
-      
-      // Truncate
-      offset = h[19] & 0xf;
-      v = (h[offset] & 0x7f) << 24 | (h[offset + 1] & 0xff) << 16 | (h[offset + 2] & 0xff) << 8 | h[offset + 3] & 0xff;
-      v = v + '';
-      return v.substr(v.length - this.length, this.length);
-    }
-
-    intToBytes(num) {
-      var bytes, i;
-      bytes = [];
-      i = 7;
-      while (i >= 0) {
-        bytes[i] = num & 255;
-        num = num >> 8;
-        --i;
-      }
-      return bytes;
-    }
-
-    hexToBytes(hex) {
-      var C, bytes, c;
-      bytes = [];
-      c = 0;
-      C = hex.length;
-      while (c < C) {
-        bytes.push(parseInt(hex.substr(c, 2), 16));
-        c += 2;
-      }
-      return bytes;
-    }
-
-  };
-
-  window.jsOTP = {};
-
-  jsOTP.totp = Totp;
-
-  jsOTP.hotp = Hotp;
-
-}).call(this);
+}
+).call(this);
 
 // https://github.com/mathiasbynens/punycode.js
 // https://cdnjs.com/libraries/punycode
@@ -3408,7 +2898,8 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 'use strict';
 
 /** Highest positive signed 32-bit float value */
-const maxInt = 2147483647; // aka. 0x7FFFFFFF or 2^31-1
+const maxInt = 2147483647;
+// aka. 0x7FFFFFFF or 2^31-1
 
 /** Bootstring parameters */
 const base = 36;
@@ -3417,19 +2908,23 @@ const tMax = 26;
 const skew = 38;
 const damp = 700;
 const initialBias = 72;
-const initialN = 128; // 0x80
-const delimiter = '-'; // '\x2D'
+const initialN = 128;
+// 0x80
+const delimiter = '-';
+// '\x2D'
 
 /** Regular expressions */
 const regexPunycode = /^xn--/;
-const regexNonASCII = /[^\0-\x7E]/; // non-ASCII chars
-const regexSeparators = /[\x2E\u3002\uFF0E\uFF61]/g; // RFC 3490 separators
+const regexNonASCII = /[^\0-\x7E]/;
+// non-ASCII chars
+const regexSeparators = /[\x2E\u3002\uFF0E\uFF61]/g;
+// RFC 3490 separators
 
 /** Error messages */
 const errors = {
-	'overflow': 'Overflow: input needs wider integers to process',
-	'not-basic': 'Illegal input >= 0x80 (not a basic code point)',
-	'invalid-input': 'Invalid input'
+    'overflow': 'Overflow: input needs wider integers to process',
+    'not-basic': 'Illegal input >= 0x80 (not a basic code point)',
+    'invalid-input': 'Invalid input'
 };
 
 /** Convenience shortcuts */
@@ -3446,7 +2941,7 @@ const stringFromCharCode = String.fromCharCode;
  * @returns {Error} Throws a `RangeError` with the applicable error message.
  */
 function error(type) {
-	throw new RangeError(errors[type]);
+    throw new RangeError(errors[type]);
 }
 
 /**
@@ -3458,12 +2953,12 @@ function error(type) {
  * @returns {Array} A new array of values returned by the callback function.
  */
 function map(array, fn) {
-	const result = [];
-	let length = array.length;
-	while (length--) {
-		result[length] = fn(array[length]);
-	}
-	return result;
+    const result = [];
+    let length = array.length;
+    while (length--) {
+        result[length] = fn(array[length]);
+    }
+    return result;
 }
 
 /**
@@ -3477,19 +2972,19 @@ function map(array, fn) {
  * function.
  */
 function mapDomain(string, fn) {
-	const parts = string.split('@');
-	let result = '';
-	if (parts.length > 1) {
-		// In email addresses, only the domain name should be punycoded. Leave
-		// the local part (i.e. everything up to `@`) intact.
-		result = parts[0] + '@';
-		string = parts[1];
-	}
-	// Avoid `split(regex)` for IE8 compatibility. See #17.
-	string = string.replace(regexSeparators, '\x2E');
-	const labels = string.split('.');
-	const encoded = map(labels, fn).join('.');
-	return result + encoded;
+    const parts = string.split('@');
+    let result = '';
+    if (parts.length > 1) {
+        // In email addresses, only the domain name should be punycoded. Leave
+        // the local part (i.e. everything up to `@`) intact.
+        result = parts[0] + '@';
+        string = parts[1];
+    }
+    // Avoid `split(regex)` for IE8 compatibility. See #17.
+    string = string.replace(regexSeparators, '\x2E');
+    const labels = string.split('.');
+    const encoded = map(labels, fn).join('.');
+    return result + encoded;
 }
 
 /**
@@ -3506,27 +3001,28 @@ function mapDomain(string, fn) {
  * @returns {Array} The new array of code points.
  */
 function ucs2decode(string) {
-	const output = [];
-	let counter = 0;
-	const length = string.length;
-	while (counter < length) {
-		const value = string.charCodeAt(counter++);
-		if (value >= 0xD800 && value <= 0xDBFF && counter < length) {
-			// It's a high surrogate, and there is a next character.
-			const extra = string.charCodeAt(counter++);
-			if ((extra & 0xFC00) == 0xDC00) { // Low surrogate.
-				output.push(((value & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000);
-			} else {
-				// It's an unmatched surrogate; only append this code unit, in case the
-				// next code unit is the high surrogate of a surrogate pair.
-				output.push(value);
-				counter--;
-			}
-		} else {
-			output.push(value);
-		}
-	}
-	return output;
+    const output = [];
+    let counter = 0;
+    const length = string.length;
+    while (counter < length) {
+        const value = string.charCodeAt(counter++);
+        if (value >= 0xD800 && value <= 0xDBFF && counter < length) {
+            // It's a high surrogate, and there is a next character.
+            const extra = string.charCodeAt(counter++);
+            if ((extra & 0xFC00) == 0xDC00) {
+                // Low surrogate.
+                output.push(((value & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000);
+            } else {
+                // It's an unmatched surrogate; only append this code unit, in case the
+                // next code unit is the high surrogate of a surrogate pair.
+                output.push(value);
+                counter--;
+            }
+        } else {
+            output.push(value);
+        }
+    }
+    return output;
 }
 
 /**
@@ -3549,16 +3045,16 @@ const ucs2encode = array => String.fromCodePoint(...array);
  * the code point does not represent a value.
  */
 const basicToDigit = function(codePoint) {
-	if (codePoint - 0x30 < 0x0A) {
-		return codePoint - 0x16;
-	}
-	if (codePoint - 0x41 < 0x1A) {
-		return codePoint - 0x41;
-	}
-	if (codePoint - 0x61 < 0x1A) {
-		return codePoint - 0x61;
-	}
-	return base;
+    if (codePoint - 0x30 < 0x0A) {
+        return codePoint - 0x16;
+    }
+    if (codePoint - 0x41 < 0x1A) {
+        return codePoint - 0x41;
+    }
+    if (codePoint - 0x61 < 0x1A) {
+        return codePoint - 0x61;
+    }
+    return base;
 };
 
 /**
@@ -3573,9 +3069,9 @@ const basicToDigit = function(codePoint) {
  * if `flag` is non-zero and `digit` has no uppercase form.
  */
 const digitToBasic = function(digit, flag) {
-	//  0..25 map to ASCII a..z or A..Z
-	// 26..35 map to ASCII 0..9
-	return digit + 22 + 75 * (digit < 26) - ((flag != 0) << 5);
+    //  0..25 map to ASCII a..z or A..Z
+    // 26..35 map to ASCII 0..9
+    return digit + 22 + 75 * (digit < 26) - ((flag != 0) << 5);
 };
 
 /**
@@ -3584,13 +3080,14 @@ const digitToBasic = function(digit, flag) {
  * @private
  */
 const adapt = function(delta, numPoints, firstTime) {
-	let k = 0;
-	delta = firstTime ? floor(delta / damp) : delta >> 1;
-	delta += floor(delta / numPoints);
-	for (/* no initialization */; delta > baseMinusTMin * tMax >> 1; k += base) {
-		delta = floor(delta / baseMinusTMin);
-	}
-	return floor(k + (baseMinusTMin + 1) * delta / (delta + skew));
+    let k = 0;
+    delta = firstTime ? floor(delta / damp) : delta >> 1;
+    delta += floor(delta / numPoints);
+    for (/* no initialization */
+    ; delta > baseMinusTMin * tMax >> 1; k += base) {
+        delta = floor(delta / baseMinusTMin);
+    }
+    return floor(k + (baseMinusTMin + 1) * delta / (delta + skew));
 };
 
 /**
@@ -3601,87 +3098,89 @@ const adapt = function(delta, numPoints, firstTime) {
  * @returns {String} The resulting string of Unicode symbols.
  */
 const decode = function(input) {
-	// Don't use UCS-2.
-	const output = [];
-	const inputLength = input.length;
-	let i = 0;
-	let n = initialN;
-	let bias = initialBias;
+    // Don't use UCS-2.
+    const output = [];
+    const inputLength = input.length;
+    let i = 0;
+    let n = initialN;
+    let bias = initialBias;
 
-	// Handle the basic code points: let `basic` be the number of input code
-	// points before the last delimiter, or `0` if there is none, then copy
-	// the first basic code points to the output.
+    // Handle the basic code points: let `basic` be the number of input code
+    // points before the last delimiter, or `0` if there is none, then copy
+    // the first basic code points to the output.
 
-	let basic = input.lastIndexOf(delimiter);
-	if (basic < 0) {
-		basic = 0;
-	}
+    let basic = input.lastIndexOf(delimiter);
+    if (basic < 0) {
+        basic = 0;
+    }
 
-	for (let j = 0; j < basic; ++j) {
-		// if it's not a basic code point
-		if (input.charCodeAt(j) >= 0x80) {
-			error('not-basic');
-		}
-		output.push(input.charCodeAt(j));
-	}
+    for (let j = 0; j < basic; ++j) {
+        // if it's not a basic code point
+        if (input.charCodeAt(j) >= 0x80) {
+            error('not-basic');
+        }
+        output.push(input.charCodeAt(j));
+    }
 
-	// Main decoding loop: start just after the last delimiter if any basic code
-	// points were copied; start at the beginning otherwise.
+    // Main decoding loop: start just after the last delimiter if any basic code
+    // points were copied; start at the beginning otherwise.
 
-	for (let index = basic > 0 ? basic + 1 : 0; index < inputLength; /* no final expression */) {
+    for (let index = basic > 0 ? basic + 1 : 0; index < inputLength; /* no final expression */
+    ) {
 
-		// `index` is the index of the next character to be consumed.
-		// Decode a generalized variable-length integer into `delta`,
-		// which gets added to `i`. The overflow checking is easier
-		// if we increase `i` as we go, then subtract off its starting
-		// value at the end to obtain `delta`.
-		let oldi = i;
-		for (let w = 1, k = base; /* no condition */; k += base) {
+        // `index` is the index of the next character to be consumed.
+        // Decode a generalized variable-length integer into `delta`,
+        // which gets added to `i`. The overflow checking is easier
+        // if we increase `i` as we go, then subtract off its starting
+        // value at the end to obtain `delta`.
+        let oldi = i;
+        for (let w = 1, k = base; /* no condition */
+        ; k += base) {
 
-			if (index >= inputLength) {
-				error('invalid-input');
-			}
+            if (index >= inputLength) {
+                error('invalid-input');
+            }
 
-			const digit = basicToDigit(input.charCodeAt(index++));
+            const digit = basicToDigit(input.charCodeAt(index++));
 
-			if (digit >= base || digit > floor((maxInt - i) / w)) {
-				error('overflow');
-			}
+            if (digit >= base || digit > floor((maxInt - i) / w)) {
+                error('overflow');
+            }
 
-			i += digit * w;
-			const t = k <= bias ? tMin : (k >= bias + tMax ? tMax : k - bias);
+            i += digit * w;
+            const t = k <= bias ? tMin : (k >= bias + tMax ? tMax : k - bias);
 
-			if (digit < t) {
-				break;
-			}
+            if (digit < t) {
+                break;
+            }
 
-			const baseMinusT = base - t;
-			if (w > floor(maxInt / baseMinusT)) {
-				error('overflow');
-			}
+            const baseMinusT = base - t;
+            if (w > floor(maxInt / baseMinusT)) {
+                error('overflow');
+            }
 
-			w *= baseMinusT;
+            w *= baseMinusT;
 
-		}
+        }
 
-		const out = output.length + 1;
-		bias = adapt(i - oldi, out, oldi == 0);
+        const out = output.length + 1;
+        bias = adapt(i - oldi, out, oldi == 0);
 
-		// `i` was supposed to wrap around from `out` to `0`,
-		// incrementing `n` each time, so we'll fix that now:
-		if (floor(i / out) > maxInt - n) {
-			error('overflow');
-		}
+        // `i` was supposed to wrap around from `out` to `0`,
+        // incrementing `n` each time, so we'll fix that now:
+        if (floor(i / out) > maxInt - n) {
+            error('overflow');
+        }
 
-		n += floor(i / out);
-		i %= out;
+        n += floor(i / out);
+        i %= out;
 
-		// Insert `n` at position `i` of the output.
-		output.splice(i++, 0, n);
+        // Insert `n` at position `i` of the output.
+        output.splice(i++, 0, n);
 
-	}
+    }
 
-	return String.fromCodePoint(...output);
+    return String.fromCodePoint(...output);
 };
 
 /**
@@ -3692,91 +3191,90 @@ const decode = function(input) {
  * @returns {String} The resulting Punycode string of ASCII-only symbols.
  */
 const encode = function(input) {
-	const output = [];
+    const output = [];
 
-	// Convert the input in UCS-2 to an array of Unicode code points.
-	input = ucs2decode(input);
+    // Convert the input in UCS-2 to an array of Unicode code points.
+    input = ucs2decode(input);
 
-	// Cache the length.
-	let inputLength = input.length;
+    // Cache the length.
+    let inputLength = input.length;
 
-	// Initialize the state.
-	let n = initialN;
-	let delta = 0;
-	let bias = initialBias;
+    // Initialize the state.
+    let n = initialN;
+    let delta = 0;
+    let bias = initialBias;
 
-	// Handle the basic code points.
-	for (const currentValue of input) {
-		if (currentValue < 0x80) {
-			output.push(stringFromCharCode(currentValue));
-		}
-	}
+    // Handle the basic code points.
+    for (const currentValue of input) {
+        if (currentValue < 0x80) {
+            output.push(stringFromCharCode(currentValue));
+        }
+    }
 
-	let basicLength = output.length;
-	let handledCPCount = basicLength;
+    let basicLength = output.length;
+    let handledCPCount = basicLength;
 
-	// `handledCPCount` is the number of code points that have been handled;
-	// `basicLength` is the number of basic code points.
+    // `handledCPCount` is the number of code points that have been handled;
+    // `basicLength` is the number of basic code points.
 
-	// Finish the basic string with a delimiter unless it's empty.
-	if (basicLength) {
-		output.push(delimiter);
-	}
+    // Finish the basic string with a delimiter unless it's empty.
+    if (basicLength) {
+        output.push(delimiter);
+    }
 
-	// Main encoding loop:
-	while (handledCPCount < inputLength) {
+    // Main encoding loop:
+    while (handledCPCount < inputLength) {
 
-		// All non-basic code points < n have been handled already. Find the next
-		// larger one:
-		let m = maxInt;
-		for (const currentValue of input) {
-			if (currentValue >= n && currentValue < m) {
-				m = currentValue;
-			}
-		}
+        // All non-basic code points < n have been handled already. Find the next
+        // larger one:
+        let m = maxInt;
+        for (const currentValue of input) {
+            if (currentValue >= n && currentValue < m) {
+                m = currentValue;
+            }
+        }
 
-		// Increase `delta` enough to advance the decoder's <n,i> state to <m,0>,
-		// but guard against overflow.
-		const handledCPCountPlusOne = handledCPCount + 1;
-		if (m - n > floor((maxInt - delta) / handledCPCountPlusOne)) {
-			error('overflow');
-		}
+        // Increase `delta` enough to advance the decoder's <n,i> state to <m,0>,
+        // but guard against overflow.
+        const handledCPCountPlusOne = handledCPCount + 1;
+        if (m - n > floor((maxInt - delta) / handledCPCountPlusOne)) {
+            error('overflow');
+        }
 
-		delta += (m - n) * handledCPCountPlusOne;
-		n = m;
+        delta += (m - n) * handledCPCountPlusOne;
+        n = m;
 
-		for (const currentValue of input) {
-			if (currentValue < n && ++delta > maxInt) {
-				error('overflow');
-			}
-			if (currentValue == n) {
-				// Represent delta as a generalized variable-length integer.
-				let q = delta;
-				for (let k = base; /* no condition */; k += base) {
-					const t = k <= bias ? tMin : (k >= bias + tMax ? tMax : k - bias);
-					if (q < t) {
-						break;
-					}
-					const qMinusT = q - t;
-					const baseMinusT = base - t;
-					output.push(
-						stringFromCharCode(digitToBasic(t + qMinusT % baseMinusT, 0))
-					);
-					q = floor(qMinusT / baseMinusT);
-				}
+        for (const currentValue of input) {
+            if (currentValue < n && ++delta > maxInt) {
+                error('overflow');
+            }
+            if (currentValue == n) {
+                // Represent delta as a generalized variable-length integer.
+                let q = delta;
+                for (let k = base; /* no condition */
+                ; k += base) {
+                    const t = k <= bias ? tMin : (k >= bias + tMax ? tMax : k - bias);
+                    if (q < t) {
+                        break;
+                    }
+                    const qMinusT = q - t;
+                    const baseMinusT = base - t;
+                    output.push(stringFromCharCode(digitToBasic(t + qMinusT % baseMinusT, 0)));
+                    q = floor(qMinusT / baseMinusT);
+                }
 
-				output.push(stringFromCharCode(digitToBasic(q, 0)));
-				bias = adapt(delta, handledCPCountPlusOne, handledCPCount == basicLength);
-				delta = 0;
-				++handledCPCount;
-			}
-		}
+                output.push(stringFromCharCode(digitToBasic(q, 0)));
+                bias = adapt(delta, handledCPCountPlusOne, handledCPCount == basicLength);
+                delta = 0;
+                ++handledCPCount;
+            }
+        }
 
-		++delta;
-		++n;
+        ++delta;
+        ++n;
 
-	}
-	return output.join('');
+    }
+    return output.join('');
 };
 
 /**
@@ -3791,11 +3289,9 @@ const encode = function(input) {
  * string.
  */
 const toUnicode = function(input) {
-	return mapDomain(input, function(string) {
-		return regexPunycode.test(string)
-			? decode(string.slice(4).toLowerCase())
-			: string;
-	});
+    return mapDomain(input, function(string) {
+        return regexPunycode.test(string) ? decode(string.slice(4).toLowerCase()) : string;
+    });
 };
 
 /**
@@ -3810,47 +3306,40 @@ const toUnicode = function(input) {
  * email address.
  */
 const toASCII = function(input) {
-	return mapDomain(input, function(string) {
-		return regexNonASCII.test(string)
-			? 'xn--' + encode(string)
-			: string;
-	});
+    return mapDomain(input, function(string) {
+        return regexNonASCII.test(string) ? 'xn--' + encode(string) : string;
+    });
 };
 
 /*--------------------------------------------------------------------------*/
 
 /** Define the public API */
 const punycode = {
-	/**
+    /**
 	 * A string representing the current Punycode.js version number.
 	 * @memberOf punycode
 	 * @type String
 	 */
-	'version': '2.1.0',
-	/**
+    'version': '2.1.0',
+    /**
 	 * An object of methods to convert from JavaScript's internal character
 	 * representation (UCS-2) to Unicode code points, and back.
 	 * @see <https://mathiasbynens.be/notes/javascript-encoding>
 	 * @memberOf punycode
 	 * @type Object
 	 */
-	'ucs2': {
-		'decode': ucs2decode,
-		'encode': ucs2encode
-	},
-	'decode': decode,
-	'encode': encode,
-	'toASCII': toASCII,
-	'toUnicode': toUnicode
+    'ucs2': {
+        'decode': ucs2decode,
+        'encode': ucs2encode
+    },
+    'decode': decode,
+    'encode': encode,
+    'toASCII': toASCII,
+    'toUnicode': toUnicode
 };
 
-
-
-class Format
-{
-    constructor()
-    {
-        
+class Format {
+    constructor() {
     }
 }
 
@@ -3860,32 +3349,37 @@ Storage.prototype.setObj = function(key, obj) {
 Storage.prototype.getObj = function(key) {
     return JSON.parse(this.getItem(key))
 }
-if( typeof Element.prototype.clearChildren === 'undefined' ) {
+if (typeof Element.prototype.clearChildren === 'undefined') {
     Object.defineProperty(Element.prototype, 'clearChildren', {
-      configurable: true,
-      enumerable: false,
-      value: function() {
-        while(this.firstChild) this.removeChild(this.lastChild);
-      }
+        configurable: true,
+        enumerable: false,
+        value: function() {
+            while (this.firstChild)
+                this.removeChild(this.lastChild);
+        }
     });
 }
-function convertToPunycode(name)
-{
+function convertToPunycode(name) {
     let nameAscii;
-    try{nameAscii = punycode.toASCII(name);}catch(e){console.log('not a punycode');}
+    try {
+        nameAscii = punycode.toASCII(name);
+    } catch (e) {
+        console.log('not a punycode');
+    }
     //console.log(nameAscii);
     return nameAscii;
 }
-function convertFromPunycode(name)
-{
-    if(name.startsWith('xn--'))
-    {
-        try{name = punycode.toUnicode(name);}catch(e){console.log('punycode error');}
+function convertFromPunycode(name) {
+    if (name.startsWith('xn--')) {
+        try {
+            name = punycode.toUnicode(name);
+        } catch (e) {
+            console.log('punycode error');
+        }
     }
     return name;
 }
-function parseDate(date)
-{
+function parseDate(date) {
     date = date.split('T')[0];
     date = date.split("-");
     let newDate = {};
@@ -3894,63 +3388,63 @@ function parseDate(date)
     newDate['year'] = parseInt(date[0]);
     return newDate;
 }
-MONTHS = ['','JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
-function formatDateToText(date)
+MONTHS = ['', 'JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+function incrementDate(date)
 {
+    date['month']++;
+    if(date['month']>12)
+    {
+        date['month']%=12;
+        date['year']++;
+    }
+    return date;
+}
+function formatDateToText(date) {
     let text = date['day'] + ' ' + this.MONTHS[date['month']] + ' ' + date['year'];
     return text;
 }
-function formatMonthToText(date)
-{
+function formatMonthToText(date) {
     let text = this.MONTHS[date['month']] + ' ' + date['year'];
     return text;
 }
-function formatDateToId(date)
-{
+function formatDateToId(date) {
     let id = date['year'] + '-' + date['month'] + '-' + date['day'];
     return id;
 }
-function parseDateFromId(id)
-{
+function parseDateFromId(id) {
     date = id.split("-");
     let newDate = {};
     newDate['day'] = parseInt(date[2]);
     newDate['month'] = parseInt(date[1]);
     newDate['year'] = parseInt(date[0]);
-    return newDate;    
+    return newDate;
 }
-function listArrayWithEllipsis(data)
-{
-    return data.join(", ").slice(0,70) + '...';
+function listArrayWithEllipsis(data) {
+    return data.join(", ").slice(0, 70) + '...';
 }
 function getRandom(max) {
-  return Math.floor(Math.random() * max);
+    return Math.floor(Math.random() * max);
 }
 
 var page = new Page();
-class App
-{
-    async navigate()
-    {
+class App {
+    async navigate() {
         let path = window.location.pathname;
         let hash = window.location.hash;
         console.log(hash);
         page.close();
-        if(hash == "")
-        {
+        if (hash == "") {
             //page = new Page();
             //page.display();
             page = new PageAbout();
             page.display();
         }
-        if(hash == "#portfolio")
-        {
+        if (hash == "#portfolio") {
             page = new PagePortfolio();
             page.display();
             page.showSomeNames();
         }
-        if(hash == "#classify")
-        {
+        if (hash == "#classify") {
             console.log('#classify');
             page = new PageClassify();
             page.display();
@@ -3960,8 +3454,7 @@ class App
             page.showPages();
             page.showTags(tags);
         }
-        if(hash == "#classed")
-        {
+        if (hash == "#classed") {
             page = new PageClassed();
             page.display();
             let tagsAccessor = new AccessorTags();
@@ -3969,8 +3462,7 @@ class App
             console.log(tags)
             page.showTags(tags);
         }
-        if(hash == "#bests")
-        {
+        if (hash == "#bests") {
             page = new PageBests();
             page.display();
             let bestsAccessor = new AccessorBest();
@@ -3978,8 +3470,7 @@ class App
             console.log(bests);
             page.showBests(bests);
         }
-        if(hash == "#tags")
-        {
+        if (hash == "#tags") {
             page = new PageTags();
             page.display();
             let tagsAccessor = new AccessorTags();
@@ -3987,13 +3478,11 @@ class App
             console.log(tags)
             page.showTags(tags);
         }
-        if(hash == "#transfer")
-        {
+        if (hash == "#transfer") {
             page = new PageTransfer();
             page.display();
         }
-        if(hash == "#about")
-        {
+        if (hash == "#about") {
             page = new PageAbout();
             page.display();
         }
@@ -4005,5 +3494,3 @@ var app = new App();
 // only one event handler - no add event listener
 window.onhashchange = app.navigate;
 app.navigate();
-
-
