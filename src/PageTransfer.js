@@ -174,12 +174,16 @@ class PageTransfer extends Page {
         ;
         analyzeButton.style.display = 'block';
     }
-    showWaitingBox(really) {
+    showWaitingBox(really, where) {
         let waitingBox = document.getElementById("waiting-box");
         waitingBox.style.display = (really) ? 'flex' : 'none';
         if (really) {
             let waitingBox = document.getElementById('waiting');
             waitingBox.classList.remove('stop');
+        }
+        if(where)
+        {
+            where.append(waitingBox);
         }
     }
     async readMonthsChosen() {
@@ -201,11 +205,12 @@ class PageTransfer extends Page {
     displayChoices() {
         let conclusionBox = document.getElementById("conclusions");
         let tag = PageTransfer.thisPageTransfer.tag;
-        let months = PageTransfer.thisPageTransfer.months.map((date)=>{
+        let months = PageTransfer.thisPageTransfer.months.map( (date) => {
             let elements = date.split("-");
             elements.pop();
             return elements.join('-');
-        });
+        }
+        );
         let tagActive = PageTransfer.thisPageTransfer.tagActive;
         let monthActive = PageTransfer.thisPageTransfer.monthActive;
         let choices = [];
@@ -225,10 +230,13 @@ class PageTransfer extends Page {
     showTransferInfos() {
         let transferInfosBox = document.getElementById('transfer-infos');
         transferInfosBox.style.display = 'block';
+        let formBox = document.getElementById('form-transfer-infos');
+        formBox.style.display = 'block';
     }
     async reactToAnalyzeClick() {
         console.log("reactToAnalyzeClick()");
-        this.showWaitingBox(true);
+        let here = document.getElementById('step-months');
+        this.showWaitingBox(true,here);
         this.readMonthsChosen();
         this.displayChoices();
         let transfers = await this.analyzeChoices();
@@ -324,8 +332,9 @@ class PageTransfer extends Page {
         let address = walletInput.value;
         let secret = secretInput.value;
         let formBox = document.getElementById('form-transfer-infos');
-        formBox.innerHTML = '';
+        formBox.style.display = 'none';
         let transferInfosBox = document.getElementById('transfer-infos');
+        transferInfosBox.style.display  = 'block';
         let waitingBox = document.getElementById('waiting-box');
         transferInfosBox.append(waitingBox);
         waitingBox.style.display = 'block';
@@ -352,13 +361,8 @@ class PageTransfer extends Page {
     }
 }
 
-PageTransfer.CSS = ['#months-configuration {display:none;position:relative;padding:1vw 0vw 0vw 1vw;height:14vw;}', '#months-configuration {font-size:2.5vw;background-color:#eeeeee;}', '#months-configuration > p {margin:0vw 0vw 0vw 1vw;}', '#months-configuration > #month-average {font-weight:bold;width:auto;}', '#months-configuration > #checkboxes {margin:1vw 0vw 0vw 1vw;}', '#months-configuration input{float:left;clear:none;}', '#months-configuration span{float:left;clear:none;margin:0 1vw 0 0vw;}',
-'#tags-configuration {position:relative;padding-top:1vw;}', '#tags-configuration #analyze {height:6vw;}', '#tags-configuration #analyze a {padding:1.2vw; font-size:3vw;}', '#selection-tag {display:none;font-size:3vw;padding:2vw;background-color:#eeeeee;}',
-'#analyze {display:none;position:absolute;right:2vw; top:2vw; width:auto; height:10vw;}', '#analyze a {display:inline-block;font-size:5vw; padding:2vw;height:100%;vertical-align:middle;}', '#analyze a {background-color: #aaaaaa;color:white;}', '#analyze a:hover {background-color:orange;color:white;}',
-//    '#waiting-box {width: 20vw;  height: 20vw;}',
-'#waiting-box {position:relative; display:none;flex-direction:row;margin-top:2vw;}', '#waiting {background-color:orange;}', '#waiting-explanation {margin-left:5vw;}', '#waiting-explanation, #waiting-explanation p {color:orange;font-weight:bold;font-size:6vw;}',
-'#transfer-infos #waiting-explanation {position:absolute;top:0;right:0;width:70vw;}', '#transfer-infos #waiting-explanation p {font-size:4vw;}',
-'#transfer-infos {display:none;}', '#transfer-infos form {background-color:#eeeeee;padding-top:1vw;padding-bottom:2vw;}', '#transfer-infos form > div {}', '#transfer-infos form > div > label {display:block; color:#666666;font-size:2.5vw; margin:1vw 0 1vw 0;}', '#transfer-infos form > div > input {width:90vw;line-height:5vw;font-size:2.5vw;padding-left:1vw;padding-right:1vw;}', '#transfer-infos form > #transfer-submit {display:block;width:90vw;margin-left:0vw;font-size:5vw;margin-top:2vw;cursor:pointer;}', '#transfer-infos form > #transfer-submit {text-align:center;background-color:orange;font-weight:bold;color:white;border:none;}', ];
+PageTransfer.CSS = ['#months-configuration {display:none;position:relative;padding:1vw 0vw 0vw 1vw;height:14vw;}', '#months-configuration {font-size:2.5vw;background-color:#eeeeee;}', '#months-configuration > p {margin:0vw 0vw 0vw 1vw;}', '#months-configuration > #month-average {font-weight:bold;width:auto;}', '#months-configuration > #checkboxes {margin:1vw 0vw 0vw 1vw;}', '#months-configuration input{float:left;clear:none;}', '#months-configuration span{float:left;clear:none;margin:0 1vw 0 0vw;}', '#tags-configuration {position:relative;padding-top:1vw;}', '#tags-configuration #analyze {height:6vw;}', '#tags-configuration #analyze a {padding:1.2vw; font-size:3vw;}', '#selection-tag {display:none;font-size:3vw;padding:2vw;background-color:#eeeeee;}', '#analyze {display:none;position:absolute;right:2vw; top:2vw; width:auto; height:10vw;}', '#analyze a {display:inline-block;font-size:5vw; padding:2vw;height:100%;vertical-align:middle;}', '#analyze a {background-color: #aaaaaa;color:white;}', '#analyze a:hover {background-color:orange;color:white;}', //    '#waiting-box {width: 20vw;  height: 20vw;}',
+'#waiting-box {position:relative; display:none;flex-direction:row;margin-top:2vw;}', '#waiting {background-color:orange;}', '#waiting-explanation {margin-left:5vw;}', '#waiting-explanation, #waiting-explanation p {color:orange;font-weight:bold;font-size:6vw;}', '#transfer-infos #waiting-explanation {position:absolute;top:0;right:0;width:70vw;}', '#transfer-infos #waiting-explanation p {font-size:4vw;}', '#transfer-infos {display:none;}', '#transfer-infos form {background-color:#eeeeee;padding-top:1vw;padding-bottom:2vw;}', '#transfer-infos form > div {}', '#transfer-infos form > div > label {display:block; color:#666666;font-size:2.5vw; margin:1vw 0 1vw 0;}', '#transfer-infos form > div > input {width:90vw;line-height:5vw;font-size:2.5vw;padding-left:1vw;padding-right:1vw;}', '#transfer-infos form > #transfer-submit {display:block;width:90vw;margin-left:0vw;font-size:5vw;margin-top:2vw;cursor:pointer;}', '#transfer-infos form > #transfer-submit {text-align:center;background-color:orange;font-weight:bold;color:white;border:none;}', ];
 
 PageTransfer.HTML = `
         <div id="page">

@@ -442,9 +442,7 @@ class PagePortfolio extends Page {
     }
 }
 
-PagePortfolio.CSS = ['#filters { margin-left:5vw; width:88vw;padding:2vw; border:solid 0.2vw #476654; border-radius:3vw;}', '#filters { background: rgb(12,113,80);background: linear-gradient(90deg, rgba(12,113,80,1) 0%, rgba(9,9,121,1) 50%, rgba(0,212,255,1) 100%);font-size:2vw;}', '#filters label, #filters span { font-weight:bold;color:white;}', '#filters select, #filters option {font-weight:bold;color:#111111;background-color:#abeeab;}', '#filters input {font-weight:bold;color:#111111;background-color:#abeeab;}', '#filters #filter-start { width:5vw;}', '#filters #filter-length { width:10vw;}', '#filters #filter-button { padding:0.5vw;font-weight:bold;}', '#filters #filter-button { background-color:#333333;color:white;}', '#filters #filter-button:hover { background-color:black;color:white;}', '#filters #page-back { padding:0.5vw;font-weight:bold;}', '#filters #page-back{ background-color:#333333;color:white;}', '#filters #page-forward { padding:0.5vw;font-weight:bold;}', '#filters #page-forward { background-color:#333333;color:white;border:none;}',
-'#filters { margin-top:3vw; }', '.domains {border-radius:3vw;padding:2vw;margin:3vw 5vw 5vw 5vw;}',
-];
+PagePortfolio.CSS = ['#filters { margin-left:5vw; width:88vw;padding:2vw; border:solid 0.2vw #476654; border-radius:3vw;}', '#filters { background: rgb(12,113,80);background: linear-gradient(90deg, rgba(12,113,80,1) 0%, rgba(9,9,121,1) 50%, rgba(0,212,255,1) 100%);font-size:2vw;}', '#filters label, #filters span { font-weight:bold;color:white;}', '#filters select, #filters option {font-weight:bold;color:#111111;background-color:#abeeab;}', '#filters input {font-weight:bold;color:#111111;background-color:#abeeab;}', '#filters #filter-start { width:5vw;}', '#filters #filter-length { width:10vw;}', '#filters #filter-button { padding:0.5vw;font-weight:bold;}', '#filters #filter-button { background-color:#333333;color:white;}', '#filters #filter-button:hover { background-color:black;color:white;}', '#filters #page-back { padding:0.5vw;font-weight:bold;}', '#filters #page-back{ background-color:#333333;color:white;}', '#filters #page-forward { padding:0.5vw;font-weight:bold;}', '#filters #page-forward { background-color:#333333;color:white;border:none;}', '#filters { margin-top:3vw; }', '.domains {border-radius:3vw;padding:2vw;margin:3vw 5vw 5vw 5vw;}', ];
 
 PagePortfolio.HTML = `
 [FILTERS]
@@ -664,9 +662,7 @@ class PageClassify extends Page {
     }
 }
 
-PageClassify.CSS = ['#tags {background-color:#efefff;border:solid 1vw black; }', '#tags {border-radius:3vw;padding:2vw;margin:5vw 5vw 2vw 5vw;}', '#tags {display:flex;flex-direction:row; flex-wrap:wrap;}', '#tags > div {font-size:3vw; margin:1.25vw; padding:1vw; cursor:pointer;}', '#tags > div {background-color:#ccccff; color:#333333; font-weight:bold; }', '#tags > div:hover {background-color:#bbbbee; color:#333333;}', '#tags > div:focus {background-color:#6666ee; color:white;}', '#tags > div.instruction {width:100%; background-color:yellow; color:#000;}',
-'#filters { margin-left:5vw; width:88vw;padding:2vw; border:solid 0.2vw #476654;border-radius:3vw;}', '#filters { background: rgb(12,113,80);background: linear-gradient(90deg, rgba(12,113,80,1) 0%, rgba(9,9,121,1) 50%, rgba(0,212,255,1) 100%);font-size:2vw;}', '#filters label, #filters span { font-weight:bold;color:white;}', '#filters select, #filters option {font-weight:bold;color:#111111;background-color:#abeeab;}', '#filters input {font-weight:bold;color:#111111;background-color:#abeeab;}', '#filters #filter-start { width:5vw;}', '#filters #filter-length { width:10vw;}', '#filters #filter-button { padding:0.5vw;font-weight:bold;}', '#filters #filter-button { background-color:#333333;color:white;}', '#filters #filter-button:hover { background-color:black;color:white;}', '#filters #page-back { padding:0.5vw;font-weight:bold;}', '#filters #page-back{ background-color:#333333;color:white;}', '#filters #page-forward { padding:0.5vw;font-weight:bold;}', '#filters #page-forward { background-color:#333333;color:white;border:none;}',
-'#domains {background-color:#ffffe0;border:solid 1vw black; }', '#domains {border-radius:3vw;padding:2vw;margin:2vw 5vw 5vw 5vw;}', '#domains {display:flex;flex-direction:row; flex-wrap:wrap;}', '#domains > div {font-size:3vw; margin:1.25vw; padding:1vw; cursor:pointer;}', '#domains > div > span {font-size:2vw; border-radius: 1vw; display:inline-block;margin-left:1vw;padding:1vw;}', '#domains > div {background-color:#affaac; color:#333333; font-weight:bold; }', '#domains > div > span {background-color:#3ea63a; color:black; }', ];
+PageClassify.CSS = ['#tags {background-color:#efefff;border:solid 1vw black; }', '#tags {border-radius:3vw;padding:2vw;margin:5vw 5vw 2vw 5vw;}', '#tags {display:flex;flex-direction:row; flex-wrap:wrap;}', '#tags > div {font-size:3vw; margin:1.25vw; padding:1vw; cursor:pointer;}', '#tags > div {background-color:#ccccff; color:#333333; font-weight:bold; }', '#tags > div:hover {background-color:#bbbbee; color:#333333;}', '#tags > div:focus {background-color:#6666ee; color:white;}', '#tags > div.instruction {width:100%; background-color:yellow; color:#000;}', '#filters { margin-left:5vw; width:88vw;padding:2vw; border:solid 0.2vw #476654;border-radius:3vw;}', '#filters { background: rgb(12,113,80);background: linear-gradient(90deg, rgba(12,113,80,1) 0%, rgba(9,9,121,1) 50%, rgba(0,212,255,1) 100%);font-size:2vw;}', '#filters label, #filters span { font-weight:bold;color:white;}', '#filters select, #filters option {font-weight:bold;color:#111111;background-color:#abeeab;}', '#filters input {font-weight:bold;color:#111111;background-color:#abeeab;}', '#filters #filter-start { width:5vw;}', '#filters #filter-length { width:10vw;}', '#filters #filter-button { padding:0.5vw;font-weight:bold;}', '#filters #filter-button { background-color:#333333;color:white;}', '#filters #filter-button:hover { background-color:black;color:white;}', '#filters #page-back { padding:0.5vw;font-weight:bold;}', '#filters #page-back{ background-color:#333333;color:white;}', '#filters #page-forward { padding:0.5vw;font-weight:bold;}', '#filters #page-forward { background-color:#333333;color:white;border:none;}', '#domains {background-color:#ffffe0;border:solid 1vw black; }', '#domains {border-radius:3vw;padding:2vw;margin:2vw 5vw 5vw 5vw;}', '#domains {display:flex;flex-direction:row; flex-wrap:wrap;}', '#domains > div {font-size:3vw; margin:1.25vw; padding:1vw; cursor:pointer;}', '#domains > div > span {font-size:2vw; border-radius: 1vw; display:inline-block;margin-left:1vw;padding:1vw;}', '#domains > div {background-color:#affaac; color:#333333; font-weight:bold; }', '#domains > div > span {background-color:#3ea63a; color:black; }', ];
 
 PageClassify.HTML = `
     <div id="tags"></div>
@@ -880,12 +876,16 @@ class PageTransfer extends Page {
         ;
         analyzeButton.style.display = 'block';
     }
-    showWaitingBox(really) {
+    showWaitingBox(really, where) {
         let waitingBox = document.getElementById("waiting-box");
         waitingBox.style.display = (really) ? 'flex' : 'none';
         if (really) {
             let waitingBox = document.getElementById('waiting');
             waitingBox.classList.remove('stop');
+        }
+        if(where)
+        {
+            where.append(waitingBox);
         }
     }
     async readMonthsChosen() {
@@ -907,11 +907,12 @@ class PageTransfer extends Page {
     displayChoices() {
         let conclusionBox = document.getElementById("conclusions");
         let tag = PageTransfer.thisPageTransfer.tag;
-        let months = PageTransfer.thisPageTransfer.months.map((date)=>{
+        let months = PageTransfer.thisPageTransfer.months.map( (date) => {
             let elements = date.split("-");
             elements.pop();
             return elements.join('-');
-        });
+        }
+        );
         let tagActive = PageTransfer.thisPageTransfer.tagActive;
         let monthActive = PageTransfer.thisPageTransfer.monthActive;
         let choices = [];
@@ -931,10 +932,13 @@ class PageTransfer extends Page {
     showTransferInfos() {
         let transferInfosBox = document.getElementById('transfer-infos');
         transferInfosBox.style.display = 'block';
+        let formBox = document.getElementById('form-transfer-infos');
+        formBox.style.display = 'block';
     }
     async reactToAnalyzeClick() {
         console.log("reactToAnalyzeClick()");
-        this.showWaitingBox(true);
+        let here = document.getElementById('step-months');
+        this.showWaitingBox(true,here);
         this.readMonthsChosen();
         this.displayChoices();
         let transfers = await this.analyzeChoices();
@@ -1030,8 +1034,9 @@ class PageTransfer extends Page {
         let address = walletInput.value;
         let secret = secretInput.value;
         let formBox = document.getElementById('form-transfer-infos');
-        formBox.innerHTML = '';
+        formBox.style.display = 'none';
         let transferInfosBox = document.getElementById('transfer-infos');
+        transferInfosBox.style.display  = 'block';
         let waitingBox = document.getElementById('waiting-box');
         transferInfosBox.append(waitingBox);
         waitingBox.style.display = 'block';
@@ -1058,13 +1063,8 @@ class PageTransfer extends Page {
     }
 }
 
-PageTransfer.CSS = ['#months-configuration {display:none;position:relative;padding:1vw 0vw 0vw 1vw;height:14vw;}', '#months-configuration {font-size:2.5vw;background-color:#eeeeee;}', '#months-configuration > p {margin:0vw 0vw 0vw 1vw;}', '#months-configuration > #month-average {font-weight:bold;width:auto;}', '#months-configuration > #checkboxes {margin:1vw 0vw 0vw 1vw;}', '#months-configuration input{float:left;clear:none;}', '#months-configuration span{float:left;clear:none;margin:0 1vw 0 0vw;}',
-'#tags-configuration {position:relative;padding-top:1vw;}', '#tags-configuration #analyze {height:6vw;}', '#tags-configuration #analyze a {padding:1.2vw; font-size:3vw;}', '#selection-tag {display:none;font-size:3vw;padding:2vw;background-color:#eeeeee;}',
-'#analyze {display:none;position:absolute;right:2vw; top:2vw; width:auto; height:10vw;}', '#analyze a {display:inline-block;font-size:5vw; padding:2vw;height:100%;vertical-align:middle;}', '#analyze a {background-color: #aaaaaa;color:white;}', '#analyze a:hover {background-color:orange;color:white;}',
-//    '#waiting-box {width: 20vw;  height: 20vw;}',
-'#waiting-box {position:relative; display:none;flex-direction:row;margin-top:2vw;}', '#waiting {background-color:orange;}', '#waiting-explanation {margin-left:5vw;}', '#waiting-explanation, #waiting-explanation p {color:orange;font-weight:bold;font-size:6vw;}',
-'#transfer-infos #waiting-explanation {position:absolute;top:0;right:0;width:70vw;}', '#transfer-infos #waiting-explanation p {font-size:4vw;}',
-'#transfer-infos {display:none;}', '#transfer-infos form {background-color:#eeeeee;padding-top:1vw;padding-bottom:2vw;}', '#transfer-infos form > div {}', '#transfer-infos form > div > label {display:block; color:#666666;font-size:2.5vw; margin:1vw 0 1vw 0;}', '#transfer-infos form > div > input {width:90vw;line-height:5vw;font-size:2.5vw;padding-left:1vw;padding-right:1vw;}', '#transfer-infos form > #transfer-submit {display:block;width:90vw;margin-left:0vw;font-size:5vw;margin-top:2vw;cursor:pointer;}', '#transfer-infos form > #transfer-submit {text-align:center;background-color:orange;font-weight:bold;color:white;border:none;}', ];
+PageTransfer.CSS = ['#months-configuration {display:none;position:relative;padding:1vw 0vw 0vw 1vw;height:14vw;}', '#months-configuration {font-size:2.5vw;background-color:#eeeeee;}', '#months-configuration > p {margin:0vw 0vw 0vw 1vw;}', '#months-configuration > #month-average {font-weight:bold;width:auto;}', '#months-configuration > #checkboxes {margin:1vw 0vw 0vw 1vw;}', '#months-configuration input{float:left;clear:none;}', '#months-configuration span{float:left;clear:none;margin:0 1vw 0 0vw;}', '#tags-configuration {position:relative;padding-top:1vw;}', '#tags-configuration #analyze {height:6vw;}', '#tags-configuration #analyze a {padding:1.2vw; font-size:3vw;}', '#selection-tag {display:none;font-size:3vw;padding:2vw;background-color:#eeeeee;}', '#analyze {display:none;position:absolute;right:2vw; top:2vw; width:auto; height:10vw;}', '#analyze a {display:inline-block;font-size:5vw; padding:2vw;height:100%;vertical-align:middle;}', '#analyze a {background-color: #aaaaaa;color:white;}', '#analyze a:hover {background-color:orange;color:white;}', //    '#waiting-box {width: 20vw;  height: 20vw;}',
+'#waiting-box {position:relative; display:none;flex-direction:row;margin-top:2vw;}', '#waiting {background-color:orange;}', '#waiting-explanation {margin-left:5vw;}', '#waiting-explanation, #waiting-explanation p {color:orange;font-weight:bold;font-size:6vw;}', '#transfer-infos #waiting-explanation {position:absolute;top:0;right:0;width:70vw;}', '#transfer-infos #waiting-explanation p {font-size:4vw;}', '#transfer-infos {display:none;}', '#transfer-infos form {background-color:#eeeeee;padding-top:1vw;padding-bottom:2vw;}', '#transfer-infos form > div {}', '#transfer-infos form > div > label {display:block; color:#666666;font-size:2.5vw; margin:1vw 0 1vw 0;}', '#transfer-infos form > div > input {width:90vw;line-height:5vw;font-size:2.5vw;padding-left:1vw;padding-right:1vw;}', '#transfer-infos form > #transfer-submit {display:block;width:90vw;margin-left:0vw;font-size:5vw;margin-top:2vw;cursor:pointer;}', '#transfer-infos form > #transfer-submit {text-align:center;background-color:orange;font-weight:bold;color:white;border:none;}', ];
 
 PageTransfer.HTML = `
         <div id="page">
@@ -1291,8 +1291,7 @@ class AccessorNames {
         let data = await this.getLink(this.LINK_STATS);
         return data.totalCountOwnedDomains;
     }
-    async filterActiveNames(names) {
-    }
+    async filterActiveNames(names) {}
 }
 class AccessorTags {
     TAGGED_NAME = "tagged";
@@ -3339,8 +3338,7 @@ const punycode = {
 };
 
 class Format {
-    constructor() {
-    }
+    constructor() {}
 }
 
 Storage.prototype.setObj = function(key, obj) {
@@ -3389,12 +3387,10 @@ function parseDate(date) {
     return newDate;
 }
 MONTHS = ['', 'JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
-function incrementDate(date)
-{
+function incrementDate(date) {
     date['month']++;
-    if(date['month']>12)
-    {
-        date['month']%=12;
+    if (date['month'] > 12) {
+        date['month'] %= 12;
         date['year']++;
     }
     return date;
