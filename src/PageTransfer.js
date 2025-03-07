@@ -174,16 +174,12 @@ class PageTransfer extends Page {
         ;
         analyzeButton.style.display = 'block';
     }
-    showWaitingBox(really, where) {
+    showWaitingBox(really) {
         let waitingBox = document.getElementById("waiting-box");
         waitingBox.style.display = (really) ? 'flex' : 'none';
         if (really) {
             let waitingBox = document.getElementById('waiting');
             waitingBox.classList.remove('stop');
-        }
-        if(where)
-        {
-            where.append(waitingBox);
         }
     }
     async readMonthsChosen() {
@@ -224,19 +220,19 @@ class PageTransfer extends Page {
             conclusionBox.innerHTML = '<p>Please choose a tag or a month</p>';
     }
     confirmTransfersReady(transfers) {
+        console.log('confirmTransfersReady()');
+        console.log(transfers);
+        let cuteTransfers = transfers.map(name => convertFromPunycode(name));
         let conclusionBox = document.getElementById("conclusions");
-        conclusionBox.innerHTML += '<p>You have ' + transfers.length + ' transfers waiting such as : ' + listArrayWithEllipsis(transfers) + '</p>';
+        conclusionBox.innerHTML += '<p>You have ' + cuteTransfers.length + ' transfers waiting such as : ' + listArrayWithEllipsis(cuteTransfers) + '</p>';
     }
     showTransferInfos() {
         let transferInfosBox = document.getElementById('transfer-infos');
         transferInfosBox.style.display = 'block';
-        let formBox = document.getElementById('form-transfer-infos');
-        formBox.style.display = 'block';
     }
     async reactToAnalyzeClick() {
         console.log("reactToAnalyzeClick()");
-        let here = document.getElementById('step-months');
-        this.showWaitingBox(true,here);
+        this.showWaitingBox(true);
         this.readMonthsChosen();
         this.displayChoices();
         let transfers = await this.analyzeChoices();
@@ -244,7 +240,6 @@ class PageTransfer extends Page {
         this.showWaitingBox(false);
         this.confirmTransfersReady(transfers);
         this.showTransferInfos();
-
     }
     page = 0;
     lastName = null;
@@ -308,7 +303,7 @@ class PageTransfer extends Page {
 
         if (tagActive) {
             let accessor = new AccessorTags();
-            let taggedNames = accessor.getNamesForTag(tag);
+            let taggedNames = accessor.getNamesForTag(tag).map(name=>convertToPunycode(name));
             console.log(taggedNames);
             if (monthActive)
                 transfer = transfer.filter(name => taggedNames.includes(name));
@@ -316,7 +311,7 @@ class PageTransfer extends Page {
                 transfer = taggedNames;
         }
         console.log('Transfer names are the following : ');
-        console.log(transfer);
+        console.log(transfer.map(name=>convertFromPunycode(name)));
         return transfer;
     }
     removeTransferedNames(transfered) {
@@ -332,9 +327,8 @@ class PageTransfer extends Page {
         let address = walletInput.value;
         let secret = secretInput.value;
         let formBox = document.getElementById('form-transfer-infos');
-        formBox.style.display = 'none';
+        formBox.innerHTML = '';
         let transferInfosBox = document.getElementById('transfer-infos');
-        transferInfosBox.style.display  = 'block';
         let waitingBox = document.getElementById('waiting-box');
         transferInfosBox.append(waitingBox);
         waitingBox.style.display = 'block';
