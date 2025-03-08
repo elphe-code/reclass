@@ -105,9 +105,14 @@ class PageClassify extends Page {
             {
                 let span = this.createSpanWithText(tag);
                 div.append(span);                
+                div.onclick = (e)=>{this.thisPageClassify.revokeTag(e.srcElement)};
             }
-            
-            div.addEventListener("click", (e)=>{this.thisPageClassify.attributeTag(e.srcElement)});
+            else
+            {
+                div.onclick = (e)=>{this.thisPageClassify.attributeTag(e.srcElement)};
+            }
+
+            //div.addEventListener("click", (e)=>{this.thisPageClassify.attributeTag(e.srcElement)});
             domainsView.append(div);  
         }
     }
@@ -151,6 +156,20 @@ class PageClassify extends Page {
         let name = element.innerHTML.split('<span>')[0];
         accessor.applyTag(name, this.selectedTag);
         element.innerHTML = name + '<span>'+this.selectedTag+'</span>';
+        //element.replaceWith(element.cloneNode(true)); // Suporess all listeners // or eventually use onclick
+        //element.addEventListener("click", (e)=>{this.thisPageClassify.revokeTag(e.srcElement)});
+        element.onclick = (e)=>{this.thisPageClassify.revokeTag(e.srcElement)};
+    }
+
+    async revokeTag(element)
+    {
+        let accessor = new AccessorTags();
+        let name = element.innerHTML.split('<span>')[0];
+        accessor.applyTag(name, "");
+        element.innerHTML = name;// + '<span></span>';
+        //element.replaceWith(element.cloneNode(true)); // Suporess all listeners // or eventually use onclick
+        //element.addEventListener("click", (e)=>{this.thisPageClassify.attributeTag(e.srcElement)});
+        element.onclick = (e)=>{this.thisPageClassify.attributeTag(e.srcElement)};
     }
 }
 
