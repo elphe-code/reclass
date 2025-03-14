@@ -972,6 +972,8 @@ class PageTransfer extends Page {
     showTransferInfos() {
         let transferInfosBox = document.getElementById('transfer-infos');
         transferInfosBox.style.display = 'block';
+        let formBox = document.getElementById('form-transfer-infos');
+        formBox.style.display = "block";
     }
     async reactToAnalyzeClick() {
         console.log("reactToAnalyzeClick()");
@@ -1069,8 +1071,12 @@ class PageTransfer extends Page {
         let secretInput = document.getElementById('namebase-secret');
         let address = walletInput.value;
         let secret = secretInput.value;
+
         let formBox = document.getElementById('form-transfer-infos');
-        formBox.innerHTML = '';
+        formBox.style.display = "none";
+        let walletField = document.getElementById('destination-wallet');
+        walletField.value = '';
+
         let transferInfosBox = document.getElementById('transfer-infos');
         let waitingBox = document.getElementById('waiting-box');
         transferInfosBox.append(waitingBox);
@@ -1154,6 +1160,7 @@ PageTransfer.HTML = `
     `;
 PageTransfer.HTML_SELECT_TAG = '<label for="select-tag">Choose a tag to transfer : </label>\
                                 <select id="select-tag">[OPTIONS]</select>';
+
 
 class AccessorBest {
     async initBests() {
